@@ -1,18 +1,16 @@
 export type SiteConfig = typeof siteConfig
 
 export const siteConfig = {
-  name: "Next.js",
-  description:
-    "Beautifully designed components built with Radix UI and Tailwind CSS.",
+  name: "Grace City App",
+  description: "The official admin application of Grace City Church PH",
   mainNav: [
     {
-      title: "Home",
-      href: "/",
+      title: "Dashboard",
+      href: "/dashboard",
+    },
+    {
+      title: "Disciples",
+      href: "/disciples",
     },
   ],
-  links: {
-    twitter: "https://twitter.com/shadcn",
-    github: "https://github.com/shadcn/ui",
-    docs: "https://ui.shadcn.com",
-  },
 }
