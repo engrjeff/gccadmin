@@ -12,5 +12,9 @@ export const siteConfig = {
       title: "Disciples",
       href: "/disciples",
     },
+    {
+      title: "Resources",
+      href: "/resources",
+    },
   ],
 }

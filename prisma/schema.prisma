@@ -104,7 +104,7 @@ model Disciple {
 
   disciples Disciple[] @relation("LeaderDisciples")
 
-  lessons_taken Lesson[]
+  lessons_taken LessonsTakenByDisciple[]
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
@@ -112,7 +112,7 @@ model Disciple {
   userAccountId         String?
   attended_cell_reports CellReportAttendees[]
   cell_reports          CellReport[]
-  CellReportAssistant   CellReportAssistant[]
+  assisted_cell_reports CellReportAssistant[]
 }
 
 model LessonSeries {
@@ -120,6 +120,8 @@ model LessonSeries {
   title       String
   description String?
   tags        String[]
+
+  lessons Lesson[]
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
@@ -135,9 +137,22 @@ model Lesson {
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
-  discipleId String?
-  Disciple   Disciple?    @relation(fields: [discipleId], references: [id])
-  CellReport CellReport[]
+  cell_reports     CellReport[]
+  disciples        LessonsTakenByDisciple[]
+  lesson_series    LessonSeries?            @relation(fields: [lesson_series_id], references: [id])
+  lesson_series_id String?
+}
+
+model LessonsTakenByDisciple {
+  lesson    Lesson @relation(fields: [lesson_id], references: [id])
+  lesson_id String
+
+  disciple    Disciple @relation(fields: [disciple_id], references: [id])
+  disciple_id String
+
+  assignedAt DateTime @default(now())
+
+  @@id([lesson_id, disciple_id])
 }
 
 model CellReport {
