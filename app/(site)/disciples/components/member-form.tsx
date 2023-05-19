@@ -70,7 +70,6 @@ export default function MemberForm({ leaderOptions }: MemberFormProps) {
     setIsLoading(false)
 
     if (!response?.ok) {
-      setOpen(false)
       return toast({
         title: "Something went wrong.",
         description: "The disciple record was not created. Please try again.",
@@ -127,13 +126,8 @@ export default function MemberForm({ leaderOptions }: MemberFormProps) {
               name="birthdate"
               placeholder="Birthdate"
             />
-            {/* <DatePicker
-              placeholder="Pick a Birthdate"
-              value={birthdate}
-              onChange={setBirthdate}
-            /> */}
           </div>
-          <div className="mb-1 space-y-2">
+          <div className="space-y-2 pb-4">
             <Label htmlFor="gender">Gender</Label>
             <RadioGroup defaultValue="MALE" name="gender" id="gender">
               <div className="flex items-center space-x-2">
@@ -147,7 +141,7 @@ export default function MemberForm({ leaderOptions }: MemberFormProps) {
             </RadioGroup>
           </div>
           <Separator />
-          <p className="mt-4 text-sm text-foreground">
+          <p className="pt-4 text-sm text-foreground">
             Church-related Information
           </p>
           {isAdmin ? (
@@ -216,7 +210,7 @@ export default function MemberForm({ leaderOptions }: MemberFormProps) {
               </Select>
             </div>
           </div>
-          <SheetFooter className="flex items-center gap-3 pt-10">
+          <SheetFooter className="flex items-center gap-2 pt-10">
             <Button variant="outline" type="reset">
               Reset
             </Button>

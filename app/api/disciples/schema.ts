@@ -12,6 +12,7 @@ export const discipleCreateSchema = z.object({
 })
 
 export const discipleUpdateSchema = discipleCreateSchema.partial().extend({
-  userAccountId: z.string(),
+  userAccountId: z.string().optional(),
   isActive: z.boolean(),
+  isMyPrimary: z.boolean(),
 })

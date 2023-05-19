@@ -49,6 +49,20 @@ export const getDiscipleById = async (id: string) => {
     },
     include: {
       leader: true,
+      lessons_taken: {
+        include: {
+          lesson: true,
+        },
+      },
+      attended_cell_reports: {
+        include: {
+          cell_report: {
+            include: {
+              lesson: true,
+            },
+          },
+        },
+      },
     },
   })
 
@@ -67,6 +81,7 @@ export const getUserAccounts = async () => {
       id: {
         not: user.id,
       },
+      isAlreadyLinked: false,
     },
   })
 

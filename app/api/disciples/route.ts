@@ -43,7 +43,7 @@ export async function POST(req: Request) {
     const disciple = await db.disciple.create({
       data: {
         ...body,
-        leaderId: body.leaderId ? body.leaderId : session.user.id,
+        leaderId: body.leaderId ? body.leaderId : session.user.discipleId,
       },
       select: {
         id: true,

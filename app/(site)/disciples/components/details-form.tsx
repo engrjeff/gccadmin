@@ -3,6 +3,7 @@
 import { FormEvent, useState } from "react"
 import { useRouter } from "next/navigation"
 import { Disciple, User } from "@prisma/client"
+import { useSession } from "next-auth/react"
 
 import { cn } from "@/lib/utils"
 import { Button } from "@/components/ui/button"
@@ -32,6 +33,9 @@ function DetailsForm({
 }: DetailsFormProps) {
   const [isLoading, setIsLoading] = useState(false)
   const router = useRouter()
+  const session = useSession()
+
+  const isAdmin = session.data?.user?.role === "ADMIN"
 
   const handleAction = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault()
@@ -49,6 +53,7 @@ function DetailsForm({
       body: JSON.stringify({
         ...values,
         isActive: values.isActive === "on" ? true : false,
+        isMyPrimary: values.isMyPrimary === "on" ? true : false,
       }),
     })
 
@@ -80,29 +85,32 @@ function DetailsForm({
         Actions
       </p>
 
-      <div className="grid grid-cols-3 items-center">
-        <p>Assign a User Account</p>
-        <Select
-          name="userAccountId"
-          defaultValue={disciple.userAccountId ?? undefined}
-        >
-          <SelectTrigger className="w-full">
-            <SelectValue placeholder="Pick an Account" />
-          </SelectTrigger>
-          <SelectContent>
-            <SelectGroup>
-              <SelectLabel>Account</SelectLabel>
-              {accountOptions.map((account) => (
-                <SelectItem key={account.id} value={account.id}>
-                  {account.name}
-                </SelectItem>
-              ))}
-            </SelectGroup>
-          </SelectContent>
-        </Select>
-      </div>
+      {!disciple.userAccountId && isAdmin && (
+        <div className="grid grid-cols-3 items-center">
+          <p>Assign a User Account</p>
+          <Select
+            name="userAccountId"
+            defaultValue={disciple.userAccountId ?? undefined}
+            disabled={accountOptions.length === 0}
+          >
+            <SelectTrigger className="w-full">
+              <SelectValue placeholder="Pick an Account" />
+            </SelectTrigger>
+            <SelectContent>
+              <SelectGroup>
+                <SelectLabel>Account</SelectLabel>
+                {accountOptions.map((account) => (
+                  <SelectItem key={account.id} value={account.id}>
+                    {account.name}
+                  </SelectItem>
+                ))}
+              </SelectGroup>
+            </SelectContent>
+          </Select>
+        </div>
+      )}
 
-      {!disciple.isPrimary && (
+      {!disciple.isPrimary && isAdmin && (
         <div className="grid grid-cols-3 items-center">
           <p>Assign a Leader</p>
           <Select name="leaderId" defaultValue={disciple.leaderId ?? undefined}>
@@ -123,6 +131,22 @@ function DetailsForm({
         </div>
       )}
 
+      {!isAdmin && (
+        <div className="grid grid-cols-3 items-center">
+          <p>Mark as My Primary</p>
+          <div className="flex items-center space-x-2">
+            <Switch
+              id="isMyPrimary"
+              name="isMyPrimary"
+              defaultChecked={disciple.isMyPrimary}
+            />
+            <Label htmlFor="isMyPrimary">
+              {disciple.isMyPrimary ? "Unmark" : "Mark"} as my Primary
+            </Label>
+          </div>
+        </div>
+      )}
+
       <div className="grid grid-cols-3 items-center">
         <p>Inactivity</p>
         <div className="flex items-center space-x-2">
@@ -137,7 +161,7 @@ function DetailsForm({
         </div>
       </div>
       <Button type="submit" size="sm">
-        {isLoading ? "Saving..." : "Save"}
+        {isLoading ? "Saving..." : "Save Changes"}
       </Button>
     </form>
   )

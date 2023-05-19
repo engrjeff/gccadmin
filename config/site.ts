@@ -16,5 +16,9 @@ export const siteConfig = {
       title: "Resources",
       href: "/resources",
     },
+    {
+      title: "Cell Reports",
+      href: "/cell-reports",
+    },
   ],
 }

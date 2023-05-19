@@ -1,7 +1,8 @@
 import Link from "next/link"
 import { format } from "date-fns"
+import { ExternalLink, Verified } from "lucide-react"
 
-import { getCurrentUser } from "@/lib/session"
+import { buttonVariants } from "@/components/ui/button"
 import PageTitle from "@/components/page-title"
 
 import DeleteSection from "../components/delete-section"
@@ -16,13 +17,11 @@ async function DiscipleDetailPage({ params }: { params: { id: string } }) {
   const discipleData = getDiscipleById(params.id)
   const primaryLeadersData = getPrimaryLeaders()
   const accountsData = getUserAccounts()
-  const userData = getCurrentUser()
 
-  const [disciple, primaryLeaders, userAccounts, user] = await Promise.all([
+  const [disciple, primaryLeaders, userAccounts] = await Promise.all([
     discipleData,
     primaryLeadersData,
     accountsData,
-    userData,
   ])
 
   if (!disciple) return <p>Not found...</p>
@@ -45,7 +44,14 @@ async function DiscipleDetailPage({ params }: { params: { id: string } }) {
         </p>
         <div className="grid grid-cols-3">
           <p>Name</p>
-          <p className="text-muted-foreground">{disciple.name}</p>
+          <p className="flex items-center text-muted-foreground">
+            {disciple.name}
+            {disciple.isMyPrimary && (
+              <span>
+                <Verified className="ml-2 h-4 w-4 text-amber-500" />
+              </span>
+            )}
+          </p>
         </div>
         <div className="grid grid-cols-3">
           <p>Gender</p>
@@ -87,15 +93,31 @@ async function DiscipleDetailPage({ params }: { params: { id: string } }) {
             {disciple.leader?.name}
           </p>
         </div>
+
+        <div className="grid grid-cols-3">
+          <p>Records</p>
+          <div className="flex items-center gap-3">
+            <Link
+              href={`/disciples/${disciple.id}/lessons`}
+              className={buttonVariants({ variant: "secondary" })}
+            >
+              Lessons Taken <ExternalLink className="ml-2 h-4 w-5" />
+            </Link>
+            <Link
+              href={`/disciples/${disciple.id}/cell-groups`}
+              className={buttonVariants({ variant: "secondary" })}
+            >
+              Attended Cell Groups <ExternalLink className="ml-2 h-4 w-5" />
+            </Link>
+          </div>
+        </div>
       </div>
 
-      {user?.role === "ADMIN" && (
-        <DetailsForm
-          disciple={disciple}
-          accountOptions={userAccounts}
-          leaderOptions={primaryLeaders}
-        />
-      )}
+      <DetailsForm
+        disciple={disciple}
+        accountOptions={userAccounts}
+        leaderOptions={primaryLeaders}
+      />
 
       <DeleteSection />
     </div>
