@@ -36,4 +36,4 @@ yarn-error.log*
 .env
 
 # test data
-gcc_members_data.json
+# gcc_members_data.json
