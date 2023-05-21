@@ -29,7 +29,7 @@ export const getDisciples = async () => {
       },
     },
     orderBy: {
-      createdAt: "desc",
+      name: "asc",
     },
   })
 

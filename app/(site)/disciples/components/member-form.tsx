@@ -8,7 +8,6 @@ import { useSession } from "next-auth/react"
 
 import { cn } from "@/lib/utils"
 import { Button } from "@/components/ui/button"
-import { DatePicker } from "@/components/ui/date-picker"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group"
@@ -33,7 +32,12 @@ import {
 } from "@/components/ui/sheet"
 import { toast } from "@/components/ui/use-toast"
 
-import { memberTypes, processLevels } from "../constants"
+import {
+  cellStatuses,
+  churchStatuses,
+  memberTypes,
+  processLevels,
+} from "../constants"
 
 interface MemberFormProps {
   leaderOptions: Disciple[]
@@ -166,6 +170,52 @@ export default function MemberForm({ leaderOptions }: MemberFormProps) {
           ) : null}
           <div className="grid gap-4 pt-1 lg:grid-cols-2">
             <div className="flex w-full flex-col space-y-2">
+              <Label htmlFor="cell_status">Cell Status</Label>
+              <Select name="cell_status">
+                <SelectTrigger className="w-full">
+                  <SelectValue placeholder="Cell Status" />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectGroup>
+                    <SelectLabel>Cell Status</SelectLabel>
+                    {cellStatuses.map((item) => (
+                      <SelectItem
+                        key={item.value}
+                        value={item.value}
+                        className="capitalize"
+                      >
+                        {item.label.split("_").join(" ")}
+                      </SelectItem>
+                    ))}
+                  </SelectGroup>
+                </SelectContent>
+              </Select>
+            </div>
+            <div className="flex w-full flex-col space-y-2">
+              <Label htmlFor="church_status">Church Status</Label>
+              <Select name="church_status">
+                <SelectTrigger className="w-full">
+                  <SelectValue placeholder="Church Status" />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectGroup>
+                    <SelectLabel>Church Status</SelectLabel>
+                    {churchStatuses.map((item) => (
+                      <SelectItem
+                        key={item.value}
+                        value={item.value}
+                        className="capitalize"
+                      >
+                        {item.label.split("_").join(" ")}
+                      </SelectItem>
+                    ))}
+                  </SelectGroup>
+                </SelectContent>
+              </Select>
+            </div>
+          </div>
+          <div className="grid gap-4 pt-1 lg:grid-cols-2">
+            <div className="flex w-full flex-col space-y-2">
               <Label htmlFor="member_type">Member Type</Label>
               <Select name="member_type">
                 <SelectTrigger className="w-full">
@@ -202,7 +252,7 @@ export default function MemberForm({ leaderOptions }: MemberFormProps) {
                         value={item.value}
                         className="capitalize"
                       >
-                        {item.label}
+                        {item.label.split("_").join(" ")}
                       </SelectItem>
                     ))}
                   </SelectGroup>

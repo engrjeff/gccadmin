@@ -24,7 +24,7 @@ async function CellReportsLayout({ children }: { children: ReactNode }) {
     ])
 
   return (
-    <div className="flex h-full flex-col gap-4 overflow-y-auto px-6">
+    <div className="flex h-full flex-col gap-4 overflow-y-auto">
       <div className="flex items-center justify-between">
         <PageTitle title="Cell Reports" subtitle="List of cell group reports" />
         <CellReportForm
@@ -33,7 +33,7 @@ async function CellReportsLayout({ children }: { children: ReactNode }) {
           primaryLeaders={primaryLeaders}
         />
       </div>
-      <div className="flex gap-6">
+      <div className="flex items-start gap-6 pl-2">
         <div className="flex-1 space-y-3">
           <CellReportFilters />
           <ul className="space-y-3">
@@ -44,7 +44,7 @@ async function CellReportsLayout({ children }: { children: ReactNode }) {
             ))}
           </ul>
         </div>
-        <div className="flex-1 rounded-lg border p-6">{children}</div>
+        <div className="flex-1 rounded-lg border p-4">{children}</div>
       </div>
     </div>
   )

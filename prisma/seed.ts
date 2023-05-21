@@ -1,4 +1,13 @@
-import { PrismaClient } from "@prisma/client"
+import {
+  CellStatus,
+  ChurchStatus,
+  Gender,
+  MemberType,
+  PrismaClient,
+  ProcessLevel,
+} from "@prisma/client"
+
+import gccMembersData from "../gcc_members_data.json"
 
 const prisma = new PrismaClient()
 
@@ -32,7 +41,9 @@ async function main() {
       birthdate: new Date("1996-03-12"),
       gender: "MALE",
       member_type: "YOUNGPRO",
-      process_level: "LEADERSHIP3",
+      process_level: "LEADERSHIP_3",
+      cell_status: "REGULAR",
+      church_status: "REGULAR",
       userAccountId: admin.id,
     },
     select: {
@@ -49,7 +60,9 @@ async function main() {
         birthdate: new Date("1996-03-12"),
         gender: "MALE",
         member_type: "YOUNGPRO",
-        process_level: "LEADERSHIP3",
+        process_level: "LEADERSHIP_3",
+        cell_status: "REGULAR",
+        church_status: "REGULAR",
         isPrimary: true,
         leaderId: adminAsDisciple.id,
       },
@@ -59,7 +72,9 @@ async function main() {
         birthdate: new Date("1996-03-12"),
         gender: "MALE",
         member_type: "YOUNGPRO",
-        process_level: "LEADERSHIP2",
+        process_level: "LEADERSHIP_2",
+        cell_status: "REGULAR",
+        church_status: "REGULAR",
         isPrimary: true,
         leaderId: adminAsDisciple.id,
       },
@@ -69,7 +84,9 @@ async function main() {
         birthdate: new Date("1993-08-26"),
         gender: "FEMALE",
         member_type: "YOUNGPRO",
-        process_level: "LEADERSHIP2",
+        process_level: "LEADERSHIP_2",
+        cell_status: "REGULAR",
+        church_status: "REGULAR",
         isPrimary: true,
         leaderId: adminAsDisciple.id,
       },
@@ -79,7 +96,9 @@ async function main() {
         birthdate: new Date("1996-03-29"),
         gender: "MALE",
         member_type: "YOUNGPRO",
-        process_level: "LEADERSHIP2",
+        process_level: "LEADERSHIP_2",
+        cell_status: "REGULAR",
+        church_status: "REGULAR",
         isPrimary: true,
         leaderId: adminAsDisciple.id,
       },
@@ -89,7 +108,9 @@ async function main() {
         birthdate: new Date("1997-10-24"),
         gender: "FEMALE",
         member_type: "YOUNGPRO",
-        process_level: "LEADERSHIP2",
+        process_level: "LEADERSHIP_2",
+        cell_status: "REGULAR",
+        church_status: "REGULAR",
         isPrimary: true,
         leaderId: adminAsDisciple.id,
       },
@@ -99,7 +120,9 @@ async function main() {
         birthdate: new Date("1997-10-24"),
         gender: "MALE",
         member_type: "YOUNGPRO",
-        process_level: "LEADERSHIP2",
+        process_level: "LEADERSHIP_2",
+        cell_status: "REGULAR",
+        church_status: "REGULAR",
         isPrimary: true,
         leaderId: adminAsDisciple.id,
       },
@@ -109,7 +132,9 @@ async function main() {
         birthdate: new Date("1997-08-24"),
         gender: "MALE",
         member_type: "YOUNGPRO",
-        process_level: "LEADERSHIP2",
+        process_level: "LEADERSHIP_2",
+        cell_status: "REGULAR",
+        church_status: "REGULAR",
         isPrimary: true,
         leaderId: adminAsDisciple.id,
       },
@@ -119,7 +144,9 @@ async function main() {
         birthdate: new Date("1995-10-24"),
         gender: "MALE",
         member_type: "YOUNGPRO",
-        process_level: "LEADERSHIP2",
+        process_level: "LEADERSHIP_2",
+        cell_status: "REGULAR",
+        church_status: "REGULAR",
         isPrimary: true,
         leaderId: adminAsDisciple.id,
       },
@@ -129,7 +156,9 @@ async function main() {
         birthdate: new Date("1995-10-24"),
         gender: "FEMALE",
         member_type: "WOMEN",
-        process_level: "LEADERSHIP2",
+        process_level: "LEADERSHIP_2",
+        cell_status: "REGULAR",
+        church_status: "REGULAR",
         isPrimary: true,
         leaderId: adminAsDisciple.id,
       },
@@ -139,7 +168,9 @@ async function main() {
         birthdate: new Date("1995-10-24"),
         gender: "MALE",
         member_type: "YOUNGPRO",
-        process_level: "LEADERSHIP2",
+        process_level: "LEADERSHIP_2",
+        cell_status: "REGULAR",
+        church_status: "REGULAR",
         isPrimary: true,
         leaderId: adminAsDisciple.id,
       },
@@ -147,6 +178,37 @@ async function main() {
   })
 
   console.log("Created leaders: ", leaders.count)
+
+  // create a leader_name : id look up
+  const leadersData = await prisma.disciple.findMany({
+    where: { isPrimary: true },
+  })
+
+  const leadersLookup = leadersData.reduce<{ [key: string]: string }>(
+    (lookup, curr) => {
+      return {
+        ...lookup,
+        [curr.name]: curr.id,
+      }
+    },
+    {}
+  )
+
+  const gccMembers = await prisma.disciple.createMany({
+    data: gccMembersData.map(({ leader_name, birthdate, ...m }) => ({
+      name: m.name,
+      address: m.address,
+      gender: m.gender as Gender,
+      birthdate: new Date("1990-01-01"),
+      member_type: m.member_type as MemberType,
+      process_level: m.process_level as ProcessLevel,
+      cell_status: m.cell_status as CellStatus,
+      church_status: m.church_status as ChurchStatus,
+      leaderId: leadersLookup[leader_name],
+    })),
+  })
+
+  console.log("Inserted GCC members", gccMembers.count)
 
   // seed series
   const series = await prisma.lessonSeries.createMany({
@@ -278,50 +340,67 @@ async function main() {
       {
         title: "The Three Stages of Redemption: Overview",
         lesson_series_id: seriesIds[3].id,
+        scripture_references: ["1 Corinthians 11:24-30"],
       },
       {
         title: "The Three Stages of Redemption: Weakness Stage",
         lesson_series_id: seriesIds[3].id,
+        scripture_references: ["1 Corinthians 11:24-30"],
       },
       {
         title: "The Price of Intimacy",
         lesson_series_id: seriesIds[3].id,
+        scripture_references: ["1 Corinthians 11:24-30"],
       },
       {
         title: "The Price of a Servant",
         lesson_series_id: seriesIds[3].id,
+        scripture_references: ["1 Corinthians 11:24-30"],
       },
       {
         title: "The Perfect Offering - Part 1",
         lesson_series_id: seriesIds[3].id,
+        scripture_references: ["1 Corinthians 11:24-30"],
       },
       {
         title: "The Perfect Offering - Part 2",
         lesson_series_id: seriesIds[3].id,
+        scripture_references: ["1 Corinthians 11:24-30"],
       },
       {
         title: "The Perfect Offering - Part 3",
         lesson_series_id: seriesIds[3].id,
+        scripture_references: ["1 Corinthians 11:24-30"],
       },
       {
         title: "The Perfect Offering - Part 4",
         lesson_series_id: seriesIds[3].id,
+        scripture_references: ["1 Corinthians 11:24-30"],
       },
       {
         title: "Sickness Stage - Part 1",
         lesson_series_id: seriesIds[3].id,
+        scripture_references: ["1 Corinthians 11:24-30"],
       },
       {
         title: "Sickness Stage - Part 2",
         lesson_series_id: seriesIds[3].id,
+        scripture_references: ["1 Corinthians 11:24-30"],
       },
       {
         title: "The Crown of Thorns : Sickness Stage - Part 3",
         lesson_series_id: seriesIds[3].id,
+        scripture_references: ["1 Corinthians 11:24-30"],
       },
       {
         title: "Restored Dominion : Sickness Stage - Part 4",
         lesson_series_id: seriesIds[3].id,
+        scripture_references: ["1 Corinthians 11:24-30"],
+      },
+      {
+        title: "The Substitute",
+        lesson_series_id: seriesIds[3].id,
+        scripture_references: ["1 Corinthians 11:24-30"],
       },
     ],
   })

@@ -32,7 +32,12 @@ import {
 } from "@/components/ui/sheet"
 import { toast } from "@/components/ui/use-toast"
 
-import { memberTypes, processLevels } from "../constants"
+import {
+  cellStatuses,
+  churchStatuses,
+  memberTypes,
+  processLevels,
+} from "../constants"
 import { useCurrentDisciple } from "./current-disciple-provider"
 
 interface DiscipleEditFormProps {
@@ -191,6 +196,58 @@ export default function DiscipleEditForm({
           ) : null}
           <div className="grid gap-4 pt-1 lg:grid-cols-2">
             <div className="flex w-full flex-col space-y-2">
+              <Label htmlFor="cell_status">Cell Status</Label>
+              <Select
+                name="cell_status"
+                defaultValue={selectedDisciple.cell_status}
+              >
+                <SelectTrigger className="w-full">
+                  <SelectValue placeholder="Cell Status" />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectGroup>
+                    <SelectLabel>Cell Status</SelectLabel>
+                    {cellStatuses.map((item) => (
+                      <SelectItem
+                        key={item.value}
+                        value={item.value}
+                        className="capitalize"
+                      >
+                        {item.label.split("_").join(" ")}
+                      </SelectItem>
+                    ))}
+                  </SelectGroup>
+                </SelectContent>
+              </Select>
+            </div>
+            <div className="flex w-full flex-col space-y-2">
+              <Label htmlFor="church_status">Church Status</Label>
+              <Select
+                name="church_status"
+                defaultValue={selectedDisciple.church_status}
+              >
+                <SelectTrigger className="w-full">
+                  <SelectValue placeholder="Church Status" />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectGroup>
+                    <SelectLabel>Church Status</SelectLabel>
+                    {churchStatuses.map((item) => (
+                      <SelectItem
+                        key={item.value}
+                        value={item.value}
+                        className="capitalize"
+                      >
+                        {item.label.split("_").join(" ")}
+                      </SelectItem>
+                    ))}
+                  </SelectGroup>
+                </SelectContent>
+              </Select>
+            </div>
+          </div>
+          <div className="grid gap-4 pt-1 lg:grid-cols-2">
+            <div className="flex w-full flex-col space-y-2">
               <Label htmlFor="member_type">Member Type</Label>
               <Select
                 name="member_type"
@@ -233,7 +290,7 @@ export default function DiscipleEditForm({
                         value={item.value}
                         className="capitalize"
                       >
-                        {item.label}
+                        {item.label.split("_").join(" ")}
                       </SelectItem>
                     ))}
                   </SelectGroup>

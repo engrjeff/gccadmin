@@ -1,5 +1,7 @@
+import { Skeleton } from "@/components/ui/skeleton"
+
 function Loading() {
-  return <div>Loading...</div>
+  return <Skeleton className="h-[400px] w-full rounded" />
 }
 
 export default Loading

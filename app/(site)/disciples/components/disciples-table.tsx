@@ -31,7 +31,12 @@ import {
   TableRow,
 } from "@/components/ui/table"
 
-import { memberTypes, processLevels } from "../constants"
+import {
+  cellStatuses,
+  churchStatuses,
+  memberTypes,
+  processLevels,
+} from "../constants"
 
 interface DataTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[]
@@ -102,6 +107,20 @@ export function DisciplesTable<TData, TValue>({
             column={table.getColumn("member_type")}
             title="Member Type"
             options={memberTypes}
+          />
+        )}
+        {table.getColumn("cell_status") && (
+          <DataTableFacetedFilter
+            column={table.getColumn("cell_status")}
+            title="Cell Status"
+            options={cellStatuses}
+          />
+        )}
+        {table.getColumn("church_status") && (
+          <DataTableFacetedFilter
+            column={table.getColumn("church_status")}
+            title="Church Status"
+            options={churchStatuses}
           />
         )}
         {table.getColumn("process_level") && (

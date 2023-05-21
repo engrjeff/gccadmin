@@ -436,9 +436,7 @@ function CellReportForm({
             <Button variant="ghost" type="reset" disabled={isLoading}>
               Reset
             </Button>
-            <Button variant="outline" type="button" disabled={isLoading}>
-              Save then Add Another
-            </Button>
+
             <Button type="submit" disabled={isLoading}>
               {isLoading ? "Saving..." : "Save"}
             </Button>

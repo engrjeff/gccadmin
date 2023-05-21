@@ -16,7 +16,8 @@ export async function POST(req: Request) {
 
     const json = await req.json()
 
-    const { attendees, ...body } = cellReportCreateSchema.parse(json)
+    const { attendees, assistant_id, ...body } =
+      cellReportCreateSchema.parse(json)
 
     const cellReport = await db.cellReport.create({
       data: {
@@ -38,6 +39,23 @@ export async function POST(req: Request) {
         id: true,
       },
     })
+
+    // assistant
+    if (assistant_id) {
+      const assistant = await db.cellReportAssistant.create({
+        data: {
+          disciple_id: assistant_id,
+          cell_reports: {
+            connect: {
+              id: cellReport.id,
+            },
+          },
+        },
+        select: { disciple_id: true },
+      })
+
+      console.log(assistant.disciple_id)
+    }
 
     //update lesson taken here
     if (body.lessonId) {

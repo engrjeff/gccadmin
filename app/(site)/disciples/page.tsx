@@ -18,7 +18,7 @@ async function MembersPage() {
       <div className="p-6">
         <p className="text-muted-foreground">
           Your account has not been validated by the Admin. Kindly wait before
-          you can access this page {JSON.stringify(user, null, 2)}
+          you can access this page
         </p>
       </div>
     )
@@ -33,7 +33,7 @@ async function MembersPage() {
 
   return (
     <CurrentDiscipleProvider>
-      <div className="flex items-center justify-between px-6">
+      <div className="flex justify-between">
         <PageTitle title={title} subtitle={subtitle} />
         <div className="space-x-3">
           <Button size="sm" variant="outline">
@@ -43,7 +43,7 @@ async function MembersPage() {
           <DiscipleEditForm leaderOptions={leaders} />
         </div>
       </div>
-      <div className="h-[calc(100%-64px)] max-h-[calc(100%-64px)] overflow-auto px-6">
+      <div className="h-[calc(100%-64px)] max-h-[calc(100%-64px)] overflow-auto">
         <DisciplesTable columns={columns} data={disciples} />
       </div>
     </CurrentDiscipleProvider>

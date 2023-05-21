@@ -40,8 +40,21 @@ export const getCellReportById = async (id: string) => {
       id,
     },
     include: {
-      assistant: true,
-      attendees: true,
+      assistant: {
+        include: {
+          disciple: true,
+        },
+      },
+      attendees: {
+        include: {
+          disciple: true,
+        },
+        orderBy: {
+          disciple: {
+            process_level: "asc",
+          },
+        },
+      },
       lesson: true,
       leader: true,
     },

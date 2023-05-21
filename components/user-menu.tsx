@@ -13,9 +13,13 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu"
+import { Skeleton } from "@/components/ui/skeleton"
 
 function UserMenu() {
   const session = useSession()
+
+  if (session.status === "loading")
+    return <Skeleton className="h-8 w-8 rounded-full" />
 
   if (!session.data?.user) {
     return null
@@ -27,7 +31,7 @@ function UserMenu() {
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
         <Button variant="ghost" className="relative h-8 w-8 rounded-full">
-          <Avatar key={user.image}>
+          <Avatar key={user.image} className="h-8 w-8">
             <AvatarImage src={user.image || undefined} />
             {user.name && (
               <AvatarFallback className="bg-primary text-white">

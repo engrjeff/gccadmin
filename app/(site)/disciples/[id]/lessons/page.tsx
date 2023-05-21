@@ -15,8 +15,8 @@ async function DiscipleLessonsTakenPage({
   if (!disciple) return <p>Not found...</p>
 
   return (
-    <div className="h-full space-y-6 overflow-y-auto px-6">
-      <div className="flex items-center justify-between">
+    <div className="h-full space-y-6 overflow-y-auto">
+      <div className="flex justify-between">
         <PageTitle
           title={`Lessons Taken by ${disciple.name}`}
           subtitle="List of lessons that were already taken"
@@ -42,7 +42,7 @@ async function DiscipleLessonsTakenPage({
         {disciple.lessons_taken.map(({ lesson, assignedAt }) => (
           <li key={lesson.id} className="border-b py-4">
             <div className="grid grid-cols-3">
-              <h3>{lesson.title}</h3>
+              <h3 className="text-sm">{lesson.title}</h3>
               <p className="text-sm">{format(assignedAt, "MMM dd, yyyy")}</p>
             </div>
           </li>

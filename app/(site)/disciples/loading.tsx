@@ -1,7 +1,7 @@
-import React from "react"
+import { Skeleton } from "@/components/ui/skeleton"
 
 function Loading() {
-  return <div>Loading...</div>
+  return <Skeleton className="h-full w-full rounded" />
 }
 
 export default Loading

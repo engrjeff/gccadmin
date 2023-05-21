@@ -25,13 +25,26 @@ enum MemberType {
   YOUNGPRO
 }
 
+enum ChurchStatus {
+  NACS
+  ACS
+  REGULAR
+}
+
+enum CellStatus {
+  FIRST_TIMER
+  SECOND_TIMER
+  THIRD_TIMER
+  REGULAR
+}
+
 enum ProcessLevel {
-  NEW
+  NONE
   PREENC
   ENCOUNTER
-  LEADERSHIP1
-  LEADERSHIP2
-  LEADERSHIP3
+  LEADERSHIP_1
+  LEADERSHIP_2
+  LEADERSHIP_3
 }
 
 enum CellType {
@@ -95,7 +108,9 @@ model Disciple {
   birthdate     DateTime
   gender        Gender
   member_type   MemberType
-  process_level ProcessLevel
+  process_level ProcessLevel @default(NONE)
+  cell_status   CellStatus   @default(FIRST_TIMER)
+  church_status ChurchStatus @default(NACS)
   isPrimary     Boolean      @default(false)
   isActive      Boolean      @default(true)
   isDeleted     Boolean      @default(false)

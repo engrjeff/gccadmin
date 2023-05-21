@@ -10,12 +10,31 @@ export const getLessonSeries = async () => {
     redirect("/signin")
   }
 
-  const lessonSeries = await db.lessonSeries.findMany({
+  const lessonSeriesList = await db.lessonSeries.findMany({
     include: {
       lessons: true,
     },
     orderBy: {
       createdAt: "desc",
+    },
+  })
+
+  return lessonSeriesList
+}
+
+export const getSeriesById = async (id: string) => {
+  const user = await getCurrentUser()
+
+  if (!user) {
+    redirect("/signin")
+  }
+
+  const lessonSeries = await db.lessonSeries.findFirst({
+    where: {
+      id,
+    },
+    include: {
+      lessons: true,
     },
   })
 

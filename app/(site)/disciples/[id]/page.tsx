@@ -27,10 +27,10 @@ async function DiscipleDetailPage({ params }: { params: { id: string } }) {
   if (!disciple) return <p>Not found...</p>
 
   return (
-    <div className="h-full space-y-6 overflow-y-auto px-6">
-      <div className="flex items-center justify-between">
+    <div className="h-full space-y-6 overflow-y-auto pr-3">
+      <div className="flex justify-between">
         <PageTitle
-          title="Disciple Information"
+          title={`Disciple Information for ${disciple.name}`}
           subtitle="Personal and Church-related information"
         />
         <Link href="/disciples" className="underline hover:text-primary">

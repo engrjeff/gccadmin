@@ -1,30 +1,14 @@
 "use client"
 
+import Link from "next/link"
 import { Disciple } from "@prisma/client"
 import { ColumnDef } from "@tanstack/react-table"
-import {
-  ArrowLeftRight,
-  Edit,
-  Eye,
-  MoreHorizontal,
-  Trash,
-  UserCheck,
-  Verified,
-} from "lucide-react"
+import { Verified } from "lucide-react"
 
 import { cn } from "@/lib/utils"
 import { Badge } from "@/components/ui/badge"
-import { Button } from "@/components/ui/button"
 import { Checkbox } from "@/components/ui/checkbox"
 import { DataTableColumnHeader } from "@/components/ui/data-table/column-header"
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuLabel,
-  DropdownMenuSeparator,
-  DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu"
 
 import DiscipleRowActions from "./disciple-row-actions"
 
@@ -66,12 +50,17 @@ export const columns: ColumnDef<
       <DataTableColumnHeader column={column} title="Name" />
     ),
     cell: (props) => (
-      <span className="flex items-center gap-2">
-        {props.row.getValue("name")}
-        {props.row.original.isPrimary ? (
-          <Verified className="h-4 w-4 text-sky-500" />
-        ) : null}{" "}
-      </span>
+      <Link
+        href={`/disciples/${props.row.original.id}`}
+        className="inline-block hover:underline"
+      >
+        <span className="flex items-center gap-2">
+          {props.row.getValue("name")}
+          {props.row.original.isPrimary ? (
+            <Verified className="h-4 w-4 text-sky-500" />
+          ) : null}{" "}
+        </span>
+      </Link>
     ),
   },
   {
@@ -132,6 +121,36 @@ export const columns: ColumnDef<
     },
   },
   {
+    accessorKey: "cell_status",
+    id: "cell_status",
+    header: ({ column }) => (
+      <DataTableColumnHeader column={column} title="Cell Status" />
+    ),
+    cell: (props) => (
+      <Badge variant="outline" className="capitalize">
+        {props.row.original.cell_status.split("_").join(" ")}
+      </Badge>
+    ),
+    filterFn: (row, id, value) => {
+      return value.includes(row.getValue(id))
+    },
+  },
+  {
+    accessorKey: "church_status",
+    id: "church_status",
+    header: ({ column }) => (
+      <DataTableColumnHeader column={column} title="Church Status" />
+    ),
+    cell: (props) => (
+      <Badge variant="outline" className="capitalize">
+        {props.row.original.church_status.split("_").join(" ")}
+      </Badge>
+    ),
+    filterFn: (row, id, value) => {
+      return value.includes(row.getValue(id))
+    },
+  },
+  {
     accessorKey: "process_level",
     id: "process_level",
     header: ({ column }) => (
@@ -139,7 +158,7 @@ export const columns: ColumnDef<
     ),
     cell: (props) => (
       <Badge variant="outline" className="capitalize">
-        {props.row.original.process_level}
+        {props.row.original.process_level.split("_").join(" ")}
       </Badge>
     ),
     filterFn: (row, id, value) => {

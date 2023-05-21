@@ -1,7 +1,10 @@
+import Link from "next/link"
 import { Lesson, LessonSeries } from "@prisma/client"
+import { Edit, FilePlus, MoreVertical } from "lucide-react"
 
+import { cn } from "@/lib/utils"
 import { Badge } from "@/components/ui/badge"
-import { Button } from "@/components/ui/button"
+import { Button, buttonVariants } from "@/components/ui/button"
 import {
   Card,
   CardContent,
@@ -10,6 +13,14 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card"
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuLabel,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu"
 
 function LessonSeriesCard({
   lessonSeries,
@@ -17,12 +28,42 @@ function LessonSeriesCard({
   lessonSeries: LessonSeries & { lessons: Lesson[] }
 }) {
   return (
-    <Card>
-      <CardHeader>
+    <Card className="flex flex-col">
+      <CardHeader className="relative">
         <CardTitle>{lessonSeries.title}</CardTitle>
+        <DropdownMenu>
+          <DropdownMenuTrigger asChild>
+            <Button
+              variant="ghost"
+              className="absolute right-3 top-2 h-8 w-8 p-0"
+            >
+              <span className="sr-only">Menu</span>
+              <MoreVertical className="h-4 w-4" />
+            </Button>
+          </DropdownMenuTrigger>
+          <DropdownMenuContent align="end" forceMount>
+            <DropdownMenuLabel>Options</DropdownMenuLabel>
+            <DropdownMenuSeparator />
+            <DropdownMenuItem asChild>
+              <button className="flex w-full">
+                <Edit className="mr-2 h-4 w-4" />
+                <span>Update</span>
+              </button>
+            </DropdownMenuItem>
+            <DropdownMenuItem asChild>
+              <button className="flex w-full">
+                <FilePlus className="mr-2 h-4 w-4" />
+                <span>Add Lesson</span>
+              </button>
+            </DropdownMenuItem>
+          </DropdownMenuContent>
+        </DropdownMenu>
+        <Badge variant="outline" className="self-start rounded">
+          {lessonSeries.lessons.length} Lessons
+        </Badge>
         <CardDescription>{lessonSeries.description}</CardDescription>
       </CardHeader>
-      <CardContent>
+      <CardContent className="flex-1">
         <div className="flex flex-wrap items-center gap-2">
           {lessonSeries.tags.map((tag, index) => (
             <Badge key={index} variant="outline">
@@ -30,12 +71,14 @@ function LessonSeriesCard({
             </Badge>
           ))}
         </div>
-        <p className="mt-4 text-muted-foreground">
-          Includes {lessonSeries.lessons.length} lessons
-        </p>
       </CardContent>
       <CardFooter>
-        <Button>View</Button>
+        <Link
+          href={`/resources/${lessonSeries.id}`}
+          className={cn(buttonVariants(), "w-full")}
+        >
+          View
+        </Link>
       </CardFooter>
     </Card>
   )

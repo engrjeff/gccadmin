@@ -15,8 +15,8 @@ async function DiscipleAttendedCellGroupsPage({
   if (!disciple) return <p>Not found...</p>
 
   return (
-    <div className="h-full space-y-6 overflow-y-auto px-6">
-      <div className="flex items-center justify-between">
+    <div className="h-full space-y-6 overflow-y-auto">
+      <div className="flex justify-between">
         <PageTitle
           title={`Cell Groups Attended by ${disciple.name}`}
           subtitle="List of cell groups attended"

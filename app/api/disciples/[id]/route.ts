@@ -31,6 +31,7 @@ export async function PUT(
       },
       data: {
         ...body,
+
         leaderId: body.leaderId ? body.leaderId : undefined,
       },
 
