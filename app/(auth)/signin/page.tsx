@@ -8,11 +8,6 @@ import { signIn } from "next-auth/react"
 
 import { Button } from "@/components/ui/button"
 
-export const metadata: Metadata = {
-  title: "Login - GCC System",
-  description: "Login to your account",
-}
-
 export default function SigninPage() {
   const [isLoading, setIsLoading] = useState(false)
 
