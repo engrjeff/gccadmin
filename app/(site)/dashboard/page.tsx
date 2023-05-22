@@ -1,3 +1,4 @@
+import { Metadata } from "next"
 import Link from "next/link"
 import { CellStatus, ChurchStatus } from "@prisma/client"
 import { Activity } from "lucide-react"
@@ -31,6 +32,10 @@ const getChurchStatusText = (churchStatus: ChurchStatus) => {
 
 const getStatusText = (inputStr: string) => {
   return inputStr.split("_").join(" ").toLowerCase()
+}
+
+export const metadata: Metadata = {
+  title: "Dashboard - Grace City App",
 }
 
 async function DashboardPage() {

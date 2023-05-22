@@ -37,7 +37,7 @@ export default function RootLayout({ children }: RootLayoutProps) {
         <head />
         <body
           className={cn(
-            "min-h-screen overflow-hidden bg-background font-sans antialiased",
+            "h-full overflow-hidden bg-background font-sans antialiased",
             fontSans.variable
           )}
         >

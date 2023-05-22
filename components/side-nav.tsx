@@ -6,7 +6,7 @@ import NavLink from "./nav-link"
 
 function SideNav() {
   return (
-    <nav className="min-h-screen w-[260px] border-r border-muted bg-sidenav text-white">
+    <nav className="min-h-screen w-[260px] shrink-0 border-r border-muted bg-sidenav text-white">
       <div className="flex h-16 items-center gap-3 px-4 pt-4">
         <Image
           src="/gcc-app-logo.png"

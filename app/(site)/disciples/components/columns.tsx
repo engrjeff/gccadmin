@@ -54,7 +54,7 @@ export const columns: ColumnDef<
         href={`/disciples/${props.row.original.id}`}
         className="inline-block hover:underline"
       >
-        <span className="flex items-center gap-2">
+        <span className="flex items-center gap-2 whitespace-nowrap">
           {props.row.getValue("name")}
           {props.row.original.isPrimary ? (
             <Verified className="h-4 w-4 text-sky-500" />
@@ -69,7 +69,11 @@ export const columns: ColumnDef<
     header: ({ column }) => (
       <DataTableColumnHeader column={column} title="Leader" />
     ),
-    cell: (props) => props.getValue(),
+    cell: (props) => (
+      <span className="whitespace-nowrap">
+        {props.row.original.leader?.name}
+      </span>
+    ),
     filterFn: (row, id, value) => {
       return value.includes(row.getValue(id))
     },

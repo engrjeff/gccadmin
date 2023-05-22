@@ -3,9 +3,9 @@ import { SiteHeader } from "@/components/site-header"
 
 async function SiteLayout({ children }: { children: React.ReactNode }) {
   return (
-    <div className="flex max-h-screen overflow-hidden">
+    <div className="flex">
       <SideNav />
-      <div className="flex flex-1 flex-col">
+      <div className="flex max-w-[calc(100vw-260px)] flex-1 flex-col">
         <SiteHeader />
         <div className="h-[calc(100vh-64px)] max-h-[calc(100vh-64px)] overflow-hidden bg-muted p-4">
           <div className="h-full rounded-lg bg-background p-4">{children}</div>
