@@ -3,6 +3,7 @@ import { prisma as db } from "@/lib/db"
 export const getDashboardData = async () => {
   const churchData = await db.disciple.groupBy({
     by: ["church_status"],
+
     _count: true,
   })
 

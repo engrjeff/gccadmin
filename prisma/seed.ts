@@ -51,21 +51,28 @@ async function main() {
     },
   })
 
+  // create pas j record
+  const pasJ = await prisma.disciple.create({
+    data: {
+      name: "John De Guzman",
+      address: "Morong, Rizal",
+      birthdate: new Date("1996-03-12"),
+      gender: "MALE",
+      member_type: "YOUNGPRO",
+      process_level: "LEADERSHIP_3",
+      cell_status: "REGULAR",
+      church_status: "REGULAR",
+      isPrimary: true,
+      leaderId: adminAsDisciple.id,
+    },
+    select: {
+      id: true,
+    },
+  })
+
   // insert the primary leaders
   const leaders = await prisma.disciple.createMany({
     data: [
-      {
-        name: "John De Guzman",
-        address: "Morong, Rizal",
-        birthdate: new Date("1996-03-12"),
-        gender: "MALE",
-        member_type: "YOUNGPRO",
-        process_level: "LEADERSHIP_3",
-        cell_status: "REGULAR",
-        church_status: "REGULAR",
-        isPrimary: true,
-        leaderId: adminAsDisciple.id,
-      },
       {
         name: "Jeff Segovia",
         address: "Morong, Rizal",
@@ -76,7 +83,7 @@ async function main() {
         cell_status: "REGULAR",
         church_status: "REGULAR",
         isPrimary: true,
-        leaderId: adminAsDisciple.id,
+        leaderId: pasJ.id,
       },
       {
         name: "Kim Lopez",
@@ -88,7 +95,7 @@ async function main() {
         cell_status: "REGULAR",
         church_status: "REGULAR",
         isPrimary: true,
-        leaderId: adminAsDisciple.id,
+        leaderId: pasJ.id,
       },
       {
         name: "Carlo Rosal",
@@ -100,7 +107,7 @@ async function main() {
         cell_status: "REGULAR",
         church_status: "REGULAR",
         isPrimary: true,
-        leaderId: adminAsDisciple.id,
+        leaderId: pasJ.id,
       },
       {
         name: "Leslie Henoguin",
@@ -112,7 +119,7 @@ async function main() {
         cell_status: "REGULAR",
         church_status: "REGULAR",
         isPrimary: true,
-        leaderId: adminAsDisciple.id,
+        leaderId: pasJ.id,
       },
       {
         name: "Gary Peña",
@@ -124,7 +131,7 @@ async function main() {
         cell_status: "REGULAR",
         church_status: "REGULAR",
         isPrimary: true,
-        leaderId: adminAsDisciple.id,
+        leaderId: pasJ.id,
       },
       {
         name: "Aerol Allauigan",
@@ -136,7 +143,7 @@ async function main() {
         cell_status: "REGULAR",
         church_status: "REGULAR",
         isPrimary: true,
-        leaderId: adminAsDisciple.id,
+        leaderId: pasJ.id,
       },
       {
         name: "Marvin Palabon",
@@ -148,7 +155,7 @@ async function main() {
         cell_status: "REGULAR",
         church_status: "REGULAR",
         isPrimary: true,
-        leaderId: adminAsDisciple.id,
+        leaderId: pasJ.id,
       },
       {
         name: "Rosalinda Sahagun",
@@ -160,7 +167,7 @@ async function main() {
         cell_status: "REGULAR",
         church_status: "REGULAR",
         isPrimary: true,
-        leaderId: adminAsDisciple.id,
+        leaderId: pasJ.id,
       },
       {
         name: "Eugene Ababa",
@@ -172,7 +179,7 @@ async function main() {
         cell_status: "REGULAR",
         church_status: "REGULAR",
         isPrimary: true,
-        leaderId: adminAsDisciple.id,
+        leaderId: pasJ.id,
       },
     ],
   })

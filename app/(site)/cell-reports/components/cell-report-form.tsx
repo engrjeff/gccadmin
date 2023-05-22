@@ -89,13 +89,15 @@ function CellReportForm({
       ?.scripture_references.join(", ") ?? ""
 
   // only the disciples who belong to the selected leader (if user is admin) or user.disciple_id
-  const attendeesOptions = attendeesSearchQuery
-    ? discipleOptions.filter((d) =>
-        d.name.toLowerCase().includes(attendeesSearchQuery.toLowerCase())
-      )
-    : isAdmin
+  const discArr = isAdmin
     ? discipleOptions.filter((d) => d.leaderId === leaderId)
     : discipleOptions
+
+  const attendeesOptions = attendeesSearchQuery
+    ? discArr.filter((d) =>
+        d.name.toLowerCase().includes(attendeesSearchQuery.toLowerCase())
+      )
+    : discArr
 
   const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault()
@@ -165,7 +167,7 @@ function CellReportForm({
       <SheetContent
         position="right"
         size="sm"
-        className="w-[450px] overflow-y-auto"
+        className="w-1/3 overflow-y-auto"
       >
         <SheetHeader>
           <SheetTitle>Create a Cell Report</SheetTitle>

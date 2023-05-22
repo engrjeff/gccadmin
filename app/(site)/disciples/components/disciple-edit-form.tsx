@@ -100,7 +100,11 @@ export default function DiscipleEditForm({
 
   return (
     <Sheet open={editFormOpen} onOpenChange={setEditFormOpen}>
-      <SheetContent position="right" size="sm" className="overflow-y-auto">
+      <SheetContent
+        position="right"
+        size="sm"
+        className="w-1/3 overflow-y-auto"
+      >
         <SheetHeader>
           <SheetTitle>Edit {selectedDisciple?.name}</SheetTitle>
           <SheetDescription>Edit the disciple details below.</SheetDescription>

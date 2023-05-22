@@ -98,7 +98,11 @@ export default function MemberForm({ leaderOptions }: MemberFormProps) {
           <Plus className="mr-2 h-4 w-5" /> Add Member
         </Button>
       </SheetTrigger>
-      <SheetContent position="right" size="sm" className="overflow-y-auto">
+      <SheetContent
+        position="right"
+        size="sm"
+        className="w-1/3 overflow-y-auto"
+      >
         <SheetHeader>
           <SheetTitle>Add Member</SheetTitle>
           <SheetDescription>
