@@ -26,6 +26,12 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu"
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger,
+} from "@/components/ui/tooltip"
 import { toast } from "@/components/ui/use-toast"
 
 import { useCurrentDisciple } from "./current-disciple-provider"
@@ -72,17 +78,40 @@ function DiscipleRowActions({ disciple }: { disciple: Disciple }) {
 
   return (
     <div className="flex items-center gap-1">
-      <Link
-        href={`/disciples/${disciple.id}`}
-        className="inline-flex h-8 w-8 items-center justify-center rounded-md p-0 transition-colors hover:bg-accent hover:text-accent-foreground"
-      >
-        <span className="sr-only">View</span>
-        <Eye className="h-4 w-4" />
-      </Link>
-      <Button variant="ghost" className="h-8 w-8 p-0" onClick={handleEditClick}>
-        <span className="sr-only">Edit</span>
-        <Edit className="h-4 w-4" />
-      </Button>
+      <TooltipProvider>
+        <Tooltip>
+          <TooltipTrigger asChild>
+            <Link
+              href={`/disciples/${disciple.id}`}
+              className="inline-flex h-8 w-8 items-center justify-center rounded-md p-0 transition-colors hover:bg-accent hover:text-accent-foreground"
+            >
+              <span className="sr-only">View</span>
+              <Eye className="h-4 w-4" />
+            </Link>
+          </TooltipTrigger>
+          <TooltipContent>
+            <span>View Disciple</span>
+          </TooltipContent>
+        </Tooltip>
+      </TooltipProvider>
+      <TooltipProvider>
+        <Tooltip>
+          <TooltipTrigger asChild>
+            <Button
+              variant="ghost"
+              className="h-8 w-8 p-0"
+              onClick={handleEditClick}
+            >
+              <span className="sr-only">Edit</span>
+              <Edit className="h-4 w-4" />
+            </Button>
+          </TooltipTrigger>
+          <TooltipContent>
+            <span>Edit Disciple</span>
+          </TooltipContent>
+        </Tooltip>
+      </TooltipProvider>
+
       <DropdownMenu>
         <DropdownMenuTrigger asChild>
           <Button variant="ghost" className="h-8 w-8 p-0">

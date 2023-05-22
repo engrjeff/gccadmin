@@ -33,7 +33,7 @@ async function MembersPage() {
 
   return (
     <CurrentDiscipleProvider>
-      <div className="flex justify-between">
+      <div className="flex justify-between px-2">
         <PageTitle title={title} subtitle={subtitle} />
         <div className="space-x-3">
           <Button size="sm" variant="outline">
@@ -43,7 +43,7 @@ async function MembersPage() {
           <DiscipleEditForm leaderOptions={leaders} />
         </div>
       </div>
-      <div className="h-[calc(100%-64px)] max-h-[calc(100%-64px)] overflow-auto">
+      <div className="h-[calc(100%-64px)] max-h-[calc(100%-64px)] overflow-y-auto px-2">
         <DisciplesTable columns={columns} data={disciples} />
       </div>
     </CurrentDiscipleProvider>

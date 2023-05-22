@@ -93,7 +93,7 @@ export function DisciplesTable<TData, TValue>({
           onChange={(event) =>
             table.getColumn("name")?.setFilterValue(event.target.value)
           }
-          className="h-8 max-w-sm"
+          className="h-8 w-[230px]"
         />
         {table.getColumn("leaderName") && (
           <DataTableFacetedFilter
@@ -142,7 +142,7 @@ export function DisciplesTable<TData, TValue>({
         )}
         <DataTableViewOptions table={table} />
       </div>
-      <div className="max-h-[calc(100%-128px)] overflow-auto rounded-md border">
+      <div className="max-h-[calc(100%-128px)] w-full overflow-auto rounded-md border">
         <Table>
           <TableHeader>
             {table.getHeaderGroups().map((headerGroup) => (

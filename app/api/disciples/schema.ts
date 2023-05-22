@@ -13,6 +13,6 @@ export const discipleCreateSchema = z.object({
 
 export const discipleUpdateSchema = discipleCreateSchema.partial().extend({
   userAccountId: z.string().optional(),
-  isActive: z.boolean(),
-  isMyPrimary: z.boolean(),
+  isActive: z.boolean().optional(),
+  isMyPrimary: z.boolean().optional(),
 })

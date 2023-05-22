@@ -74,6 +74,8 @@ function CellReportForm({
 
   const [leaderId, setLeaderId] = useState<string>()
 
+  const [attendeesSearchQuery, setAttendeesSearchQuery] = useState("")
+
   const attendeesFormRef = useRef<HTMLFormElement | null>(null)
 
   const isAdmin = session.data?.user?.role === "ADMIN"
@@ -87,7 +89,11 @@ function CellReportForm({
       ?.scripture_references.join(", ") ?? ""
 
   // only the disciples who belong to the selected leader (if user is admin) or user.disciple_id
-  const attendeesOptions = isAdmin
+  const attendeesOptions = attendeesSearchQuery
+    ? discipleOptions.filter((d) =>
+        d.name.toLowerCase().includes(attendeesSearchQuery.toLowerCase())
+      )
+    : isAdmin
     ? discipleOptions.filter((d) => d.leaderId === leaderId)
     : discipleOptions
 
@@ -109,6 +115,11 @@ function CellReportForm({
         ...values,
         attendees,
         date: new Date(values.date as string),
+        scripture_references: values.scripture_references
+          ? String(values.scripture_references)
+              .split(",")
+              .map((s) => s.trim())
+          : undefined,
       }),
     })
 
@@ -395,27 +406,41 @@ function CellReportForm({
                   </AlertDialogDescription>
                 </AlertDialogHeader>
                 <form ref={attendeesFormRef}>
-                  {attendeesOptions.map((disciple) => (
-                    <div
-                      key={disciple.id}
-                      className="rounded px-2 py-3 hover:bg-muted"
-                    >
-                      <Label
-                        htmlFor={disciple.id}
-                        className="flex cursor-pointer items-center gap-2 "
+                  <Input
+                    placeholder="Search here"
+                    value={attendeesSearchQuery}
+                    onChange={(e) =>
+                      setAttendeesSearchQuery(e.currentTarget.value)
+                    }
+                  />
+                  <div className="my-3 h-[350px] max-h-[350px] overflow-y-auto py-3 pr-2">
+                    {attendeesOptions.length === 0 ? (
+                      <p className="text-center text-muted-foreground">
+                        No results found
+                      </p>
+                    ) : null}
+                    {attendeesOptions.map((disciple) => (
+                      <div
+                        key={disciple.id}
+                        className="rounded px-2 py-3 hover:bg-muted"
                       >
-                        <Checkbox
-                          name={disciple.id}
-                          id={disciple.id}
-                          defaultChecked={
-                            attendees.includes(disciple.id) ||
-                            disciple.id === assistantId
-                          }
-                        />
-                        {disciple.name}
-                      </Label>
-                    </div>
-                  ))}
+                        <Label
+                          htmlFor={disciple.id}
+                          className="flex cursor-pointer items-center gap-2 "
+                        >
+                          <Checkbox
+                            name={disciple.id}
+                            id={disciple.id}
+                            defaultChecked={
+                              attendees.includes(disciple.id) ||
+                              disciple.id === assistantId
+                            }
+                          />
+                          {disciple.name}
+                        </Label>
+                      </div>
+                    ))}
+                  </div>
                   <AlertDialogFooter>
                     <AlertDialogCancel type="button">Close</AlertDialogCancel>
                     <AlertDialogAction
