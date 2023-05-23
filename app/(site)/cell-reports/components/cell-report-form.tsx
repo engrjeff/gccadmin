@@ -53,14 +53,14 @@ interface CellReportFormProps {
   primaryLeaders: Disciple[]
 }
 
-function CellReportForm({
+const ReporFormComponent = ({
   lessonOptions,
   discipleOptions,
   primaryLeaders,
-}: CellReportFormProps) {
+  onDone,
+}: CellReportFormProps & { onDone: () => void }) => {
   const router = useRouter()
   const session = useSession()
-  const [open, setOpen] = useState(false)
 
   const [isLoading, setIsLoading] = useState(false)
 
@@ -144,18 +144,309 @@ function CellReportForm({
     })
     router.refresh()
 
-    setOpen(false)
+    onDone()
   }
 
-  const handleAttendeesSelection = () => {
-    const attendeesForm = attendeesFormRef.current
-
-    if (!attendeesForm) return
-
-    const entries = Object.fromEntries(new FormData(attendeesForm).entries())
-
-    setAttendees(Object.keys(entries))
+  const handleAttendeesSelection = (attendeeId: string) => {
+    console.log(attendeeId)
+    setAttendees((current) =>
+      current.includes(attendeeId)
+        ? current.filter((i) => i !== attendeeId)
+        : [...current, attendeeId]
+    )
   }
+
+  return (
+    <form
+      key={String(open)}
+      className={cn("space-y-3 py-4", {
+        "pointer-events-none opacity-80": isLoading,
+      })}
+      onSubmit={handleSubmit}
+    >
+      <p className="text-xs uppercase text-muted-foreground">General Details</p>
+      {isAdmin && (
+        <div className="flex flex-col space-y-2">
+          <Label htmlFor="leaderId">Cell Leader</Label>
+          <Select
+            name="leaderId"
+            value={leaderId}
+            onValueChange={(value) => {
+              setLeaderId(value)
+              setAttendees([])
+            }}
+          >
+            <SelectTrigger className="w-full">
+              <SelectValue placeholder="Choose a cell leader" />
+            </SelectTrigger>
+            <SelectContent>
+              <SelectGroup>
+                <SelectLabel>Cell Leader</SelectLabel>
+                {primaryLeaders.map((leader) => (
+                  <SelectItem key={leader.id} value={leader.id}>
+                    {leader.name}
+                  </SelectItem>
+                ))}
+              </SelectGroup>
+            </SelectContent>
+          </Select>
+        </div>
+      )}
+      <div className="flex flex-col space-y-2">
+        <Label htmlFor="leaderId">Cell Type</Label>
+        <Select name="type">
+          <SelectTrigger className="w-full">
+            <SelectValue placeholder="Pick a cell type" />
+          </SelectTrigger>
+          <SelectContent>
+            <SelectGroup>
+              <SelectLabel>Cell Type</SelectLabel>
+              {["SOULWINNING", "OPEN", "DISCIPLESHIP"].map((cellType) => (
+                <SelectItem key={cellType} value={cellType}>
+                  {cellType}
+                </SelectItem>
+              ))}
+            </SelectGroup>
+          </SelectContent>
+        </Select>
+      </div>
+      <div className="space-y-2">
+        <Label htmlFor="venue">Venue</Label>
+        <Input id="venue" name="venue" placeholder="Venue" />
+      </div>
+
+      <div className="flex gap-3">
+        <div className="w-full space-y-2">
+          <Label htmlFor="date">Date</Label>
+          <Input
+            type="date"
+            id="date"
+            name="date"
+            placeholder="Date"
+            max={new Date().toLocaleDateString("en-ca")}
+          />
+        </div>
+
+        <div className="w-full space-y-2">
+          <Label htmlFor="time">Time</Label>
+          <Input type="time" id="time" name="time" placeholder="Time" />
+        </div>
+      </div>
+
+      <div className="flex items-center space-x-2 pt-4">
+        <Switch
+          checked={withAssistant}
+          onCheckedChange={(checked) => setWithAssistant(checked)}
+        />
+        <Label>I have an assistant leader</Label>
+      </div>
+
+      {withAssistant && (
+        <div className="flex flex-col space-y-2">
+          <Label htmlFor="assistant_id">Assistant Leader</Label>
+          <Select
+            name="assistant_id"
+            value={assistantId}
+            onValueChange={(value) => {
+              setAssistantId(value)
+
+              setAttendees((current) => [...current, value])
+            }}
+          >
+            <SelectTrigger className="w-full">
+              <SelectValue placeholder="Choose assistant leader" />
+            </SelectTrigger>
+            <SelectContent>
+              <SelectGroup>
+                <SelectLabel>Assistant Leader</SelectLabel>
+                {attendeesOptions.map((disciple) => (
+                  <SelectItem key={disciple.id} value={disciple.id}>
+                    {disciple.name}
+                  </SelectItem>
+                ))}
+              </SelectGroup>
+            </SelectContent>
+          </Select>
+        </div>
+      )}
+
+      <p className="inline-block pt-4 text-xs uppercase text-muted-foreground">
+        Lesson Details
+      </p>
+
+      <Tabs defaultValue="pick-lesson" className="w-full">
+        <TabsList className="grid w-full grid-cols-2">
+          <TabsTrigger value="pick-lesson">Pick a Lesson</TabsTrigger>
+          <TabsTrigger value="custom-lesson">Custom Lesson</TabsTrigger>
+        </TabsList>
+        <TabsContent
+          value="pick-lesson"
+          className="space-y-3 rounded-lg border p-3"
+        >
+          <div className="flex flex-col space-y-2">
+            <Label>Series</Label>
+            <Select value={selectedSeries} onValueChange={setSelectedSeries}>
+              <SelectTrigger className="w-full">
+                <SelectValue placeholder="Pick a series" />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectGroup>
+                  <SelectLabel>Series</SelectLabel>
+                  {lessonOptions.map((series) => (
+                    <SelectItem key={series.id} value={series.id}>
+                      {series.title}
+                    </SelectItem>
+                  ))}
+                </SelectGroup>
+              </SelectContent>
+            </Select>
+          </div>
+          <div className="flex flex-col space-y-2">
+            <Label htmlFor="lessonId">Lesson</Label>
+            <Select
+              name="lessonId"
+              disabled={!selectedSeries}
+              value={selectedLesson}
+              onValueChange={setSelectedLesson}
+            >
+              <SelectTrigger className="w-full">
+                <SelectValue placeholder="Pick a Lesson" />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectGroup>
+                  <SelectLabel>Lesson</SelectLabel>
+                  {lessons.map((lesson) => (
+                    <SelectItem key={lesson.id} value={lesson.id}>
+                      {lesson.title}
+                    </SelectItem>
+                  ))}
+                </SelectGroup>
+              </SelectContent>
+            </Select>
+          </div>
+          <div className="flex flex-col space-y-2">
+            <Label>Scripture References</Label>
+            <Textarea
+              placeholder="Scripture references"
+              disabled
+              defaultValue={referencesFromLessons}
+            />
+          </div>
+        </TabsContent>
+        <TabsContent
+          value="custom-lesson"
+          className="space-y-3 rounded-lg border p-3"
+        >
+          <div className="w-full space-y-2">
+            <Label htmlFor="lesson_name">Lesson Title</Label>
+            <Input
+              id="lesson_name"
+              name="lesson_name"
+              placeholder="Lesson title"
+            />
+          </div>
+          <div className="flex flex-col space-y-2">
+            <Label htmlFor="scripture_references">Scripture References</Label>
+            <Textarea
+              id="scripture_references"
+              name="scripture_references"
+              placeholder="Enter a comma-separated list of verses (e.g. John 3:16, Romans 5:8, Luke 15)"
+            />
+          </div>
+        </TabsContent>
+      </Tabs>
+
+      <p className="inline-block pt-4 text-xs uppercase text-muted-foreground">
+        Attendees
+      </p>
+      <div className="my-2 space-x-3">
+        <input
+          type="hidden"
+          name="attendees"
+          hidden
+          defaultValue={attendees}
+          key={attendees.length}
+        />
+        <AlertDialog
+          open={attendeesDialogShown}
+          onOpenChange={setAttendeesDialogShown}
+        >
+          <AlertDialogTrigger asChild>
+            <Button
+              variant="secondary"
+              type="button"
+              disabled={!leaderId && isAdmin}
+            >
+              Select Attendees
+            </Button>
+          </AlertDialogTrigger>
+          <AlertDialogContent>
+            <AlertDialogHeader>
+              <AlertDialogTitle>Select Cell Group Attendees</AlertDialogTitle>
+              <AlertDialogDescription>
+                Choose the disciples who attended this cell group
+              </AlertDialogDescription>
+            </AlertDialogHeader>
+            <form ref={attendeesFormRef}>
+              <Input
+                placeholder="Search here"
+                value={attendeesSearchQuery}
+                onChange={(e) => setAttendeesSearchQuery(e.currentTarget.value)}
+              />
+              <div className="my-3 h-[350px] max-h-[350px] overflow-y-auto py-3 pr-2">
+                {attendeesOptions.length === 0 ? (
+                  <p className="text-center text-muted-foreground">
+                    No results found
+                  </p>
+                ) : null}
+                {attendeesOptions.map((disciple) => (
+                  <div
+                    key={disciple.id}
+                    className="rounded px-2 py-3 hover:bg-muted"
+                  >
+                    <Label
+                      htmlFor={disciple.id}
+                      className="flex cursor-pointer items-center gap-2 "
+                    >
+                      <Checkbox
+                        name={disciple.id}
+                        id={disciple.id}
+                        checked={attendees.includes(disciple.id)}
+                        onCheckedChange={() =>
+                          handleAttendeesSelection(disciple.id)
+                        }
+                      />
+                      {disciple.name}
+                    </Label>
+                  </div>
+                ))}
+              </div>
+              <AlertDialogFooter>
+                <AlertDialogCancel type="button">Close</AlertDialogCancel>
+                <AlertDialogAction type="button">Done</AlertDialogAction>
+              </AlertDialogFooter>
+            </form>
+          </AlertDialogContent>
+        </AlertDialog>
+        <span className="text-muted-foreground">
+          {attendees.length} selected
+        </span>
+      </div>
+      <SheetFooter className="flex items-center gap-2 pt-10">
+        <Button variant="ghost" type="reset" disabled={isLoading}>
+          Reset
+        </Button>
+
+        <Button type="submit" disabled={isLoading}>
+          {isLoading ? "Saving..." : "Save"}
+        </Button>
+      </SheetFooter>
+    </form>
+  )
+}
+
+function CellReportForm(props: CellReportFormProps) {
+  const [open, setOpen] = useState(false)
 
   return (
     <Sheet open={open} onOpenChange={setOpen}>
@@ -175,300 +466,7 @@ function CellReportForm({
             Create a cell report here. Click save when you are done.
           </SheetDescription>
         </SheetHeader>
-        <form
-          key={String(open)}
-          className={cn("space-y-3 py-4", {
-            "pointer-events-none opacity-80": isLoading,
-          })}
-          onSubmit={handleSubmit}
-        >
-          <p className="text-xs uppercase text-muted-foreground">
-            General Details
-          </p>
-          {isAdmin && (
-            <div className="flex flex-col space-y-2">
-              <Label htmlFor="leaderId">Cell Leader</Label>
-              <Select
-                name="leaderId"
-                value={leaderId}
-                onValueChange={setLeaderId}
-              >
-                <SelectTrigger className="w-full">
-                  <SelectValue placeholder="Choose a cell leader" />
-                </SelectTrigger>
-                <SelectContent>
-                  <SelectGroup>
-                    <SelectLabel>Cell Leader</SelectLabel>
-                    {primaryLeaders.map((leader) => (
-                      <SelectItem key={leader.id} value={leader.id}>
-                        {leader.name}
-                      </SelectItem>
-                    ))}
-                  </SelectGroup>
-                </SelectContent>
-              </Select>
-            </div>
-          )}
-          <div className="flex flex-col space-y-2">
-            <Label htmlFor="leaderId">Cell Type</Label>
-            <Select name="type">
-              <SelectTrigger className="w-full">
-                <SelectValue placeholder="Pick a cell type" />
-              </SelectTrigger>
-              <SelectContent>
-                <SelectGroup>
-                  <SelectLabel>Cell Type</SelectLabel>
-                  {["SOULWINNING", "OPEN", "DISCIPLESHIP"].map((cellType) => (
-                    <SelectItem key={cellType} value={cellType}>
-                      {cellType}
-                    </SelectItem>
-                  ))}
-                </SelectGroup>
-              </SelectContent>
-            </Select>
-          </div>
-          <div className="space-y-2">
-            <Label htmlFor="venue">Venue</Label>
-            <Input id="venue" name="venue" placeholder="Venue" />
-          </div>
-
-          <div className="flex gap-3">
-            <div className="w-full space-y-2">
-              <Label htmlFor="date">Date</Label>
-              <Input
-                type="date"
-                id="date"
-                name="date"
-                placeholder="Date"
-                max={new Date().toLocaleDateString("en-ca")}
-              />
-            </div>
-
-            <div className="w-full space-y-2">
-              <Label htmlFor="time">Time</Label>
-              <Input type="time" id="time" name="time" placeholder="Time" />
-            </div>
-          </div>
-
-          <div className="flex items-center space-x-2 pt-4">
-            <Switch
-              checked={withAssistant}
-              onCheckedChange={(checked) => setWithAssistant(checked)}
-            />
-            <Label>I have an assistant leader</Label>
-          </div>
-
-          {withAssistant && (
-            <div className="flex flex-col space-y-2">
-              <Label htmlFor="assistant_id">Assistant Leader</Label>
-              <Select
-                name="assistant_id"
-                value={assistantId}
-                onValueChange={setAssistantId}
-              >
-                <SelectTrigger className="w-full">
-                  <SelectValue placeholder="Choose assistant leader" />
-                </SelectTrigger>
-                <SelectContent>
-                  <SelectGroup>
-                    <SelectLabel>Assistant Leader</SelectLabel>
-                    {attendeesOptions.map((disciple) => (
-                      <SelectItem key={disciple.id} value={disciple.id}>
-                        {disciple.name}
-                      </SelectItem>
-                    ))}
-                  </SelectGroup>
-                </SelectContent>
-              </Select>
-            </div>
-          )}
-
-          <p className="inline-block pt-4 text-xs uppercase text-muted-foreground">
-            Lesson Details
-          </p>
-
-          <Tabs defaultValue="pick-lesson" className="w-full">
-            <TabsList className="grid w-full grid-cols-2">
-              <TabsTrigger value="pick-lesson">Pick a Lesson</TabsTrigger>
-              <TabsTrigger value="custom-lesson">Custom Lesson</TabsTrigger>
-            </TabsList>
-            <TabsContent
-              value="pick-lesson"
-              className="space-y-3 rounded-lg border p-3"
-            >
-              <div className="flex flex-col space-y-2">
-                <Label>Series</Label>
-                <Select
-                  value={selectedSeries}
-                  onValueChange={setSelectedSeries}
-                >
-                  <SelectTrigger className="w-full">
-                    <SelectValue placeholder="Pick a series" />
-                  </SelectTrigger>
-                  <SelectContent>
-                    <SelectGroup>
-                      <SelectLabel>Series</SelectLabel>
-                      {lessonOptions.map((series) => (
-                        <SelectItem key={series.id} value={series.id}>
-                          {series.title}
-                        </SelectItem>
-                      ))}
-                    </SelectGroup>
-                  </SelectContent>
-                </Select>
-              </div>
-              <div className="flex flex-col space-y-2">
-                <Label htmlFor="lessonId">Lesson</Label>
-                <Select
-                  name="lessonId"
-                  disabled={!selectedSeries}
-                  value={selectedLesson}
-                  onValueChange={setSelectedLesson}
-                >
-                  <SelectTrigger className="w-full">
-                    <SelectValue placeholder="Pick a Lesson" />
-                  </SelectTrigger>
-                  <SelectContent>
-                    <SelectGroup>
-                      <SelectLabel>Lesson</SelectLabel>
-                      {lessons.map((lesson) => (
-                        <SelectItem key={lesson.id} value={lesson.id}>
-                          {lesson.title}
-                        </SelectItem>
-                      ))}
-                    </SelectGroup>
-                  </SelectContent>
-                </Select>
-              </div>
-              <div className="flex flex-col space-y-2">
-                <Label>Scripture References</Label>
-                <Textarea
-                  placeholder="Scripture references"
-                  disabled
-                  defaultValue={referencesFromLessons}
-                />
-              </div>
-            </TabsContent>
-            <TabsContent
-              value="custom-lesson"
-              className="space-y-3 rounded-lg border p-3"
-            >
-              <div className="w-full space-y-2">
-                <Label htmlFor="lesson_name">Lesson Title</Label>
-                <Input
-                  id="lesson_name"
-                  name="lesson_name"
-                  placeholder="Lesson title"
-                />
-              </div>
-              <div className="flex flex-col space-y-2">
-                <Label htmlFor="scripture_references">
-                  Scripture References
-                </Label>
-                <Textarea
-                  id="scripture_references"
-                  name="scripture_references"
-                  placeholder="Enter a comma-separated list of verses (e.g. John 3:16, Romans 5:8, Luke 15)"
-                />
-              </div>
-            </TabsContent>
-          </Tabs>
-
-          <p className="inline-block pt-4 text-xs uppercase text-muted-foreground">
-            Attendees
-          </p>
-          <div className="my-2 space-x-3">
-            <input
-              type="hidden"
-              name="attendees"
-              hidden
-              defaultValue={attendees}
-              key={attendees.length}
-            />
-            <AlertDialog
-              open={attendeesDialogShown}
-              onOpenChange={setAttendeesDialogShown}
-            >
-              <AlertDialogTrigger asChild>
-                <Button
-                  variant="secondary"
-                  type="button"
-                  disabled={!leaderId && isAdmin}
-                >
-                  Select Attendees
-                </Button>
-              </AlertDialogTrigger>
-              <AlertDialogContent>
-                <AlertDialogHeader>
-                  <AlertDialogTitle>
-                    Select Cell Group Attendees
-                  </AlertDialogTitle>
-                  <AlertDialogDescription>
-                    Choose the disciples who attended this cell group
-                  </AlertDialogDescription>
-                </AlertDialogHeader>
-                <form ref={attendeesFormRef}>
-                  <Input
-                    placeholder="Search here"
-                    value={attendeesSearchQuery}
-                    onChange={(e) =>
-                      setAttendeesSearchQuery(e.currentTarget.value)
-                    }
-                  />
-                  <div className="my-3 h-[350px] max-h-[350px] overflow-y-auto py-3 pr-2">
-                    {attendeesOptions.length === 0 ? (
-                      <p className="text-center text-muted-foreground">
-                        No results found
-                      </p>
-                    ) : null}
-                    {attendeesOptions.map((disciple) => (
-                      <div
-                        key={disciple.id}
-                        className="rounded px-2 py-3 hover:bg-muted"
-                      >
-                        <Label
-                          htmlFor={disciple.id}
-                          className="flex cursor-pointer items-center gap-2 "
-                        >
-                          <Checkbox
-                            name={disciple.id}
-                            id={disciple.id}
-                            defaultChecked={
-                              attendees.includes(disciple.id) ||
-                              disciple.id === assistantId
-                            }
-                          />
-                          {disciple.name}
-                        </Label>
-                      </div>
-                    ))}
-                  </div>
-                  <AlertDialogFooter>
-                    <AlertDialogCancel type="button">Close</AlertDialogCancel>
-                    <AlertDialogAction
-                      type="button"
-                      onClick={handleAttendeesSelection}
-                    >
-                      Done
-                    </AlertDialogAction>
-                  </AlertDialogFooter>
-                </form>
-              </AlertDialogContent>
-            </AlertDialog>
-            <span className="text-muted-foreground">
-              {attendees.length} selected
-            </span>
-          </div>
-          <SheetFooter className="flex items-center gap-2 pt-10">
-            <Button variant="ghost" type="reset" disabled={isLoading}>
-              Reset
-            </Button>
-
-            <Button type="submit" disabled={isLoading}>
-              {isLoading ? "Saving..." : "Save"}
-            </Button>
-          </SheetFooter>
-        </form>
+        <ReporFormComponent {...props} onDone={() => setOpen(false)} />
       </SheetContent>
     </Sheet>
   )

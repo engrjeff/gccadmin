@@ -1,4 +1,4 @@
-import { redirect } from "next/navigation"
+import { notFound, redirect } from "next/navigation"
 
 import { prisma as db } from "@/lib/db"
 import { getCurrentUser } from "@/lib/session"
@@ -65,6 +65,10 @@ export const getDiscipleById = async (id: string) => {
       },
     },
   })
+
+  if (!disciple) {
+    return notFound()
+  }
 
   return disciple
 }

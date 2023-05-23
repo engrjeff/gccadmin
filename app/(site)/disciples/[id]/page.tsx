@@ -24,8 +24,6 @@ async function DiscipleDetailPage({ params }: { params: { id: string } }) {
     accountsData,
   ])
 
-  if (!disciple) return <p>Not found...</p>
-
   return (
     <div className="h-full space-y-6 overflow-y-auto pr-3">
       <div className="flex justify-between">
@@ -119,7 +117,7 @@ async function DiscipleDetailPage({ params }: { params: { id: string } }) {
         leaderOptions={primaryLeaders}
       />
 
-      <DeleteSection />
+      <DeleteSection disciple={disciple} />
     </div>
   )
 }

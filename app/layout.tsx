@@ -1,13 +1,16 @@
 import "@/styles/globals.css"
 import { Metadata } from "next"
 import AuthProvider from "@/providers/auth-provider"
+import ReactQueryProvider from "@/providers/react-query-provider"
 
 import { siteConfig } from "@/config/site"
 import { fontSans } from "@/lib/fonts"
+import { getCurrentUser } from "@/lib/session"
 import { cn } from "@/lib/utils"
 import { Toaster } from "@/components/ui/toaster"
 import { TailwindIndicator } from "@/components/tailwind-indicator"
 import { ThemeProvider } from "@/components/theme-provider"
+import UnverifiedAccountView from "@/components/unverified-account-view"
 
 export const metadata: Metadata = {
   title: {
@@ -30,7 +33,9 @@ interface RootLayoutProps {
   children: React.ReactNode
 }
 
-export default function RootLayout({ children }: RootLayoutProps) {
+export default async function RootLayout({ children }: RootLayoutProps) {
+  const user = await getCurrentUser()
+
   return (
     <>
       <html lang="en" suppressHydrationWarning>
@@ -42,8 +47,16 @@ export default function RootLayout({ children }: RootLayoutProps) {
           )}
         >
           <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
-            <AuthProvider>{children}</AuthProvider>
-            <Toaster />
+            {user?.discipleId ? (
+              <>
+                <AuthProvider>
+                  <ReactQueryProvider>{children}</ReactQueryProvider>
+                </AuthProvider>
+                <Toaster />
+              </>
+            ) : (
+              <UnverifiedAccountView />
+            )}
             <TailwindIndicator />
           </ThemeProvider>
         </body>
