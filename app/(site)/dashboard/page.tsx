@@ -39,7 +39,7 @@ export const metadata: Metadata = {
 }
 
 async function DashboardPage() {
-  const { churchData, cellData, processData, primaryData } =
+  const { churchData, cellData, processData, primaryData, weeklyReports } =
     await getDashboardData()
 
   return (
@@ -129,8 +129,26 @@ async function DashboardPage() {
             <CardHeader>
               <CardTitle>Latest Cell Reports</CardTitle>
             </CardHeader>
-            <CardContent className="flex-1">
-              <p>Latest cell reports here...</p>
+            <CardContent className="max-h-[500px] flex-1 overflow-y-auto">
+              <ul className="pb-3">
+                <li className="mb-4 text-lg font-medium">
+                  Total CGs this week:{" "}
+                  {weeklyReports.reduce((t, r) => t + r.cell_reports.length, 0)}
+                </li>
+                {weeklyReports.map((leader) => (
+                  <li
+                    key={leader.id}
+                    className="grid grid-cols-2 gap-2 border-b py-3"
+                  >
+                    <p>Name:</p>
+                    <p>{leader.name}</p>
+                    <p>No. of CGs Done: </p>
+                    <p>{leader.cell_reports.length}</p>
+                    <p>No. of Disciples:</p>
+                    <p>{leader.disciples.length}</p>
+                  </li>
+                ))}
+              </ul>
             </CardContent>
             <CardFooter>
               <Link

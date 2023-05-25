@@ -5,7 +5,7 @@ import { getLessonSeries } from "../resources/service"
 import CellReportFilters from "./components/cell-report-filters"
 import CellReportForm from "./components/cell-report-form"
 import CellReportListItem from "./components/cell-report-list-item"
-import { getCellReports } from "./service"
+import { getCellReports, getWeeklyReports } from "./service"
 
 async function CellReportsPage() {
   const lessonSeriesData = getLessonSeries()

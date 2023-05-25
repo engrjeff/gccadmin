@@ -1,4 +1,6 @@
 import { notFound, redirect } from "next/navigation"
+import nextSaturday from "date-fns/nextSaturday"
+import previousSunday from "date-fns/previousSunday"
 
 import { prisma as db } from "@/lib/db"
 import { getCurrentUser } from "@/lib/session"
@@ -63,4 +65,30 @@ export const getCellReportById = async (id: string) => {
   if (!cellReport) return notFound()
 
   return cellReport
+}
+
+export const getWeeklyReports = async () => {
+  const startDay = previousSunday(new Date())
+  const endDay = nextSaturday(new Date())
+
+  const reports = await db.cellReport.findMany({
+    where: {
+      date: {
+        gte: startDay,
+        lte: endDay,
+      },
+    },
+
+    include: {
+      leader: true,
+      assistant: true,
+      attendees: {
+        select: {
+          disciple: true,
+        },
+      },
+    },
+  })
+
+  return reports
 }

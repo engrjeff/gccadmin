@@ -1,4 +1,9 @@
+import nextSaturday from "date-fns/nextSaturday"
+import previousSunday from "date-fns/previousSunday"
+
 import { prisma as db } from "@/lib/db"
+
+import { getWeeklyReports } from "../cell-reports/service"
 
 export const getDashboardData = async () => {
   const churchData = await db.disciple.groupBy({
@@ -42,10 +47,41 @@ export const getDashboardData = async () => {
     },
   })
 
+  // weekly reports
+  const startDay = previousSunday(new Date())
+  const endDay = nextSaturday(new Date())
+
+  const weeklyReports = await db.disciple.findMany({
+    where: {
+      isPrimary: true,
+    },
+    include: {
+      disciples: true,
+      cell_reports: {
+        where: {
+          date: {
+            gte: startDay,
+            lte: endDay,
+          },
+        },
+        include: {
+          leader: true,
+          assistant: true,
+          attendees: {
+            select: {
+              disciple: true,
+            },
+          },
+        },
+      },
+    },
+  })
+
   return {
     churchData,
     cellData,
     processData,
+    weeklyReports,
     primaryData: primaryData.map((d) => ({
       name: d.name,
       disciples: d._count.disciples,

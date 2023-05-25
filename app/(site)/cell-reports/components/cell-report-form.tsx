@@ -256,7 +256,7 @@ const ReporFormComponent = ({
             <SelectTrigger className="w-full">
               <SelectValue placeholder="Choose assistant leader" />
             </SelectTrigger>
-            <SelectContent>
+            <SelectContent className="max-h-[300px] overflow-y-auto">
               <SelectGroup>
                 <SelectLabel>Assistant Leader</SelectLabel>
                 {attendeesOptions.map((disciple) => (
