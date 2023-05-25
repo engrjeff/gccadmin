@@ -20,9 +20,9 @@ const memberColorMap: Record<Disciple["member_type"], string> = {
   YOUNGPRO: "text-orange-500",
 }
 
-export const columns: ColumnDef<
-  Disciple & { leader: { name: string } | null }
->[] = [
+export type DiscipleWithLeader = Disciple & { leader: { name: string } | null }
+
+export const columns: ColumnDef<DiscipleWithLeader>[] = [
   {
     id: "select",
     header: ({ table }) => (

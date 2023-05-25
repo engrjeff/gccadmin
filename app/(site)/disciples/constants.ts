@@ -1,4 +1,6 @@
-export const processLevels = [
+import { Option } from "@/types/common"
+
+export const processLevels: Option[] = [
   "NONE",
   "PREENC",
   "ENCOUNTER",
@@ -7,14 +9,18 @@ export const processLevels = [
   "LEADERSHIP_3",
 ].map((p) => ({ value: p, label: p }))
 
-export const memberTypes = ["KIDS", "MEN", "WOMEN", "YOUTH", "YOUNGPRO"].map(
-  (m) => ({
-    value: m,
-    label: m,
-  })
-)
+export const memberTypes: Option[] = [
+  "KIDS",
+  "MEN",
+  "WOMEN",
+  "YOUTH",
+  "YOUNGPRO",
+].map((m) => ({
+  value: m,
+  label: m,
+}))
 
-export const cellStatuses = [
+export const cellStatuses: Option[] = [
   "FIRST_TIMER",
   "SECOND_TIMER",
   "THIRD_TIMER",
@@ -24,7 +30,7 @@ export const cellStatuses = [
   label: m,
 }))
 
-export const churchStatuses = ["NACS", "ACS", "REGULAR"].map((m) => ({
+export const churchStatuses: Option[] = ["NACS", "ACS", "REGULAR"].map((m) => ({
   value: m,
   label: m,
 }))

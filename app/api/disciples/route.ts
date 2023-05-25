@@ -4,7 +4,7 @@ import { getServerSession } from "next-auth"
 import { authOptions } from "@/lib/auth"
 import { prisma as db } from "@/lib/db"
 
-import { discipleCreateSchema } from "./schema"
+import { discipleBulkUpdateSchema, discipleCreateSchema } from "./schema"
 
 export async function GET() {
   try {
@@ -51,6 +51,37 @@ export async function POST(req: Request) {
     })
 
     return NextResponse.json(disciple)
+  } catch (error: any) {
+    return new NextResponse(error.message || "Error", { status: 500 })
+  }
+}
+
+export async function PUT(req: Request) {
+  try {
+    const session = await getServerSession(authOptions)
+
+    if (!session) {
+      return new NextResponse("Unauthorized", { status: 403 })
+    }
+
+    const json = await req.json()
+
+    const body = discipleBulkUpdateSchema.parse(json)
+
+    const updatedDisciples = await db.disciple.updateMany({
+      where: {
+        id: {
+          in: body.selectedIds,
+        },
+      },
+      data: {
+        cell_status: body.cell_status,
+        church_status: body.church_status,
+        process_level: body.process_level,
+      },
+    })
+
+    return NextResponse.json(updatedDisciples)
   } catch (error: any) {
     return new NextResponse(error.message || "Error", { status: 500 })
   }

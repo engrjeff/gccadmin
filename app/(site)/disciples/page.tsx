@@ -3,7 +3,6 @@ import { Download } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import PageTitle from "@/components/page-title"
 
-import { columns } from "./components/columns"
 import CurrentDiscipleProvider from "./components/current-disciple-provider"
 import DiscipleEditForm from "./components/disciple-edit-form"
 import { DisciplesTable } from "./components/disciples-table"
@@ -43,8 +42,8 @@ async function MembersPage() {
           <DiscipleEditForm leaderOptions={leaders} />
         </div>
       </div>
-      <div className="h-[calc(100%-64px)] max-h-[calc(100%-64px)] overflow-y-auto px-2">
-        <DisciplesTable columns={columns} data={disciples} />
+      <div className="h-[calc(100%-64px)] max-h-[calc(100%-64px)] px-2">
+        <DisciplesTable data={disciples} />
       </div>
     </CurrentDiscipleProvider>
   )
