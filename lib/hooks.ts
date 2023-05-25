@@ -1,14 +1,16 @@
+import { type Disciple } from "@prisma/client"
 import { create } from "zustand"
 
 interface DiscipleFormSheetState {
   shown: boolean
   openForm: () => void
   closeForm: () => void
+  toggle: (open: boolean) => void
 }
 
 interface SelectedDiscipleState {
-  selectDiscipleId: string | null
-  setSelectedDiscipleId: (id: string) => void
+  selectedDisciple: Disciple | null
+  setSelectedDisciple: (disciple: Disciple | null) => void
 }
 
 export const useDiscipleFormSheetStore = create<DiscipleFormSheetState>(
@@ -16,12 +18,13 @@ export const useDiscipleFormSheetStore = create<DiscipleFormSheetState>(
     shown: false,
     openForm: () => set({ shown: true }),
     closeForm: () => set({ shown: true }),
+    toggle: (open) => set({ shown: open }),
   })
 )
 
 export const useSelectedDiscipleStore = create<SelectedDiscipleState>(
   (set) => ({
-    selectDiscipleId: null,
-    setSelectedDiscipleId: (id) => set({ selectDiscipleId: id }),
+    selectedDisciple: null,
+    setSelectedDisciple: (disciple) => set({ selectedDisciple: disciple }),
   })
 )

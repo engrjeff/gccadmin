@@ -5,6 +5,10 @@ import Link from "next/link"
 import { Disciple } from "@prisma/client"
 import { Book, Edit, Eye, MoreHorizontal, Trash, Users } from "lucide-react"
 
+import {
+  useDiscipleFormSheetStore,
+  useSelectedDiscipleStore,
+} from "@/lib/hooks"
 import { Button } from "@/components/ui/button"
 import {
   DropdownMenu,
@@ -21,17 +25,17 @@ import {
   TooltipTrigger,
 } from "@/components/ui/tooltip"
 
-import { useCurrentDisciple } from "./current-disciple-provider"
 import DiscipleDeleteDialog from "./delete-disciple-dialog"
 
 function DiscipleRowActions({ disciple }: { disciple: Disciple }) {
-  const { setSelectedDisciple, setEditFormOpen } = useCurrentDisciple()
+  const { openForm } = useDiscipleFormSheetStore()
+  const { setSelectedDisciple } = useSelectedDiscipleStore()
 
   const [deleteDialogShown, setDeleteDialogShown] = useState(false)
 
   const handleEditClick = () => {
     setSelectedDisciple(disciple)
-    setEditFormOpen(true)
+    openForm()
   }
 
   return (

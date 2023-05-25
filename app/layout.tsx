@@ -1,7 +1,6 @@
 import "@/styles/globals.css"
 import { Metadata } from "next"
 import AuthProvider from "@/providers/auth-provider"
-import ReactQueryProvider from "@/providers/react-query-provider"
 
 import { siteConfig } from "@/config/site"
 import { fontSans } from "@/lib/fonts"
@@ -49,9 +48,7 @@ export default async function RootLayout({ children }: RootLayoutProps) {
           <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
             {user?.discipleId ? (
               <>
-                <AuthProvider>
-                  <ReactQueryProvider>{children}</ReactQueryProvider>
-                </AuthProvider>
+                <AuthProvider>{children}</AuthProvider>
                 <Toaster />
               </>
             ) : (

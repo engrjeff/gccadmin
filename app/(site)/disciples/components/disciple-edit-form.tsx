@@ -6,6 +6,10 @@ import { Disciple } from "@prisma/client"
 import { format } from "date-fns"
 import { useSession } from "next-auth/react"
 
+import {
+  useDiscipleFormSheetStore,
+  useSelectedDiscipleStore,
+} from "@/lib/hooks"
 import { cn } from "@/lib/utils"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
@@ -28,7 +32,6 @@ import {
   SheetFooter,
   SheetHeader,
   SheetTitle,
-  SheetTrigger,
 } from "@/components/ui/sheet"
 import { toast } from "@/components/ui/use-toast"
 
@@ -38,7 +41,6 @@ import {
   memberTypes,
   processLevels,
 } from "../constants"
-import { useCurrentDisciple } from "./current-disciple-provider"
 
 interface DiscipleEditFormProps {
   leaderOptions: Disciple[]
@@ -49,8 +51,11 @@ export default function DiscipleEditForm({
 }: DiscipleEditFormProps) {
   const router = useRouter()
   const [isLoading, setIsLoading] = useState(false)
-  const { editFormOpen, setEditFormOpen, selectedDisciple } =
-    useCurrentDisciple()
+
+  const { shown, closeForm, toggle } = useDiscipleFormSheetStore()
+  const selectedDisciple = useSelectedDiscipleStore(
+    (state) => state.selectedDisciple
+  )
 
   const session = useSession()
 
@@ -80,7 +85,6 @@ export default function DiscipleEditForm({
     setIsLoading(false)
 
     if (!response?.ok) {
-      setEditFormOpen(false)
       return toast({
         title: "Something went wrong.",
         description: "The disciple record was not updated. Please try again.",
@@ -95,11 +99,11 @@ export default function DiscipleEditForm({
     // This forces a cache invalidation.
     router.refresh()
 
-    setEditFormOpen(false)
+    closeForm()
   }
 
   return (
-    <Sheet open={editFormOpen} onOpenChange={setEditFormOpen}>
+    <Sheet open={shown} onOpenChange={toggle}>
       <SheetContent
         position="right"
         size="sm"
@@ -148,11 +152,6 @@ export default function DiscipleEditForm({
                 "yyyy-MM-dd"
               )}
             />
-            {/* <DatePicker
-              placeholder="Pick a Birthdate"
-              value={birthdate}
-              onChange={setBirthdate}
-            /> */}
           </div>
           <div className="mb-1 space-y-2">
             <Label htmlFor="gender">Gender</Label>

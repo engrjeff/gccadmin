@@ -3,7 +3,6 @@ import { Download } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import PageTitle from "@/components/page-title"
 
-import CurrentDiscipleProvider from "./components/current-disciple-provider"
 import DiscipleEditForm from "./components/disciple-edit-form"
 import { DisciplesTable } from "./components/disciples-table"
 import MemberForm from "./components/member-form"
@@ -31,7 +30,7 @@ async function MembersPage() {
       : "List of your disciples"
 
   return (
-    <CurrentDiscipleProvider>
+    <>
       <div className="flex justify-between px-2">
         <PageTitle title={title} subtitle={subtitle} />
         <div className="space-x-3">
@@ -45,7 +44,7 @@ async function MembersPage() {
       <div className="h-[calc(100%-64px)] max-h-[calc(100%-64px)] px-2">
         <DisciplesTable data={disciples} />
       </div>
-    </CurrentDiscipleProvider>
+    </>
   )
 }
 
