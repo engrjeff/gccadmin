@@ -13,9 +13,25 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card"
+import DateRangePicker from "@/components/ui/data-range-picker"
+import {
+  Table,
+  TableBody,
+  TableCaption,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from "@/components/ui/table"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import PageTitle from "@/components/page-title"
 
+import {
+  cellStatuses,
+  churchStatuses,
+  memberTypes,
+  processLevels,
+} from "../disciples/constants"
 import LeadersData from "./components/leaders-data"
 import { getDashboardData } from "./service"
 
@@ -39,126 +55,266 @@ export const metadata: Metadata = {
 }
 
 async function DashboardPage() {
-  const { churchData, cellData, processData, primaryData, weeklyReports } =
-    await getDashboardData()
+  const reports = await getDashboardData()
 
   return (
     <div className="flex h-full flex-col gap-7 overflow-y-auto pr-3">
-      <div>
+      <div className="flex justify-between">
         <PageTitle
           title="Dashboard"
           subtitle="A quick view of church statistics"
         />
       </div>
-      <div className="grid grid-cols-7 gap-6">
-        <div className="col-span-5 space-y-6">
-          <Tabs defaultValue="church">
+      <div className="grid grid-cols-12 gap-6">
+        <div className="col-span-6 h-full">
+          <Card>
+            <CardHeader>
+              <CardTitle className="text-sm font-semibold text-foreground">
+                Leader&apos; Data
+              </CardTitle>
+              <CardDescription>No. of Disciples by Leader</CardDescription>
+            </CardHeader>
+            <CardContent className="p-0">
+              <LeadersData leadersDiscipleData={reports.primaryData} />
+            </CardContent>
+          </Card>
+        </div>
+        <div className="col-span-6">
+          <Tabs defaultValue="weekly_report" className="w-full">
             <TabsList className="mb-5">
-              <TabsTrigger value="church">Church</TabsTrigger>
-              <TabsTrigger value="cell-group">Cell Group</TabsTrigger>
-              <TabsTrigger value="process-level">Process</TabsTrigger>
+              <TabsTrigger value="weekly_report">Weekly Report</TabsTrigger>
+              <TabsTrigger value="member_type">Member Type</TabsTrigger>
+              <TabsTrigger value="cell_status">Cell Status</TabsTrigger>
+              <TabsTrigger value="church_status">Church Status</TabsTrigger>
+              <TabsTrigger value="process_level">Process Level</TabsTrigger>
             </TabsList>
-            <TabsContent value="church">
-              <div className="grid grid-cols-1 gap-4 md:grid-cols-3">
-                {churchData.map((data) => (
-                  <Card key={data.church_status}>
-                    <CardHeader className="flex flex-row items-center justify-between">
-                      <CardTitle className="text-sm font-medium tracking-tight">
-                        {getChurchStatusText(data.church_status)}
-                      </CardTitle>
-                      <Activity className="h-4 w-4 text-muted-foreground" />
-                    </CardHeader>
-                    <CardContent>
-                      <div className="text-3xl font-bold">{data._count}</div>
-                    </CardContent>
-                  </Card>
-                ))}
-              </div>
+            <TabsContent value="weekly_report">
+              <Card>
+                <div className="flex items-start justify-between p-4">
+                  <CardDescription className="font-semibold text-foreground">
+                    Cell Group Weekly Report
+                  </CardDescription>
+                  <DateRangePicker />
+                </div>
+                <CardContent className="p-0">
+                  <Table>
+                    <TableHeader>
+                      <TableRow>
+                        <TableHead>Leader</TableHead>
+                        <TableHead>CG This Week</TableHead>
+                        <TableHead>Unique</TableHead>
+                        <TableHead>CG Last Week</TableHead>
+                        <TableHead>Unique (Last Week)</TableHead>
+                      </TableRow>
+                    </TableHeader>
+                    <TableBody>
+                      {reports.weeklyReports.cgCountByLeaderData.map((d) => (
+                        <TableRow key={d.id} className="border-0">
+                          <TableCell className="font-medium">
+                            <Link
+                              href={`/disciples/${d.id}`}
+                              className="hover:underline"
+                            >
+                              {d.name}
+                            </Link>
+                          </TableCell>
+                          <TableCell>{d.cgCount}</TableCell>
+                          <TableCell>
+                            {d.uniqueDisciplesDuringCgCount}
+                          </TableCell>
+                          <TableCell>
+                            {
+                              reports.pastWeeklyReports.cgCountByLeaderData.find(
+                                (r) => r.id === d.id
+                              )?.cgCount
+                            }
+                          </TableCell>
+                          <TableCell>
+                            {
+                              reports.pastWeeklyReports.cgCountByLeaderData.find(
+                                (r) => r.id === d.id
+                              )?.uniqueDisciplesDuringCgCount
+                            }
+                          </TableCell>
+                        </TableRow>
+                      ))}
+                    </TableBody>
+                  </Table>
+                </CardContent>
+              </Card>
             </TabsContent>
-            <TabsContent value="cell-group">
-              <div className="grid grid-cols-1 gap-4 md:grid-cols-3">
-                {cellData.map((data) => (
-                  <Card key={data.cell_status}>
-                    <CardHeader className="flex flex-row items-center justify-between">
-                      <CardTitle className="text-sm font-medium capitalize tracking-tight">
-                        {getStatusText(data.cell_status)}
-                      </CardTitle>
-                      <Activity className="h-4 w-4 text-muted-foreground" />
-                    </CardHeader>
-                    <CardContent>
-                      <div className="text-3xl font-bold">{data._count}</div>
-                    </CardContent>
-                  </Card>
-                ))}
-              </div>
+            <TabsContent value="member_type">
+              <Card>
+                <div className="flex items-center justify-between p-4">
+                  <CardDescription className="font-semibold text-foreground">
+                    Leader&apos;s Disciples by Member Type
+                  </CardDescription>
+                </div>
+                <CardContent className="p-0">
+                  <Table>
+                    <TableHeader>
+                      <TableRow>
+                        <TableHead>Leader</TableHead>
+                        {memberTypes.map((i) => (
+                          <TableHead key={i.value}>{i.label}</TableHead>
+                        ))}
+                      </TableRow>
+                    </TableHeader>
+                    <TableBody>
+                      {reports.disciplesTallyData.map((leader) => (
+                        <TableRow key={leader.details.id} className="border-0">
+                          <TableCell>
+                            <Link
+                              href={`/disciples/${leader.details.id}`}
+                              className="hover:underline"
+                            >
+                              {leader.details.name}
+                            </Link>
+                          </TableCell>
+                          <TableCell>{leader.memberType.KIDS}</TableCell>
+                          <TableCell>{leader.memberType.MEN}</TableCell>
+                          <TableCell>{leader.memberType.WOMEN}</TableCell>
+                          <TableCell>{leader.memberType.YOUTH}</TableCell>
+                          <TableCell>{leader.memberType.YOUNGPRO}</TableCell>
+                        </TableRow>
+                      ))}
+                    </TableBody>
+                  </Table>
+                </CardContent>
+              </Card>
             </TabsContent>
-            <TabsContent value="process-level">
-              <div className="grid auto-cols-fr grid-flow-col gap-4">
-                {processData.map((data) => (
-                  <Card key={data.process_level}>
-                    <CardHeader className="flex flex-row items-center justify-between">
-                      <CardTitle className="text-sm font-medium capitalize tracking-tight">
-                        {getStatusText(data.process_level)}
-                      </CardTitle>
-                      <Activity className="h-4 w-4 text-muted-foreground" />
-                    </CardHeader>
-                    <CardContent>
-                      <div className="text-3xl font-bold">{data._count}</div>
-                    </CardContent>
-                  </Card>
-                ))}
-              </div>
+            <TabsContent value="cell_status">
+              <Card>
+                <div className="flex items-center justify-between p-4">
+                  <CardDescription className="font-semibold text-foreground">
+                    Leader&apos;s Disciples by Cell Status
+                  </CardDescription>
+                </div>
+                <CardContent className="p-0">
+                  <Table>
+                    <TableHeader>
+                      <TableRow>
+                        <TableHead>Leader</TableHead>
+                        {cellStatuses.map((i) => (
+                          <TableHead key={i.value}>
+                            {i.label.replace(/_/g, " ")}
+                          </TableHead>
+                        ))}
+                      </TableRow>
+                    </TableHeader>
+                    <TableBody>
+                      {reports.disciplesTallyData.map((leader) => (
+                        <TableRow key={leader.details.id} className="border-0">
+                          <TableCell>
+                            <Link
+                              href={`/disciples/${leader.details.id}`}
+                              className="hover:underline"
+                            >
+                              {leader.details.name}
+                            </Link>
+                          </TableCell>
+                          <TableCell>{leader.cellStatus.FIRST_TIMER}</TableCell>
+                          <TableCell>
+                            {leader.cellStatus.SECOND_TIMER}
+                          </TableCell>
+                          <TableCell>{leader.cellStatus.THIRD_TIMER}</TableCell>
+                          <TableCell>{leader.cellStatus.REGULAR}</TableCell>
+                        </TableRow>
+                      ))}
+                    </TableBody>
+                  </Table>
+                </CardContent>
+              </Card>
+            </TabsContent>
+            <TabsContent value="church_status">
+              <Card>
+                <div className="flex items-center justify-between p-4">
+                  <CardDescription className="font-semibold text-foreground">
+                    Leader&apos;s Disciples by Church Status
+                  </CardDescription>
+                </div>
+                <CardContent className="p-0">
+                  <Table>
+                    <TableHeader>
+                      <TableRow>
+                        <TableHead>Leader</TableHead>
+                        {churchStatuses.map((i) => (
+                          <TableHead key={i.value}>
+                            {i.label.replace(/_/g, " ")}
+                          </TableHead>
+                        ))}
+                      </TableRow>
+                    </TableHeader>
+                    <TableBody>
+                      {reports.disciplesTallyData.map((leader) => (
+                        <TableRow key={leader.details.id} className="border-0">
+                          <TableCell>
+                            <Link
+                              href={`/disciples/${leader.details.id}`}
+                              className="hover:underline"
+                            >
+                              {leader.details.name}
+                            </Link>
+                          </TableCell>
+                          <TableCell>{leader.churchStatus.NACS}</TableCell>
+                          <TableCell>{leader.churchStatus.ACS}</TableCell>
+                          <TableCell>{leader.churchStatus.REGULAR}</TableCell>
+                        </TableRow>
+                      ))}
+                    </TableBody>
+                  </Table>
+                </CardContent>
+              </Card>
+            </TabsContent>
+            <TabsContent value="process_level">
+              <Card>
+                <div className="flex items-center justify-between p-4">
+                  <CardDescription className="font-semibold text-foreground">
+                    Leader&apos;s Disciples by Process Level
+                  </CardDescription>
+                </div>
+                <CardContent className="p-0">
+                  <Table>
+                    <TableHeader>
+                      <TableRow>
+                        <TableHead>Leader</TableHead>
+                        {processLevels.slice(0, 5).map((i) => (
+                          <TableHead key={i.value}>
+                            {i.label.replace(/_/g, " ")}
+                          </TableHead>
+                        ))}
+                      </TableRow>
+                    </TableHeader>
+                    <TableBody>
+                      {reports.disciplesTallyData.map((leader) => (
+                        <TableRow key={leader.details.id} className="border-0">
+                          <TableCell>
+                            <Link
+                              href={`/disciples/${leader.details.id}`}
+                              className="hover:underline"
+                            >
+                              {leader.details.name}
+                            </Link>
+                          </TableCell>
+                          <TableCell>{leader.processLevels.NONE}</TableCell>
+                          <TableCell>{leader.processLevels.PREENC}</TableCell>
+                          <TableCell>
+                            {leader.processLevels.ENCOUNTER}
+                          </TableCell>
+                          <TableCell>
+                            {leader.processLevels.LEADERSHIP_1}
+                          </TableCell>
+                          <TableCell>
+                            {leader.processLevels.LEADERSHIP_2}
+                          </TableCell>
+                        </TableRow>
+                      ))}
+                    </TableBody>
+                  </Table>
+                </CardContent>
+              </Card>
             </TabsContent>
           </Tabs>
-          <div className="col-span-5">
-            <Card>
-              <CardHeader>
-                <CardTitle>Leaders&apos; Data</CardTitle>
-                <CardDescription>
-                  Showing the number of Leader&apos; disciples
-                </CardDescription>
-              </CardHeader>
-              <CardContent className="relative z-10 -ml-2 pb-20 pl-0">
-                <LeadersData leadersDiscipleData={primaryData} />
-              </CardContent>
-            </Card>
-          </div>
-        </div>
-        <div className="col-span-2 h-full">
-          <Card className="flex h-full flex-col">
-            <CardHeader>
-              <CardTitle>Latest Cell Reports</CardTitle>
-            </CardHeader>
-            <CardContent className="max-h-[500px] flex-1 overflow-y-auto">
-              <ul className="pb-3">
-                <li className="mb-4 text-lg font-medium">
-                  Total CGs this week:{" "}
-                  {weeklyReports.reduce((t, r) => t + r.cell_reports.length, 0)}
-                </li>
-                {weeklyReports.map((leader) => (
-                  <li
-                    key={leader.id}
-                    className="grid grid-cols-2 gap-2 border-b py-3"
-                  >
-                    <p>Name:</p>
-                    <p>{leader.name}</p>
-                    <p>No. of CGs Done: </p>
-                    <p>{leader.cell_reports.length}</p>
-                    <p>No. of Disciples:</p>
-                    <p>{leader.disciples.length}</p>
-                  </li>
-                ))}
-              </ul>
-            </CardContent>
-            <CardFooter>
-              <Link
-                href="/cell-reports"
-                className={cn(buttonVariants(), "w-full")}
-              >
-                View All
-              </Link>
-            </CardFooter>
-          </Card>
         </div>
       </div>
     </div>
