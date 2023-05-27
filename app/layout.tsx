@@ -46,14 +46,18 @@ export default async function RootLayout({ children }: RootLayoutProps) {
           )}
         >
           <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
-            {user?.discipleId ? (
+            {/* {user?.discipleId ? (
               <>
                 <AuthProvider>{children}</AuthProvider>
                 <Toaster />
               </>
             ) : (
               <UnverifiedAccountView />
-            )}
+            )} */}
+            <>
+              <AuthProvider>{children}</AuthProvider>
+              <Toaster />
+            </>
             <TailwindIndicator />
           </ThemeProvider>
         </body>
