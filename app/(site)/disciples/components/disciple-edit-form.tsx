@@ -97,9 +97,9 @@ export default function DiscipleEditForm({
       variant: "success",
     })
     // This forces a cache invalidation.
-    router.refresh()
+    toggle(false)
 
-    closeForm()
+    router.refresh()
   }
 
   return (
