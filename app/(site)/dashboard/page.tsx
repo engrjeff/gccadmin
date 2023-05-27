@@ -57,7 +57,7 @@ async function DashboardPage() {
   }))
 
   return (
-    <div className="flex h-full flex-col gap-4 overflow-y-auto pr-3">
+    <div className="flex h-full flex-col gap-4 overflow-y-auto lg:pr-3">
       <div className="flex justify-between">
         <PageTitle
           title="Dashboard"
@@ -67,7 +67,7 @@ async function DashboardPage() {
       <div className="flex">
         <DashboardDataFilter leaderOptions={leaderOptions} />
       </div>
-      <div className="grid grid-cols-4 gap-6">
+      <div className="grid gap-4 lg:grid-cols-4 lg:gap-6">
         <KPICard
           title="Active Church Members"
           value={reports.totalKPIData.activeInChurch}
@@ -89,9 +89,9 @@ async function DashboardPage() {
           subValue={`As of ${format(new Date(), "MMM dd, yyyy")}`}
         />
       </div>
-      <div className="grid grid-cols-12 gap-6">
-        <div className="col-span-8">
-          <div className="grid grid-cols-2 gap-5">
+      <div className="grid gap-4 lg:grid-cols-12 lg:gap-6">
+        <div className="lg:col-span-8">
+          <div className="grid gap-4 lg:grid-cols-2 lg:gap-5">
             <LeadersData leadersDiscipleData={reports.primaryData} />
             <WeeklyCellReports
               totalCGDone={reports.weeklyReports.totalCGsDone}
@@ -99,7 +99,7 @@ async function DashboardPage() {
             />
           </div>
         </div>
-        <div className="col-span-4">
+        <div className="max-w-full lg:col-span-4">
           <Card>
             <Tabs defaultValue="cell">
               <CardHeader className="flex-row p-4 pb-0">
