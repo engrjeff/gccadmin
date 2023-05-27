@@ -259,7 +259,7 @@ const ReporFormComponent = ({
             <SelectContent className="max-h-[300px] overflow-y-auto">
               <SelectGroup>
                 <SelectLabel>Assistant Leader</SelectLabel>
-                {attendeesOptions.map((disciple) => (
+                {discArr.map((disciple) => (
                   <SelectItem key={disciple.id} value={disciple.id}>
                     {disciple.name}
                   </SelectItem>

@@ -13,6 +13,9 @@ const getWeeklyReports = async (params: { startDate: Date; endDate: Date }) => {
   const reports = await db.disciple.findMany({
     where: {
       isPrimary: true,
+      name: {
+        not: "GCC Admin",
+      },
     },
     include: {
       disciples: {
@@ -204,6 +207,9 @@ export const getDashboardData = async () => {
     by: ["member_type"],
     where: {
       isActive: true,
+      name: {
+        not: "GCC Admin",
+      },
     },
     _count: {
       member_type: true,
@@ -214,6 +220,9 @@ export const getDashboardData = async () => {
     by: ["church_status"],
     where: {
       isActive: true,
+      name: {
+        not: "GCC Admin",
+      },
     },
     _count: {
       church_status: true,
@@ -224,6 +233,9 @@ export const getDashboardData = async () => {
     by: ["cell_status"],
     where: {
       isActive: true,
+      name: {
+        not: "GCC Admin",
+      },
     },
     _count: {
       cell_status: true,
@@ -234,6 +246,9 @@ export const getDashboardData = async () => {
     by: ["process_level"],
     where: {
       isActive: true,
+      name: {
+        not: "GCC Admin",
+      },
     },
     _count: {
       process_level: true,

@@ -23,7 +23,7 @@ function LeadersData({
   return (
     <Card>
       <CardHeader className="pb-0">
-        <CardTitle>Leader&apos; Data</CardTitle>
+        <CardTitle>Leader&apos;s Data</CardTitle>
         <CardDescription className="text-3xl font-bold text-foreground">
           {totalDisciples}{" "}
           <span className="text-sm font-normal text-muted-foreground">

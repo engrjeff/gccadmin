@@ -167,9 +167,11 @@ model LessonsTakenByDisciple {
   disciple    Disciple @relation(fields: [disciple_id], references: [id])
   disciple_id String
 
+  lesson_taken_disciple_id String
+
   assignedAt DateTime @default(now())
 
-  @@id([lesson_id, disciple_id])
+  @@id([lesson_taken_disciple_id])
 }
 
 model CellReport {
@@ -194,12 +196,12 @@ model CellReport {
 
   attendees CellReportAttendees[]
 
-  assistant    CellReportAssistant? @relation(fields: [assistant_id], references: [disciple_id])
+  assistant    CellReportAssistant? @relation(fields: [assistant_id], references: [disciple_report_id], onDelete: Cascade)
   assistant_id String?
 }
 
 model CellReportAttendees {
-  cell_report    CellReport @relation(fields: [cell_report_id], references: [id])
+  cell_report    CellReport @relation(fields: [cell_report_id], references: [id], onDelete: Cascade)
   cell_report_id String
 
   disciple    Disciple @relation(fields: [disciple_id], references: [id])
@@ -208,13 +210,16 @@ model CellReportAttendees {
   assignedAt DateTime @default(now())
   assignedBy String
 
-  @@id([cell_report_id, disciple_id])
+  cell_report_attendee_id String
+
+  @@id([cell_report_attendee_id])
 }
 
 model CellReportAssistant {
-  disciple     Disciple     @relation(fields: [disciple_id], references: [id])
-  disciple_id  String
-  cell_reports CellReport[]
+  disciple           Disciple     @relation(fields: [disciple_id], references: [id])
+  disciple_id        String
+  disciple_report_id String
+  CellReport         CellReport[]
 
-  @@id([disciple_id])
+  @@id([disciple_report_id])
 }

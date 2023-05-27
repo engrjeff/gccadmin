@@ -28,7 +28,12 @@ import {
 } from "@/components/ui/popover"
 import { Separator } from "@/components/ui/separator"
 
-import { cellStatuses, churchStatuses, memberTypes } from "../constants"
+import {
+  cellStatuses,
+  churchStatuses,
+  memberTypes,
+  processLevels,
+} from "../constants"
 import { DiscipleWithLeader } from "./columns"
 
 interface DiscipleFiltersProps {
@@ -95,6 +100,18 @@ function DiscipleFilters({ table, leadersOptions }: DiscipleFiltersProps) {
                   column={table.getColumn("church_status")}
                   title="Church Status"
                   options={churchStatuses}
+                />
+              </AccordionContent>
+            </AccordionItem>
+            <AccordionItem value="process_level">
+              <AccordionTrigger className="px-4 py-2 text-sm hover:bg-accent hover:no-underline">
+                Process Level
+              </AccordionTrigger>
+              <AccordionContent>
+                <FilterItem
+                  column={table.getColumn("process_level")}
+                  title="Process Level"
+                  options={processLevels}
                 />
               </AccordionContent>
             </AccordionItem>

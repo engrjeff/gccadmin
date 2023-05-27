@@ -24,28 +24,31 @@ export async function POST(req: Request) {
         ...body,
         leaderId: body.leaderId ? body.leaderId : session.user.discipleId!,
         has_custom_lesson: body.lesson_name ? true : false,
-        attendees: {
-          createMany: {
-            data: attendees.map((attendee) => {
-              return {
-                assignedBy: session.user.discipleId!,
-                disciple_id: attendee,
-              }
-            }),
-          },
-        },
       },
       select: {
         id: true,
       },
     })
 
+    // attendees
+    const createdAttendees = await db.cellReportAttendees.createMany({
+      data: attendees.map((attendee) => {
+        return {
+          assignedBy: session.user.discipleId!,
+          disciple_id: attendee,
+          cell_report_id: cellReport.id,
+          cell_report_attendee_id: `${cellReport.id}-${attendee}`,
+        }
+      }),
+    })
+
     // assistant
     if (assistant_id) {
       const assistant = await db.cellReportAssistant.create({
         data: {
+          disciple_report_id: `${cellReport.id}-${assistant_id}`, // report-assistant
           disciple_id: assistant_id,
-          cell_reports: {
+          CellReport: {
             connect: {
               id: cellReport.id,
             },
@@ -64,6 +67,7 @@ export async function POST(req: Request) {
           return {
             disciple_id: attendee,
             lesson_id: body.lessonId!,
+            lesson_taken_disciple_id: `${cellReport.id}-${body.lessonId}-${attendee}`, // report-lesson-disciple
           }
         }),
       })

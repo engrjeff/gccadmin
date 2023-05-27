@@ -1,7 +1,9 @@
 "use client"
 
 import * as React from "react"
-import { addDays, format } from "date-fns"
+import { format } from "date-fns"
+import nextSunday from "date-fns/nextSunday"
+import previousSunday from "date-fns/previousSunday"
 import { Calendar as CalendarIcon } from "lucide-react"
 import { DateRange } from "react-day-picker"
 
@@ -16,10 +18,13 @@ import {
 
 export default function DateRangePicker({
   className,
-}: React.HTMLAttributes<HTMLDivElement>) {
+  align = "start",
+}: React.HTMLAttributes<HTMLDivElement> & {
+  align?: "center" | "start" | "end"
+}) {
   const [date, setDate] = React.useState<DateRange | undefined>({
-    from: new Date(2022, 0, 20),
-    to: addDays(new Date(2022, 0, 20), 20),
+    from: previousSunday(new Date()),
+    to: nextSunday(new Date()),
   })
 
   return (
@@ -29,8 +34,9 @@ export default function DateRangePicker({
           <Button
             id="date"
             variant={"outline"}
+            size="sm"
             className={cn(
-              "w-[250px] justify-start text-left font-normal",
+              "h-8 w-auto justify-start text-left font-normal",
               !date && "text-muted-foreground"
             )}
           >
@@ -49,7 +55,7 @@ export default function DateRangePicker({
             )}
           </Button>
         </PopoverTrigger>
-        <PopoverContent className="w-auto p-0" align="end">
+        <PopoverContent className="w-auto p-0" align={align}>
           <Calendar
             initialFocus
             mode="range"

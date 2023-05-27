@@ -23,7 +23,7 @@ export const getCellReports = async () => {
       leader: true,
     },
     orderBy: {
-      createdAt: "desc",
+      date: "desc",
     },
   })
 
