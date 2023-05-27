@@ -15,7 +15,11 @@ const getWeeklyReports = async (params: { startDate: Date; endDate: Date }) => {
       isPrimary: true,
     },
     include: {
-      disciples: true,
+      disciples: {
+        where: {
+          isActive: true,
+        },
+      },
       cell_reports: {
         where: {
           date: {
@@ -60,33 +64,12 @@ const getWeeklyReports = async (params: { startDate: Date; endDate: Date }) => {
 }
 
 export const getDashboardData = async () => {
-  const churchData = await db.disciple.groupBy({
-    by: ["church_status"],
-
-    _count: true,
-  })
-
-  const cellData = await db.disciple.groupBy({
-    by: ["cell_status"],
-    _count: true,
-    orderBy: {
-      cell_status: "desc",
-    },
-  })
-
-  const processData = await db.disciple.groupBy({
-    by: ["process_level"],
-    _count: true,
-    orderBy: {
-      process_level: "asc",
-    },
-  })
-
   const primaryData = await db.disciple.findMany({
     where: {
       isPrimary: true,
     },
     select: {
+      id: true,
       name: true,
       _count: {
         select: {
@@ -116,60 +99,170 @@ export const getDashboardData = async () => {
     endDate: pastEndDate,
   })
 
-  // tally data
-  const disciplesTallyData = weeklyReports.leaders.map((d) => {
-    const memberType = ["KIDS", "MEN", "WOMEN", "YOUTH", "YOUNGPRO"].reduce(
-      (obj, curr) => ({
-        [curr]: d.disciples.filter((i) => i.member_type === curr).length,
-        ...obj,
-      }),
-      {}
-    ) as Record<MemberType, number>
+  const KPIDataPerLeader = weeklyReports.leaders.map((leader) => {
+    const activeInChurch = leader.disciples.filter(
+      (d) => d.church_status === "REGULAR"
+    ).length
+    const activeInCell = leader.disciples.filter(
+      (d) => d.cell_status === "REGULAR"
+    ).length
+    const activeInProcess = leader.disciples.filter(
+      (d) => d.process_level !== "NONE"
+    ).length
 
-    const cellStatus = [
-      "FIRST_TIMER",
-      "SECOND_TIMER",
-      "THIRD_TIMER",
-      "REGULAR",
-    ].reduce(
-      (obj, curr) => ({
-        [curr]: d.disciples.filter((i) => i.cell_status === curr).length,
-        ...obj,
-      }),
-      {}
-    ) as Record<CellStatus, number>
-
-    const churchStatus = ["NACS", "ACS", "REGULAR"].reduce(
-      (obj, curr) => ({
-        [curr]: d.disciples.filter((i) => i.church_status === curr).length,
-        ...obj,
-      }),
-      {}
-    ) as Record<ChurchStatus, number>
-
-    const processLevels = [
-      "NONE",
-      "PREENC",
-      "ENCOUNTER",
-      "LEADERSHIP_1",
-      "LEADERSHIP_2",
-      "LEADERSHIP_3",
-    ].reduce(
-      (obj, curr) => ({
-        [curr]: d.disciples.filter((i) => i.process_level === curr).length,
-        ...obj,
-      }),
-      {}
-    ) as Record<ProcessLevel, number>
+    const newlyWonSouls = leader.cell_reports
+      .map((r) => r.attendees)
+      .flat()
+      .filter((r) => r.disciple.cell_status === "FIRST_TIMER").length
 
     return {
-      memberType,
-      cellStatus,
-      churchStatus,
-      processLevels,
-      details: d,
+      activeInChurch,
+      activeInCell,
+      activeInProcess,
+      newlyWonSouls,
+      totalDisciples: leader.disciples.length,
     }
   })
+
+  const totalKPIData = KPIDataPerLeader.reduce<
+    Record<keyof (typeof KPIDataPerLeader)[number], number>
+  >(
+    (countObj, data) => {
+      return {
+        activeInChurch: countObj.activeInChurch + data.activeInChurch,
+        activeInCell: countObj.activeInCell + data.activeInCell,
+        activeInProcess: countObj.activeInProcess + data.activeInProcess,
+        totalDisciples: countObj.totalDisciples + data.totalDisciples,
+        newlyWonSouls: countObj.newlyWonSouls + data.newlyWonSouls,
+      }
+    },
+    {
+      activeInCell: 0,
+      activeInChurch: 0,
+      activeInProcess: 0,
+      totalDisciples: 0,
+      newlyWonSouls: 0,
+    }
+  )
+
+  // tally data
+  // const disciplesTallyData = weeklyReports.leaders.map((d) => {
+  //   const memberType = ["KIDS", "MEN", "WOMEN", "YOUTH", "YOUNGPRO"].reduce(
+  //     (obj, curr) => ({
+  //       [curr]: d.disciples.filter((i) => i.member_type === curr).length,
+  //       ...obj,
+  //     }),
+  //     {}
+  //   ) as Record<MemberType, number>
+
+  //   const cellStatus = [
+  //     "FIRST_TIMER",
+  //     "SECOND_TIMER",
+  //     "THIRD_TIMER",
+  //     "REGULAR",
+  //   ].reduce(
+  //     (obj, curr) => ({
+  //       [curr]: d.disciples.filter((i) => i.cell_status === curr).length,
+  //       ...obj,
+  //     }),
+  //     {}
+  //   ) as Record<CellStatus, number>
+
+  //   const churchStatus = ["NACS", "ACS", "REGULAR"].reduce(
+  //     (obj, curr) => ({
+  //       [curr]: d.disciples.filter((i) => i.church_status === curr).length,
+  //       ...obj,
+  //     }),
+  //     {}
+  //   ) as Record<ChurchStatus, number>
+
+  //   const processLevels = [
+  //     "NONE",
+  //     "PREENC",
+  //     "ENCOUNTER",
+  //     "LEADERSHIP_1",
+  //     "LEADERSHIP_2",
+  //     "LEADERSHIP_3",
+  //   ].reduce(
+  //     (obj, curr) => ({
+  //       [curr]: d.disciples.filter((i) => i.process_level === curr).length,
+  //       ...obj,
+  //     }),
+  //     {}
+  //   ) as Record<ProcessLevel, number>
+
+  //   return {
+  //     memberType,
+  //     cellStatus,
+  //     churchStatus,
+  //     processLevels,
+  //     details: d,
+  //   }
+  // })
+
+  const rawMemberTypeData = await db.disciple.groupBy({
+    by: ["member_type"],
+    where: {
+      isActive: true,
+    },
+    _count: {
+      member_type: true,
+    },
+  })
+
+  const rawChurchData = await db.disciple.groupBy({
+    by: ["church_status"],
+    where: {
+      isActive: true,
+    },
+    _count: {
+      church_status: true,
+    },
+  })
+
+  const rawCellData = await db.disciple.groupBy({
+    by: ["cell_status"],
+    where: {
+      isActive: true,
+    },
+    _count: {
+      cell_status: true,
+    },
+  })
+
+  const rawProcessData = await db.disciple.groupBy({
+    by: ["process_level"],
+    where: {
+      isActive: true,
+    },
+    _count: {
+      process_level: true,
+    },
+  })
+
+  const memberTypeData = rawMemberTypeData.map((i) => ({
+    value: i._count.member_type,
+    name: getMemberTypeText(i.member_type).name,
+    valueDesc: getMemberTypeText(i.member_type).desc,
+  }))
+
+  const churchData = rawChurchData.map((i) => ({
+    value: i._count.church_status,
+    name: i.church_status,
+    valueDesc: getChurchStatusText(i.church_status),
+  }))
+
+  const cellData = rawCellData.map((i) => ({
+    value: i._count.cell_status,
+    name: i.cell_status.split("_").join(" "),
+    valueDesc: getCellStatusText(i.cell_status),
+  }))
+
+  const processData = rawProcessData.map((i) => ({
+    value: i._count.process_level,
+    name: i.process_level.split("_").join(" "),
+    valueDesc: getProcessLevelText(i.process_level),
+  }))
 
   return {
     churchData,
@@ -177,10 +270,83 @@ export const getDashboardData = async () => {
     processData,
     weeklyReports,
     pastWeeklyReports,
-    disciplesTallyData,
+    KPIDataPerLeader,
+    totalKPIData,
+    memberTypeData,
     primaryData: primaryData.map((d) => ({
-      name: d.name,
+      ...d,
       disciples: d._count.disciples,
     })),
+  }
+}
+
+const getChurchStatusText = (churchStatus: ChurchStatus) => {
+  switch (churchStatus) {
+    case "ACS":
+      return "Attended Church"
+    case "NACS":
+      return "Not Yet Attended Church"
+    case "REGULAR":
+      return "Regular Attendees"
+  }
+}
+
+const getCellStatusText = (cellStatus: CellStatus) => {
+  switch (cellStatus) {
+    case "FIRST_TIMER":
+      return "Newly won soul"
+    case "SECOND_TIMER":
+      return "2nd-time attendee"
+    case "THIRD_TIMER":
+      return "3rd-time attendee"
+    case "REGULAR":
+      return "Regular attendee"
+  }
+}
+
+const getProcessLevelText = (processLevel: ProcessLevel) => {
+  switch (processLevel) {
+    case "NONE":
+      return "Not in the process yet"
+    case "PREENC":
+      return "Pre-Encounter delegates"
+    case "ENCOUNTER":
+      return "Attended Ecnounter"
+    case "LEADERSHIP_1":
+      return "In Leadership Level 1"
+    case "LEADERSHIP_2":
+      return "In Leadership Level 2"
+    case "LEADERSHIP_3":
+      return "In Leadership Level 3"
+  }
+}
+
+const getMemberTypeText = (value: MemberType) => {
+  switch (value) {
+    case "KIDS":
+      return {
+        name: "Kids",
+        desc: "Kids, elementary",
+      }
+    case "MEN":
+      return {
+        name: "Men",
+        desc: "Married men, fathers",
+      }
+    case "WOMEN":
+      return {
+        name: "Women",
+        desc: "Married women, mothers",
+      }
+    case "YOUTH":
+      return {
+        name: "Youth",
+        desc: "Late teens, students",
+      }
+    case "YOUNGPRO":
+      return {
+        name: "Young Pro",
+        desc: "Young, unmarried professionals",
+      }
   }
 }
