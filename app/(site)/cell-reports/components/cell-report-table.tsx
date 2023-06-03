@@ -59,7 +59,7 @@ function CellReportTable({ data, leadersOptions }: CellReportTableProps) {
     <>
       <div className="flex h-16 items-center gap-4">
         <DateRangePicker />
-        {table.getColumn("type") && (
+        {/* {table.getColumn("type") && (
           <DataTableFacetedFilter
             column={table.getColumn("type")}
             title="Cell Type"
@@ -75,7 +75,7 @@ function CellReportTable({ data, leadersOptions }: CellReportTableProps) {
             title="Leader"
             options={leadersOptions}
           />
-        )}
+        )} */}
         <DataTableViewOptions table={table} />
       </div>
       <DataTable table={table} columnCount={columns.length} />

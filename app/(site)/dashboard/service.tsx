@@ -4,6 +4,8 @@ import {
   MemberType,
   ProcessLevel,
 } from "@prisma/client"
+import addDays from "date-fns/addDays"
+import isWithinInterval from "date-fns/isWithinInterval"
 import nextSaturday from "date-fns/nextSaturday"
 import previousSunday from "date-fns/previousSunday"
 
@@ -54,7 +56,7 @@ const getWeeklyReports = async (params: { startDate: Date; endDate: Date }) => {
       name: r.name,
       cgCount: r.cell_reports.length,
       uniqueDisciplesDuringCgCount: new Set(
-        r.cell_reports.map((c) => c.attendees).flat()
+        r.cell_reports.map((c) => c.attendees.map((a) => a.disciple.id)).flat()
       ).size,
     })),
   ].sort((a, b) => {
@@ -89,7 +91,7 @@ export const getDashboardData = async () => {
 
   // this week reports
   const startDate = previousSunday(new Date())
-  const endDate = nextSaturday(new Date())
+  const endDate = addDays(startDate, 6)
 
   // past week reports
   const pastStartDate = previousSunday(startDate)
@@ -116,7 +118,15 @@ export const getDashboardData = async () => {
     const newlyWonSouls = leader.cell_reports
       .map((r) => r.attendees)
       .flat()
-      .filter((r) => r.disciple.cell_status === "FIRST_TIMER").length
+      .filter(
+        (r) =>
+          r.disciple.cell_status === "FIRST_TIMER" &&
+          r.disciple.church_status === "NACS" &&
+          isWithinInterval(r.disciple.createdAt, {
+            start: startDate,
+            end: endDate,
+          })
+      ).length
 
     return {
       activeInChurch,
@@ -147,61 +157,6 @@ export const getDashboardData = async () => {
       newlyWonSouls: 0,
     }
   )
-
-  // tally data
-  // const disciplesTallyData = weeklyReports.leaders.map((d) => {
-  //   const memberType = ["KIDS", "MEN", "WOMEN", "YOUTH", "YOUNGPRO"].reduce(
-  //     (obj, curr) => ({
-  //       [curr]: d.disciples.filter((i) => i.member_type === curr).length,
-  //       ...obj,
-  //     }),
-  //     {}
-  //   ) as Record<MemberType, number>
-
-  //   const cellStatus = [
-  //     "FIRST_TIMER",
-  //     "SECOND_TIMER",
-  //     "THIRD_TIMER",
-  //     "REGULAR",
-  //   ].reduce(
-  //     (obj, curr) => ({
-  //       [curr]: d.disciples.filter((i) => i.cell_status === curr).length,
-  //       ...obj,
-  //     }),
-  //     {}
-  //   ) as Record<CellStatus, number>
-
-  //   const churchStatus = ["NACS", "ACS", "REGULAR"].reduce(
-  //     (obj, curr) => ({
-  //       [curr]: d.disciples.filter((i) => i.church_status === curr).length,
-  //       ...obj,
-  //     }),
-  //     {}
-  //   ) as Record<ChurchStatus, number>
-
-  //   const processLevels = [
-  //     "NONE",
-  //     "PREENC",
-  //     "ENCOUNTER",
-  //     "LEADERSHIP_1",
-  //     "LEADERSHIP_2",
-  //     "LEADERSHIP_3",
-  //   ].reduce(
-  //     (obj, curr) => ({
-  //       [curr]: d.disciples.filter((i) => i.process_level === curr).length,
-  //       ...obj,
-  //     }),
-  //     {}
-  //   ) as Record<ProcessLevel, number>
-
-  //   return {
-  //     memberType,
-  //     cellStatus,
-  //     churchStatus,
-  //     processLevels,
-  //     details: d,
-  //   }
-  // })
 
   const rawMemberTypeData = await db.disciple.groupBy({
     by: ["member_type"],

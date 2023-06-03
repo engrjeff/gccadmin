@@ -1,39 +1,10 @@
 import { Metadata } from "next"
-import Link from "next/link"
-import { CellStatus, ChurchStatus } from "@prisma/client"
-import { Grid, Metric } from "@tremor/react"
 import { format } from "date-fns"
-import { Activity, Users } from "lucide-react"
 
-import { cn } from "@/lib/utils"
-import { buttonVariants } from "@/components/ui/button"
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardFooter,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card"
-import DateRangePicker from "@/components/ui/data-range-picker"
-import {
-  Table,
-  TableBody,
-  TableCaption,
-  TableCell,
-  TableHead,
-  TableHeader,
-  TableRow,
-} from "@/components/ui/table"
+import { Card, CardHeader } from "@/components/ui/card"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import PageTitle from "@/components/page-title"
 
-import {
-  cellStatuses,
-  churchStatuses,
-  memberTypes,
-  processLevels,
-} from "../disciples/constants"
 import CellStatusData from "./components/cell-status-data"
 import ChurchStatusData from "./components/church-status-data"
 import DashboardDataFilter from "./components/dashboard-data-filters"
@@ -94,6 +65,7 @@ async function DashboardPage() {
           <div className="grid gap-4 lg:grid-cols-2 lg:gap-5">
             <LeadersData leadersDiscipleData={reports.primaryData} />
             <WeeklyCellReports
+              totalCGLastWeek={reports.pastWeeklyReports.totalCGsDone}
               totalCGDone={reports.weeklyReports.totalCGsDone}
               cgCountByLeaderData={reports.weeklyReports.cgCountByLeaderData}
             />

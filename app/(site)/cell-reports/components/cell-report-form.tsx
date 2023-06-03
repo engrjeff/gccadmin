@@ -148,7 +148,6 @@ const ReporFormComponent = ({
   }
 
   const handleAttendeesSelection = (attendeeId: string) => {
-    console.log(attendeeId)
     setAttendees((current) =>
       current.includes(attendeeId)
         ? current.filter((i) => i !== attendeeId)
@@ -159,6 +158,8 @@ const ReporFormComponent = ({
   return (
     <form
       key={String(open)}
+      name="cell-report-form"
+      id="cell-report-form"
       className={cn("space-y-3 py-4", {
         "pointer-events-none opacity-80": isLoading,
       })}
@@ -193,7 +194,7 @@ const ReporFormComponent = ({
         </div>
       )}
       <div className="flex flex-col space-y-2">
-        <Label htmlFor="leaderId">Cell Type</Label>
+        <Label htmlFor="type">Cell Type</Label>
         <Select name="type">
           <SelectTrigger className="w-full">
             <SelectValue placeholder="Pick a cell type" />
@@ -212,7 +213,7 @@ const ReporFormComponent = ({
       </div>
       <div className="space-y-2">
         <Label htmlFor="venue">Venue</Label>
-        <Input id="venue" name="venue" placeholder="Venue" />
+        <Input name="venue" placeholder="Venue" />
       </div>
 
       <div className="flex gap-3">
@@ -220,7 +221,6 @@ const ReporFormComponent = ({
           <Label htmlFor="date">Date</Label>
           <Input
             type="date"
-            id="date"
             name="date"
             placeholder="Date"
             max={new Date().toLocaleDateString("en-ca")}
@@ -229,7 +229,7 @@ const ReporFormComponent = ({
 
         <div className="w-full space-y-2">
           <Label htmlFor="time">Time</Label>
-          <Input type="time" id="time" name="time" placeholder="Time" />
+          <Input type="time" name="time" placeholder="Time" />
         </div>
       </div>
 
@@ -339,16 +339,11 @@ const ReporFormComponent = ({
         >
           <div className="w-full space-y-2">
             <Label htmlFor="lesson_name">Lesson Title</Label>
-            <Input
-              id="lesson_name"
-              name="lesson_name"
-              placeholder="Lesson title"
-            />
+            <Input name="lesson_name" placeholder="Lesson title" />
           </div>
           <div className="flex flex-col space-y-2">
             <Label htmlFor="scripture_references">Scripture References</Label>
             <Textarea
-              id="scripture_references"
               name="scripture_references"
               placeholder="Enter a comma-separated list of verses (e.g. John 3:16, Romans 5:8, Luke 15)"
             />
@@ -410,7 +405,6 @@ const ReporFormComponent = ({
                     >
                       <Checkbox
                         name={disciple.id}
-                        id={disciple.id}
                         checked={attendees.includes(disciple.id)}
                         onCheckedChange={() =>
                           handleAttendeesSelection(disciple.id)

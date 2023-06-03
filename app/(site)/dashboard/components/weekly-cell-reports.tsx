@@ -12,6 +12,7 @@ import {
 
 interface WeeklyCellReportsProps {
   totalCGDone: number
+  totalCGLastWeek: number
   cgCountByLeaderData: {
     id: string
     name: string
@@ -22,6 +23,7 @@ interface WeeklyCellReportsProps {
 
 function WeeklyCellReports({
   totalCGDone,
+  totalCGLastWeek,
   cgCountByLeaderData,
 }: WeeklyCellReportsProps) {
   return (
@@ -34,6 +36,9 @@ function WeeklyCellReports({
             cell groups this week
           </span>
         </CardDescription>
+        <span className="text-xs font-normal text-muted-foreground">
+          Last week was {totalCGLastWeek}
+        </span>
       </CardHeader>
       <CardContent>
         <Flex className="mt-4">
