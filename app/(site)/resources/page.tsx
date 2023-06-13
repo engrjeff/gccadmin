@@ -3,6 +3,7 @@ import { Plus } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import PageTitle from "@/components/page-title"
 
+import LessonForm from "./components/lesson-form"
 import LessonSeriesCard from "./components/lesson-series-card"
 import { getLessonSeries } from "./service"
 
@@ -22,6 +23,7 @@ async function ResourcesPage() {
           <LessonSeriesCard key={lessonSeries.id} lessonSeries={lessonSeries} />
         ))}
       </ul>
+      <LessonForm />
     </div>
   )
 }

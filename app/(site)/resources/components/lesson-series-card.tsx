@@ -1,7 +1,10 @@
+"use client"
+
 import Link from "next/link"
 import { Lesson, LessonSeries } from "@prisma/client"
 import { Edit, FilePlus, MoreVertical } from "lucide-react"
 
+import { useLessonFormSheetStore } from "@/lib/hooks"
 import { cn } from "@/lib/utils"
 import { Badge } from "@/components/ui/badge"
 import { Button, buttonVariants } from "@/components/ui/button"
@@ -27,6 +30,14 @@ function LessonSeriesCard({
 }: {
   lessonSeries: LessonSeries & { lessons: Lesson[] }
 }) {
+  const { setSelectedSeries, openForm } = useLessonFormSheetStore()
+
+  const handleAddLessonClick = () => {
+    setSelectedSeries(lessonSeries)
+
+    openForm()
+  }
+
   return (
     <Card className="flex flex-col">
       <CardHeader className="relative">
@@ -51,7 +62,7 @@ function LessonSeriesCard({
               </button>
             </DropdownMenuItem>
             <DropdownMenuItem asChild>
-              <button className="flex w-full">
+              <button className="flex w-full" onClick={handleAddLessonClick}>
                 <FilePlus className="mr-2 h-4 w-4" />
                 <span>Add Lesson</span>
               </button>
