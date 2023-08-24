@@ -91,11 +91,10 @@ const Form = () => {
       description: "The lesson was created successfully!",
       variant: "success",
     })
+    closeForm()
     router.refresh()
 
     setSelectedSeries(null)
-
-    closeForm()
   }
 
   return (

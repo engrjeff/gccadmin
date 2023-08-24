@@ -143,7 +143,6 @@ const ReporFormComponent = ({
       variant: "success",
     })
     router.refresh()
-
     onDone()
   }
 
@@ -312,7 +311,7 @@ const ReporFormComponent = ({
               <SelectTrigger className="w-full">
                 <SelectValue placeholder="Pick a Lesson" />
               </SelectTrigger>
-              <SelectContent>
+              <SelectContent className="max-h-[300px]">
                 <SelectGroup>
                   <SelectLabel>Lesson</SelectLabel>
                   {lessons.map((lesson) => (
@@ -401,7 +400,12 @@ const ReporFormComponent = ({
                   >
                     <Label
                       htmlFor={disciple.id}
-                      className="flex cursor-pointer items-center gap-2 "
+                      className={cn(
+                        "flex cursor-pointer items-center gap-2",
+                        disciple.id === assistantId
+                          ? "pointer-events-none opacity-60"
+                          : ""
+                      )}
                     >
                       <Checkbox
                         name={disciple.id}

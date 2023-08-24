@@ -90,8 +90,13 @@ export const getDashboardData = async () => {
   })
 
   // this week reports
-  const startDate = previousSunday(new Date())
+  const now = new Date()
+
+  now.setHours(0, 0, 0, 0)
+  const startDate = previousSunday(now)
   const endDate = addDays(startDate, 6)
+
+  // console.log(startDate, endDate)
 
   // past week reports
   const pastStartDate = previousSunday(startDate)
