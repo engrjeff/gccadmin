@@ -13,9 +13,9 @@ import CellReportForm from "./cell-report-form"
 
 async function CellReportList() {
   const lessonSeriesData = getLessonSeries()
-  const disciplesData = getDisciples()
+  const disciplesData = getDisciples({ isActive: "true" })
   const primaryLeadersData = getPrimaryLeaders()
-  const cellReportsData = getCellReports()
+  const cellReportsData = getCellReports({ isAll: true })
 
   const [lessonSeriesList, { disciples, user }, primaryLeaders, cellReports] =
     await Promise.all([

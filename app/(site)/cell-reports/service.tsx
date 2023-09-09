@@ -7,11 +7,16 @@ import { prisma as db } from "@/lib/db"
 import { getCurrentUser } from "@/lib/session"
 
 interface GetCellReportsOptions {
-  from: string
-  to: string
+  from?: string
+  to?: string
+  isAll?: boolean
 }
 
-export const getCellReports = async ({ from, to }: GetCellReportsOptions) => {
+export const getCellReports = async ({
+  from,
+  to,
+  isAll,
+}: GetCellReportsOptions) => {
   const user = await getCurrentUser()
 
   if (!user) {
@@ -24,10 +29,12 @@ export const getCellReports = async ({ from, to }: GetCellReportsOptions) => {
   const cellReports = await db.cellReport.findMany({
     where: {
       leaderId: user.role === "ADMIN" ? undefined : user.discipleId,
-      date: {
-        gte: from ? from : firstDay,
-        lte: to ? to : lastDay,
-      },
+      date: isAll
+        ? undefined
+        : {
+            gte: from ? from : firstDay,
+            lte: to ? to : lastDay,
+          },
     },
     include: {
       assistant: true,
