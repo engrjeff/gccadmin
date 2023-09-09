@@ -6,11 +6,18 @@ import CellReportForm from "./components/cell-report-form"
 import CellReportTable from "./components/cell-report-table"
 import { getCellReports } from "./service"
 
-async function CellReportsPage() {
+async function CellReportsPage({
+  searchParams,
+}: {
+  searchParams: { [key: string]: string }
+}) {
   const lessonSeriesData = getLessonSeries()
-  const disciplesData = getDisciples()
+  const disciplesData = getDisciples({ isActive: "true" })
   const primaryLeadersData = getPrimaryLeaders()
-  const cellReportsData = getCellReports()
+  const cellReportsData = getCellReports({
+    from: searchParams.from,
+    to: searchParams.to,
+  })
 
   const [lessonSeriesList, { disciples }, primaryLeaders, cellReports] =
     await Promise.all([

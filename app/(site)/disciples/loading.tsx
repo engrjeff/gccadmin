@@ -1,7 +1,11 @@
-import { Skeleton } from "@/components/ui/skeleton"
+import { Spinner } from "@/components/spinner"
 
 function Loading() {
-  return <Skeleton className="h-full w-full rounded" />
+  return (
+    <div className="flex h-full items-center justify-center">
+      <Spinner />
+    </div>
+  )
 }
 
 export default Loading

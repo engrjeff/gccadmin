@@ -1,20 +1,33 @@
 import { notFound, redirect } from "next/navigation"
+import { addDays } from "date-fns"
 import nextSaturday from "date-fns/nextSaturday"
 import previousSunday from "date-fns/previousSunday"
 
 import { prisma as db } from "@/lib/db"
 import { getCurrentUser } from "@/lib/session"
 
-export const getCellReports = async () => {
+interface GetCellReportsOptions {
+  from: string
+  to: string
+}
+
+export const getCellReports = async ({ from, to }: GetCellReportsOptions) => {
   const user = await getCurrentUser()
 
   if (!user) {
     redirect("/signin")
   }
 
+  const firstDay = previousSunday(new Date())
+  const lastDay = addDays(firstDay, 6)
+
   const cellReports = await db.cellReport.findMany({
     where: {
       leaderId: user.role === "ADMIN" ? undefined : user.discipleId,
+      date: {
+        gte: from ? from : firstDay,
+        lte: to ? to : lastDay,
+      },
     },
     include: {
       assistant: true,

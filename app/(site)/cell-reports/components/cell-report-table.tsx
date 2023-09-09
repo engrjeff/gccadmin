@@ -1,6 +1,7 @@
 "use client"
 
-import { useState } from "react"
+import React, { useState } from "react"
+import Link from "next/link"
 import {
   ColumnFiltersState,
   SortingState,
@@ -13,8 +14,12 @@ import {
   getSortedRowModel,
   useReactTable,
 } from "@tanstack/react-table"
+import { addDays, previousSunday } from "date-fns"
+import { DateRange } from "react-day-picker"
 
 import { Option } from "@/types/common"
+import { cn } from "@/lib/utils"
+import { buttonVariants } from "@/components/ui/button"
 import DateRangePicker from "@/components/ui/data-range-picker"
 import { DataTableViewOptions } from "@/components/ui/data-table/column-visibility-toggle"
 import DataTable from "@/components/ui/data-table/data-table"
@@ -55,28 +60,52 @@ function CellReportTable({ data, leadersOptions }: CellReportTableProps) {
     },
   })
 
+  const firstDay = previousSunday(new Date())
+
+  const [date, setDate] = React.useState<DateRange | undefined>({
+    from: firstDay,
+    to: addDays(firstDay, 6),
+  })
+
   return (
     <>
       <div className="flex h-16 items-center gap-4">
-        <DateRangePicker />
-        {/* {table.getColumn("type") && (
-          <DataTableFacetedFilter
-            column={table.getColumn("type")}
-            title="Cell Type"
-            options={["SOULWINNING", "OPEN", "DISCIPLESHIP"].map((i) => ({
-              label: i,
-              value: i,
-            }))}
-          />
-        )}
-        {table.getColumn("leader_name") && (
-          <DataTableFacetedFilter
-            column={table.getColumn("leader_name")}
-            title="Leader"
-            options={leadersOptions}
-          />
-        )} */}
-        <DataTableViewOptions table={table} />
+        <DateRangePicker dateRange={date} onDateRangeChange={setDate} />
+        <Link
+          className={cn(
+            buttonVariants({ variant: "secondary", size: "sm" }),
+            "h-8"
+          )}
+          href={{
+            pathname: "/cell-reports",
+            query: {
+              from: date?.from?.toISOString(),
+              to: date?.to?.toISOString(),
+            },
+          }}
+        >
+          Filter by Date
+        </Link>
+        <div className="ml-auto flex items-center justify-end gap-4">
+          {table.getColumn("type") && (
+            <DataTableFacetedFilter
+              column={table.getColumn("type")}
+              title="Cell Type"
+              options={["SOULWINNING", "OPEN", "DISCIPLESHIP"].map((i) => ({
+                label: i,
+                value: i,
+              }))}
+            />
+          )}
+          {table.getColumn("leader_name") && (
+            <DataTableFacetedFilter
+              column={table.getColumn("leader_name")}
+              title="Leader"
+              options={leadersOptions}
+            />
+          )}
+          <DataTableViewOptions table={table} />
+        </div>
       </div>
       <DataTable table={table} columnCount={columns.length} />
       {/* Pagination */}

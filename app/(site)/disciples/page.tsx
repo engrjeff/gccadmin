@@ -4,12 +4,19 @@ import { Button } from "@/components/ui/button"
 import PageTitle from "@/components/page-title"
 
 import DiscipleEditForm from "./components/disciple-edit-form"
+import DiscipleTabs from "./components/disciple-tabs"
 import { DisciplesTable } from "./components/disciples-table"
 import MemberForm from "./components/member-form"
 import { getDisciples } from "./service/disciples"
 
-async function MembersPage() {
-  const { disciples, user } = await getDisciples()
+async function MembersPage({
+  searchParams,
+}: {
+  searchParams: { isActive?: string }
+}) {
+  const { disciples, user } = await getDisciples({
+    isActive: searchParams.isActive,
+  })
 
   if (!user.discipleId)
     return (
@@ -41,7 +48,8 @@ async function MembersPage() {
           <DiscipleEditForm leaderOptions={leaders} />
         </div>
       </div>
-      <div className="h-[calc(100%-64px)] max-h-[calc(100%-64px)] px-2">
+      <DiscipleTabs />
+      <div className="h-[calc(100%-120px)] max-h-[calc(100%-120px)] px-2">
         <DisciplesTable data={disciples} />
       </div>
     </>

@@ -3,7 +3,11 @@ import { notFound, redirect } from "next/navigation"
 import { prisma as db } from "@/lib/db"
 import { getCurrentUser } from "@/lib/session"
 
-export const getDisciples = async () => {
+interface GetDisciplesArgs {
+  isActive?: string
+}
+
+export const getDisciples = async ({ isActive }: GetDisciplesArgs) => {
   const user = await getCurrentUser()
 
   if (!user) {
@@ -17,6 +21,7 @@ export const getDisciples = async () => {
   const disciples = await db.disciple.findMany({
     where: {
       leaderId: user.role === "ADMIN" ? undefined : user.discipleId,
+      isActive: !isActive ? true : isActive === "true" ? true : false,
       name: {
         not: "GCC Admin",
       },

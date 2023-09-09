@@ -83,7 +83,7 @@ export const columns: ColumnDef<CellReportRecord>[] = [
       <DataTableColumnHeader column={column} title="Date" />
     ),
     cell: (props) =>
-      `${format(props.row.original.date, "MM dd, yyyy")} at ${formatTime(
+      `${format(props.row.original.date, "MMM dd, yyyy")} at ${formatTime(
         props.row.original.time
       )}`,
     filterFn: (row, id, value) => {
