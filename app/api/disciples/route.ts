@@ -6,6 +6,8 @@ import { prisma as db } from "@/lib/db"
 
 import { discipleBulkUpdateSchema, discipleCreateSchema } from "./schema"
 
+export const dynamic = "force-dynamic"
+
 export async function GET() {
   try {
     const session = await getServerSession(authOptions)

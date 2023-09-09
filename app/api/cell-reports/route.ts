@@ -6,6 +6,8 @@ import { prisma as db } from "@/lib/db"
 
 import { cellReportCreateSchema } from "./schema"
 
+export const dynamic = "force-dynamic"
+
 export async function POST(req: Request) {
   try {
     const session = await getServerSession(authOptions)

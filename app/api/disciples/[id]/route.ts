@@ -6,6 +6,8 @@ import { prisma as db } from "@/lib/db"
 
 import { discipleUpdateSchema } from "../schema"
 
+export const dynamic = "force-dynamic"
+
 export async function PUT(
   req: Request,
   {
