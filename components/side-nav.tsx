@@ -1,12 +1,12 @@
 import Image from "next/image"
 
-import { siteConfig } from "@/config/site"
+import { menuItems } from "@/config/menuItems"
 
 import NavLink from "./nav-link"
 
 function SideNav() {
   return (
-    <nav className="hidden min-h-screen w-[260px] shrink-0 border-r border-muted bg-sidenav text-white lg:block">
+    <nav className="hidden min-h-screen w-[260px] shrink-0 border-r bg-muted text-muted-foreground lg:block">
       <div className="flex h-16 items-center gap-3 px-4 pt-4">
         <Image
           src="/gcc-app-logo.png"
@@ -17,13 +17,16 @@ function SideNav() {
         <span className="text-xl font-semibold">GCC System</span>
       </div>
       <div className="space-y-2 p-4">
-        <p className="py-3 text-sm font-semibold uppercase tracking-wider text-muted-foreground">
+        <p className="py-3 text-xs font-semibold uppercase tracking-wider text-muted-foreground">
           Menu
         </p>
         <ul className="space-y-1">
-          {siteConfig.mainNav.map((navItem) => (
+          {menuItems.map((navItem) => (
             <li key={navItem.title}>
-              <NavLink href={navItem.href}>{navItem.title}</NavLink>
+              <NavLink href={navItem.href}>
+                <span className="mr-3">{navItem.icon}</span>
+                <span>{navItem.title}</span>
+              </NavLink>
             </li>
           ))}
         </ul>

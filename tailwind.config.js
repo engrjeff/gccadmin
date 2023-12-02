@@ -18,7 +18,8 @@ module.exports = {
     },
     extend: {
       colors: {
-        sidenav: "hsl(var(--sidenav))",
+        sidenav: "hsl(var(--muted-2))",
+        muted2: "hsl(var(--muted-2))",
         border: "hsl(var(--border))",
         input: "hsl(var(--input))",
         ring: "hsl(var(--ring))",
@@ -51,6 +52,22 @@ module.exports = {
         card: {
           DEFAULT: "hsl(var(--card))",
           foreground: "hsl(var(--card-foreground))",
+        },
+        success: {
+          DEFAULT: "var(--success)",
+          light: "var(--success-light)",
+        },
+        info: {
+          DEFAULT: "var(--info)",
+          light: "var(--info-light)",
+        },
+        warning: {
+          DEFAULT: "var(--warning)",
+          light: "var(--warning-light)",
+        },
+        danger: {
+          DEFAULT: "var(--danger)",
+          light: "var(--danger-light)",
         },
       },
       borderRadius: {

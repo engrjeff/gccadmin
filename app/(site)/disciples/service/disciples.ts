@@ -5,9 +5,11 @@ import { getCurrentUser } from "@/lib/session"
 
 interface GetDisciplesArgs {
   isActive?: string
+  page?: number
+  pageSize?: number
 }
 
-export const getDisciples = async ({ isActive }: GetDisciplesArgs) => {
+export const getDisciples = async (args: GetDisciplesArgs | undefined) => {
   const user = await getCurrentUser()
 
   if (!user) {
@@ -18,10 +20,12 @@ export const getDisciples = async ({ isActive }: GetDisciplesArgs) => {
     return { disciples: [], user }
   }
 
+  const totalDisciples = await db.disciple.count({ where: { isActive: true } })
+
   const disciples = await db.disciple.findMany({
     where: {
       leaderId: user.role === "ADMIN" ? undefined : user.discipleId,
-      isActive: !isActive ? true : isActive === "true" ? true : false,
+      ...{ isActive: args?.isActive === "true" ? true : false },
       name: {
         not: "GCC Admin",
       },

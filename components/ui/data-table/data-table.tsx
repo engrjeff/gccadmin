@@ -16,7 +16,7 @@ interface DataTableProps<TData> {
 
 function DataTable<TData>({ table, columnCount }: DataTableProps<TData>) {
   return (
-    <Table className="relative max-h-[calc(100%-128px)] w-full overflow-auto rounded-md border">
+    <Table className="relative w-full overflow-auto">
       <TableHeader>
         {table.getHeaderGroups().map((headerGroup) => (
           <TableRow key={headerGroup.id}>

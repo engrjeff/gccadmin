@@ -1,59 +1,24 @@
-import { Download } from "lucide-react"
+import { Metadata } from "next"
 
-import { Button } from "@/components/ui/button"
 import PageTitle from "@/components/page-title"
 
-import DiscipleEditForm from "./components/disciple-edit-form"
-import DiscipleTabs from "./components/disciple-tabs"
-import { DisciplesTable } from "./components/disciples-table"
-import MemberForm from "./components/member-form"
-import { getDisciples } from "./service/disciples"
+import DiscipleAddButton from "./components/disciple-add-button"
+import DisciplesListing from "./components/disciples-listing"
 
-async function MembersPage({
-  searchParams,
-}: {
-  searchParams: { isActive?: string }
-}) {
-  const { disciples, user } = await getDisciples({
-    isActive: searchParams.isActive,
-  })
+export const metadata: Metadata = {
+  title: "Disciples",
+}
 
-  if (!user.discipleId)
-    return (
-      <div className="p-6">
-        <p className="text-muted-foreground">
-          Your account has not been validated by the Admin. Kindly wait before
-          you can access this page
-        </p>
-      </div>
-    )
-
-  const leaders = disciples.filter((d) => d.isPrimary)
-
-  const title = user.role === "ADMIN" ? "GCC Members" : "Your Disciples"
-  const subtitle =
-    user.role === "ADMIN"
-      ? "Here's a list of GCC members"
-      : "List of your disciples"
-
+function DisciplesPage() {
   return (
     <>
-      <div className="flex justify-between px-2">
-        <PageTitle title={title} subtitle={subtitle} />
-        <div className="space-x-3">
-          <Button size="sm" variant="outline">
-            <Download className="mr-2 h-4 w-5" /> Import
-          </Button>
-          <MemberForm leaderOptions={leaders} />
-          <DiscipleEditForm leaderOptions={leaders} />
-        </div>
+      <div className="mb-4 flex justify-between">
+        <PageTitle title="Disciples" subtitle="Manage your disciples here" />
+        <DiscipleAddButton />
       </div>
-      <DiscipleTabs />
-      <div className="h-[calc(100%-120px)] max-h-[calc(100%-120px)] px-2">
-        <DisciplesTable data={disciples} />
-      </div>
+      <DisciplesListing />
     </>
   )
 }
 
-export default MembersPage
+export default DisciplesPage

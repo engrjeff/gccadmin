@@ -25,6 +25,8 @@ import {
   TooltipTrigger,
 } from "@/components/ui/tooltip"
 
+import DiscipleDeleteDialog from "./delete-disciple-dialog"
+
 function DiscipleRowActions({ disciple }: { disciple: Disciple }) {
   const { openForm } = useDiscipleFormSheetStore()
   const { setSelectedDisciple } = useSelectedDiscipleStore()
@@ -101,6 +103,11 @@ function DiscipleRowActions({ disciple }: { disciple: Disciple }) {
           </DropdownMenuItem>
         </DropdownMenuContent>
       </DropdownMenu>
+      <DiscipleDeleteDialog
+        open={deleteDialogShown}
+        onOpenChange={setDeleteDialogShown}
+        disciple={disciple}
+      />
     </div>
   )
 }

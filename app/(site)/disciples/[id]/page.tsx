@@ -5,8 +5,8 @@ import { ExternalLink, Verified } from "lucide-react"
 import { buttonVariants } from "@/components/ui/button"
 import PageTitle from "@/components/page-title"
 
-import DeleteSection from "../components/delete-section"
-import DetailsForm from "../components/details-form"
+import DeleteSection from "../old_components/delete-section"
+import DetailsForm from "../old_components/details-form"
 import {
   getDiscipleById,
   getPrimaryLeaders,
