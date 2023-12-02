@@ -7,7 +7,7 @@ export const processLevels: Option[] = [
   "LEADERSHIP_1",
   "LEADERSHIP_2",
   "LEADERSHIP_3",
-].map((p) => ({ value: p, label: p }))
+].map((p) => ({ value: p, label: p.replace("_", " ").toLowerCase() }))
 
 export const memberTypes: Option[] = [
   "KIDS",
@@ -17,7 +17,7 @@ export const memberTypes: Option[] = [
   "YOUNGPRO",
 ].map((m) => ({
   value: m,
-  label: m,
+  label: m.toLowerCase(),
 }))
 
 export const cellStatuses: Option[] = [
@@ -27,10 +27,10 @@ export const cellStatuses: Option[] = [
   "REGULAR",
 ].map((m) => ({
   value: m,
-  label: m,
+  label: m.replace("_", " ").toLowerCase(),
 }))
 
 export const churchStatuses: Option[] = ["NACS", "ACS", "REGULAR"].map((m) => ({
   value: m,
-  label: m,
+  label: m === "REGULAR" ? "Regular" : m,
 }))
