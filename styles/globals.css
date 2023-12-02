@@ -27,6 +27,28 @@
   }
 
   .dark {
+    --background: 223 39% 9%;
+    --foreground: 210 38% 95%;
+    --muted: 218 39% 11%;
+    --muted-2: 219 32% 16%;
+    --muted-foreground: 214 20% 69%;
+    --muted-foreground-2: 215 9% 65%;
+    --primary: 239 84% 67%;
+    --primary-foreground: 210 38% 95%;
+    --border: 218 23% 23%;
+    --input: 218 23% 23%;
+    --ring: 239 84% 67%;
+    --destructive: 4 86% 58%;
+    --destructive-foreground: 210 38% 95%;
+    --accent: 0 0% 100% 0.039;
+    --accent-foreground: 210 38% 95%;
+    --card: 223 39% 9%;
+    --card-foreground: 210 38% 95%;
+    --popover: 223 39% 9%;
+    --popover-foreground: 210 38% 95%;
+    --secondary: 218 23% 23%;
+    --secondary-foreground: 210 38% 95%;
+    /* 
     --background: 224 71.4% 4.1%;
     --foreground: 210 20% 98%;
     --card: 224 71.4% 4.1%;
@@ -45,7 +67,7 @@
     --destructive-foreground: 210 20% 98%;
     --border: 215 27.9% 16.9%;
     --input: 215 27.9% 16.9%;
-    --ring: 263.4 70% 50.4%;
+    --ring: 263.4 70% 50.4%; */
   }
 }
 
@@ -55,7 +77,9 @@
   }
   body {
     @apply bg-background text-foreground;
-    font-feature-settings: "rlig" 1, "calt" 1;
+    font-feature-settings:
+      "rlig" 1,
+      "calt" 1;
   }
 
   .data-table-container {
