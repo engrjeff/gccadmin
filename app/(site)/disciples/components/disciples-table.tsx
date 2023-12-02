@@ -14,9 +14,12 @@ import {
   VisibilityState,
 } from "@tanstack/react-table"
 
+import { DataTableViewOptions } from "@/components/ui/data-table/column-visibility-toggle"
 import DataTable from "@/components/ui/data-table/data-table"
 import { DataTablePagination } from "@/components/ui/data-table/table-pagination"
+import RefreshButton from "@/components/refresh-button"
 
+import ActivityFilter from "./activity-filter"
 import { columns, DiscipleWithLeader } from "./columns"
 import DiscipleFilters from "./disciple-filters"
 import DiscipleSearch from "./disciple-search"
@@ -58,11 +61,19 @@ function DisciplesTable({ disciples }: { disciples: DiscipleWithLeader[] }) {
   const leadersOptions = disciples
     .filter((d) => d.isPrimary)
     .map((i) => ({ label: i.name, value: i.name }))
+    .sort((a, b) => (a.label > b.label ? 1 : -1))
 
   return (
     <>
       <DiscipleSearch value={searchValue} onChange={handleSearch} />
-      <DiscipleFilters table={table} leadersOptions={leadersOptions} />
+      <div className="flex items-center border-b px-2 py-3">
+        <DiscipleFilters table={table} leadersOptions={leadersOptions} />
+        <div className="ml-auto flex items-center gap-3">
+          <RefreshButton />
+          <ActivityFilter />
+          <DataTableViewOptions table={table} />
+        </div>
+      </div>
       <div className="data-table-container">
         <DataTable table={table} columnCount={columns.length} />
       </div>

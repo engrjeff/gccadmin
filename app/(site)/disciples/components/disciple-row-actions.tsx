@@ -1,14 +1,10 @@
 "use client"
 
-import { useState } from "react"
 import Link from "next/link"
 import { Disciple } from "@prisma/client"
 import { Book, Edit, Eye, MoreHorizontal, Trash, Users } from "lucide-react"
 
-import {
-  useDiscipleFormSheetStore,
-  useSelectedDiscipleStore,
-} from "@/lib/hooks"
+import { useSelectedDiscipleStore } from "@/lib/hooks"
 import { Button } from "@/components/ui/button"
 import {
   DropdownMenu,
@@ -26,15 +22,7 @@ import {
 } from "@/components/ui/tooltip"
 
 function DiscipleRowActions({ disciple }: { disciple: Disciple }) {
-  const { openForm } = useDiscipleFormSheetStore()
   const { setSelectedDisciple } = useSelectedDiscipleStore()
-
-  const [deleteDialogShown, setDeleteDialogShown] = useState(false)
-
-  const handleEditClick = () => {
-    setSelectedDisciple(disciple)
-    openForm()
-  }
 
   return (
     <div className="flex items-center gap-1">
@@ -57,14 +45,13 @@ function DiscipleRowActions({ disciple }: { disciple: Disciple }) {
       <TooltipProvider>
         <Tooltip>
           <TooltipTrigger asChild>
-            <Button
-              variant="ghost"
-              className="h-8 w-8 p-0"
-              onClick={handleEditClick}
+            <Link
+              href={`/disciples/${disciple.id}/edit`}
+              className="inline-flex h-8 w-8 items-center justify-center rounded-md p-0 transition-colors hover:bg-accent hover:text-accent-foreground"
             >
               <span className="sr-only">Edit</span>
               <Edit className="h-4 w-4" />
-            </Button>
+            </Link>
           </TooltipTrigger>
           <TooltipContent>
             <span>Edit Disciple</span>
@@ -95,7 +82,7 @@ function DiscipleRowActions({ disciple }: { disciple: Disciple }) {
           </DropdownMenuItem>
 
           <DropdownMenuSeparator />
-          <DropdownMenuItem onClick={() => setDeleteDialogShown(true)}>
+          <DropdownMenuItem onClick={() => setSelectedDisciple(disciple)}>
             <Trash className="mr-2 h-4 w-4" />
             <span>Delete</span>
           </DropdownMenuItem>

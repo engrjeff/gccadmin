@@ -23,6 +23,7 @@ interface AutocompleteProps {
   onChange: (value: string) => void
   options: { label: string; value: string }[]
   disabled?: boolean
+  error?: boolean
 }
 
 function Autocomplete({
@@ -32,6 +33,7 @@ function Autocomplete({
   onChange,
   options,
   disabled,
+  error,
 }: AutocompleteProps) {
   const [open, setOpen] = React.useState(false)
 
@@ -46,7 +48,10 @@ function Autocomplete({
           variant="outline"
           role="combobox"
           aria-expanded={open}
-          className="h-10 w-full justify-between shadow-none ring-offset-background placeholder:text-muted-foreground hover:bg-transparent focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
+          className={cn(
+            "h-10 w-full justify-between shadow-none ring-offset-background placeholder:text-muted-foreground hover:bg-transparent focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50",
+            { "focus:ring-danger border-danger": error }
+          )}
           disabled={disabled}
         >
           {value

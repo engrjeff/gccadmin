@@ -1,14 +1,16 @@
 "use client"
 
 import { useState } from "react"
+import Link from "next/link"
 import { useRouter } from "next/navigation"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { Disciple } from "@prisma/client"
+import { format } from "date-fns"
 import { useSession } from "next-auth/react"
 import { Controller, useForm } from "react-hook-form"
 
 import { cn } from "@/lib/utils"
-import { Button } from "@/components/ui/button"
+import { Button, buttonVariants } from "@/components/ui/button"
 import FormErrorMessage from "@/components/ui/form-error-message"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
@@ -26,28 +28,18 @@ import { Separator } from "@/components/ui/separator"
 import { toast } from "@/components/ui/use-toast"
 import Autocomplete from "@/components/autocomplete"
 import {
-  DiscipleCreateInputs,
-  discipleCreateSchema,
+  DiscipleUpdateInputs,
+  discipleUpdateSchema,
 } from "@/app/api/disciples/schema"
 
 import { cellStatuses, churchStatuses, processLevels } from "../constants"
 
-const initialValues: Partial<DiscipleCreateInputs> = {
-  name: "",
-  address: "",
-  birthdate: "1990-01-01",
-  gender: "MALE",
-  cell_status: "FIRST_TIMER",
-  church_status: "NACS",
-  member_type: "KIDS",
-  process_level: "NONE",
-}
-
 interface DiscipleFormProps {
   leaderOptions: Disciple[]
+  disciple: Disciple
 }
 
-function DiscipleForm({ leaderOptions }: DiscipleFormProps) {
+function DiscipleEditForm({ leaderOptions, disciple }: DiscipleFormProps) {
   const session = useSession()
 
   const isAdmin = session.data?.user?.role === "ADMIN"
@@ -56,21 +48,31 @@ function DiscipleForm({ leaderOptions }: DiscipleFormProps) {
   const router = useRouter()
   const [isLoading, setIsLoading] = useState(false)
 
-  const form = useForm<DiscipleCreateInputs>({
-    defaultValues: initialValues,
+  const form = useForm<DiscipleUpdateInputs>({
     mode: "onChange",
-    resolver: zodResolver(discipleCreateSchema),
+    defaultValues: {
+      name: disciple.name,
+      address: disciple.address,
+      birthdate: format(new Date(disciple.birthdate), "yyyy-MM-dd"),
+      gender: disciple.gender,
+      leaderId: disciple.leaderId!,
+      cell_status: disciple.cell_status,
+      church_status: disciple.church_status,
+      member_type: disciple.member_type,
+      process_level: disciple.process_level,
+    },
+    resolver: zodResolver(discipleUpdateSchema),
   })
 
   const formErrors = form.formState.errors
 
-  const onSubmit = (shouldAddMore?: boolean) => async () => {
+  const onSubmit = async () => {
     const values = form.getValues()
 
     setIsLoading(true)
 
-    const response = await fetch("/api/disciples", {
-      method: "POST",
+    const response = await fetch(`/api/disciples/${disciple.id}`, {
+      method: "PUT",
       headers: {
         "Content-Type": "application/json",
       },
@@ -85,20 +87,17 @@ function DiscipleForm({ leaderOptions }: DiscipleFormProps) {
     if (!response?.ok) {
       return toast({
         title: "Something went wrong.",
-        description: "The disciple record was not created. Please try again.",
+        description: "The disciple record was not updated. Please try again.",
         variant: "destructive",
       })
     }
     toast({
       title: "Success!",
-      description: "The disciple was created successfully!",
+      description: "The disciple was updated successfully!",
       variant: "success",
     })
 
-    if (!shouldAddMore) router.replace("/disciples")
-
     router.refresh()
-    form.reset()
   }
 
   const onError = (errors: typeof formErrors) => {
@@ -111,7 +110,7 @@ function DiscipleForm({ leaderOptions }: DiscipleFormProps) {
         className={cn("space-y-3", {
           "pointer-events-none opacity-80": isLoading,
         })}
-        onSubmit={form.handleSubmit(onSubmit(), onError)}
+        onSubmit={form.handleSubmit(onSubmit, onError)}
       >
         <p className="text-sm text-foreground">Personal Information</p>
         <div className="space-y-2">
@@ -367,21 +366,19 @@ function DiscipleForm({ leaderOptions }: DiscipleFormProps) {
           </div>
         </div>
         <div className="flex items-center gap-3 pt-10">
-          <Button type="submit">{isLoading ? "Saving..." : "Save"}</Button>
-          <Button
-            variant="outline"
-            type="button"
-            onClick={form.handleSubmit(onSubmit(true), onError)}
+          <Button type="submit">
+            {isLoading ? "Saving..." : "Save Changes"}
+          </Button>
+          <Link
+            href="/disciples"
+            className={buttonVariants({ variant: "ghost" })}
           >
-            Save and Add Another
-          </Button>
-          <Button variant="ghost" type="reset" onClick={() => form.reset()}>
-            Reset
-          </Button>
+            Cancel
+          </Link>
         </div>
       </form>
     </div>
   )
 }
 
-export default DiscipleForm
+export default DiscipleEditForm

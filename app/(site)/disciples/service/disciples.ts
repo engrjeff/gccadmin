@@ -1,4 +1,4 @@
-import { notFound, redirect } from "next/navigation"
+import { redirect } from "next/navigation"
 
 import { prisma as db } from "@/lib/db"
 import { getCurrentUser } from "@/lib/session"
@@ -38,7 +38,7 @@ export const getDisciples = async (args: GetDisciplesArgs | undefined) => {
       },
     },
     orderBy: {
-      name: "asc",
+      createdAt: "desc",
     },
   })
 
@@ -58,25 +58,11 @@ export const getDiscipleById = async (id: string) => {
     },
     include: {
       leader: true,
-      lessons_taken: {
-        include: {
-          lesson: true,
-        },
-      },
-      attended_cell_reports: {
-        include: {
-          cell_report: {
-            include: {
-              lesson: true,
-            },
-          },
-        },
-      },
     },
   })
 
   if (!disciple) {
-    return notFound()
+    return null
   }
 
   return disciple

@@ -70,7 +70,7 @@ export function DataTableFacetedFilter<TData, TValue>({
                         key={option.value}
                         className="rounded-sm bg-primary px-1 font-normal capitalize"
                       >
-                        {option.label}
+                        {option.label.replace("_", " ").toLowerCase()}
                       </Badge>
                     ))
                 )}

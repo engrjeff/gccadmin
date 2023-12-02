@@ -15,7 +15,7 @@ async function CreateDisciplePage() {
         href="/disciples"
         className="inline-flex items-center gap-3 font-medium hover:underline"
       >
-        <ArrowLeft className="h-6 w-6" />
+        <ArrowLeft className="h-5 w-5" />
         <span className="sr-only">Back to </span>
         <span>Disciples</span>
       </Link>

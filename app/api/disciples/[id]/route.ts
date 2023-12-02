@@ -8,14 +8,11 @@ import { discipleUpdateSchema } from "../schema"
 
 export const dynamic = "force-dynamic"
 
-export async function PUT(
-  req: Request,
-  {
-    params,
-  }: {
-    params: { id: string }
-  }
-) {
+interface Params {
+  params: { id: string }
+}
+
+export async function PUT(req: Request, { params }: Params) {
   try {
     const session = await getServerSession(authOptions)
 
@@ -33,7 +30,6 @@ export async function PUT(
       },
       data: {
         ...body,
-
         leaderId: body.leaderId ? body.leaderId : undefined,
       },
 
@@ -49,14 +45,7 @@ export async function PUT(
   }
 }
 
-export async function DELETE(
-  req: Request,
-  {
-    params,
-  }: {
-    params: { id: string }
-  }
-) {
+export async function DELETE(req: Request, { params }: Params) {
   try {
     const session = await getServerSession(authOptions)
 
