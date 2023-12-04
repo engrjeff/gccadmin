@@ -1,4 +1,4 @@
-import { getDisciples } from "../service/disciples"
+import { getDisciples, getPrimaryLeaders } from "../service/disciples"
 import DisciplesTable from "./disciples-table"
 
 interface Props {
@@ -7,9 +7,10 @@ interface Props {
 
 async function DisciplesListing({ active }: Props) {
   const { disciples } = await getDisciples({ isActive: active })
+  const leaders = await getPrimaryLeaders()
   return (
     <div className="rounded-lg border dark:bg-muted">
-      <DisciplesTable disciples={disciples} />
+      <DisciplesTable disciples={disciples} leaders={leaders} />
     </div>
   )
 }

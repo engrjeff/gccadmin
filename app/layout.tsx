@@ -5,7 +5,6 @@ import AuthProvider from "@/providers/auth-provider"
 
 import { siteConfig } from "@/config/site"
 import { fontSans } from "@/lib/fonts"
-import { getCurrentUser } from "@/lib/session"
 import { cn } from "@/lib/utils"
 import { Toaster } from "@/components/ui/toaster"
 import { TailwindIndicator } from "@/components/tailwind-indicator"
@@ -36,19 +35,18 @@ interface RootLayoutProps {
   children: React.ReactNode
 }
 
-export default async function RootLayout({ children }: RootLayoutProps) {
-  const user = await getCurrentUser()
-
+export default function RootLayout({ children }: RootLayoutProps) {
   return (
     <>
       <html lang="en" suppressHydrationWarning>
         <head />
         <body
           className={cn(
-            "h-full overflow-hidden bg-background font-sans antialiased",
-            fontSans.variable
+            fontSans.variable,
+            "h-full overflow-hidden bg-background font-sans antialiased"
           )}
         >
+          {/* <NextTopLoader color="#6467F2" showSpinner={false} /> */}
           <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
             {/* {user?.discipleId ? (
               <>

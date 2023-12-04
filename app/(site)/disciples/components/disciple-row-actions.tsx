@@ -46,7 +46,7 @@ function DiscipleRowActions({ disciple }: { disciple: Disciple }) {
         <Tooltip>
           <TooltipTrigger asChild>
             <Link
-              href={`/disciples/${disciple.id}/edit`}
+              href={`/disciples/edit/${disciple.id}`}
               className="inline-flex h-8 w-8 items-center justify-center rounded-md p-0 transition-colors hover:bg-accent hover:text-accent-foreground"
             >
               <span className="sr-only">Edit</span>

@@ -1,6 +1,7 @@
 "use client"
 
 import { useState } from "react"
+import { Disciple } from "@prisma/client"
 import {
   ColumnFiltersState,
   getCoreRowModel,
@@ -24,7 +25,12 @@ import { columns, DiscipleWithLeader } from "./columns"
 import DiscipleFilters from "./disciple-filters"
 import DiscipleSearch from "./disciple-search"
 
-function DisciplesTable({ disciples }: { disciples: DiscipleWithLeader[] }) {
+interface Props {
+  disciples: DiscipleWithLeader[]
+  leaders: Disciple[]
+}
+
+function DisciplesTable({ disciples, leaders }: Props) {
   const [sorting, setSorting] = useState<SortingState>([])
   const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([])
   const [columnVisibility, setColumnVisibility] = useState<VisibilityState>({})
@@ -58,10 +64,7 @@ function DisciplesTable({ disciples }: { disciples: DiscipleWithLeader[] }) {
     table.getColumn("name")?.setFilterValue(searchValue)
 
   // leaders options
-  const leadersOptions = disciples
-    .filter((d) => d.isPrimary)
-    .map((i) => ({ label: i.name, value: i.name }))
-    .sort((a, b) => (a.label > b.label ? 1 : -1))
+  const leadersOptions = leaders.map((i) => ({ label: i.name, value: i.name }))
 
   return (
     <>

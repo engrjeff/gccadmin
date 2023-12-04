@@ -25,7 +25,7 @@ export const getDisciples = async (args: GetDisciplesArgs | undefined) => {
   const disciples = await db.disciple.findMany({
     where: {
       leaderId: user.role === "ADMIN" ? undefined : user.discipleId,
-      ...{ isActive: args?.isActive === "true" ? true : false },
+      ...{ isActive: args?.isActive === "false" ? false : true },
       name: {
         not: "GCC Admin",
       },
