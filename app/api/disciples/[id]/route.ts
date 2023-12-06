@@ -39,6 +39,18 @@ export async function PUT(req: Request, { params }: Params) {
       },
     })
 
+    // if assigning a userAccount, update that account : isAlreadyLinked = true
+    if (body.userAccountId) {
+      await db.user.update({
+        where: {
+          id: body.userAccountId,
+        },
+        data: {
+          isAlreadyLinked: true,
+        },
+      })
+    }
+
     return NextResponse.json(disciple)
   } catch (error: any) {
     return new NextResponse(error.message || "Error", { status: 500 })

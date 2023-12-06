@@ -3,6 +3,8 @@
 import { User } from "@prisma/client"
 import { useSession } from "next-auth/react"
 
+import { Skeleton } from "@/components/ui/skeleton"
+
 import { DiscipleWithLeader } from "./columns"
 import DiscipleActionForm from "./disciple-action-form"
 import DiscipleAssignUserForm from "./disciple-assign-user-form"
@@ -20,6 +22,16 @@ function DiscipleAccountActions({ userAccounts, disciple }: Props) {
   const isPrimary = session.data?.user?.isPrimary === true
 
   const shouldRenderActions = isAdmin || isPrimary
+
+  if (session.status !== "authenticated") {
+    return (
+      <div className="grid w-[300px] grid-rows-3 gap-4">
+        <Skeleton />
+        <Skeleton />
+        <Skeleton />
+      </div>
+    )
+  }
 
   if (!shouldRenderActions) return null
 

@@ -5,6 +5,7 @@ import { useParams, useRouter } from "next/navigation"
 import { User } from "@prisma/client"
 
 import { Button } from "@/components/ui/button"
+import { Input } from "@/components/ui/input"
 import { toast } from "@/components/ui/use-toast"
 import Autocomplete from "@/components/autocomplete"
 
@@ -60,27 +61,43 @@ function DiscipleAssignUserForm({
   return (
     <form
       onSubmit={handleConfirm}
-      className="space-y-4 rounded-lg bg-muted p-4 shadow-lg"
+      className="rounded-lg bg-muted p-4 shadow-lg"
     >
-      <h3 className="font-semibold">Assign User</h3>
-      <div className="max-w-xs">
-        <Autocomplete
-          searchText="Search user account"
-          placeholderText="Select a user"
-          value={userAccountId ?? undefined}
-          onChange={setUserAccountId}
-          options={userAccounts.map((i) => ({
-            value: i.id,
-            label: i.name!,
-          }))}
-        />
-      </div>
-      <p className="text-xs text-muted-foreground">
-        Assign this disciple to a registered user account.
-      </p>
-      <Button disabled={isLoading}>
-        {isLoading ? "Saving..." : "Confirm"}
-      </Button>
+      <fieldset
+        className="space-y-4"
+        disabled={isLoading || userAccounts.length === 0}
+      >
+        <h3 className="font-semibold">Assign User</h3>
+        <div className="max-w-xs">
+          {accountId ? (
+            <Input
+              readOnly
+              disabled
+              name="userAccountId"
+              defaultValue={accountId}
+            />
+          ) : (
+            <Autocomplete
+              searchText="Search user account"
+              placeholderText="Select a user"
+              value={userAccountId ?? undefined}
+              onChange={setUserAccountId}
+              options={userAccounts.map((i) => ({
+                value: i.id,
+                label: i.name!,
+              }))}
+            />
+          )}
+        </div>
+        <p className="text-xs text-muted-foreground">
+          Assign this disciple to a registered user account.
+        </p>
+        {!accountId && (
+          <Button disabled={isLoading}>
+            {isLoading ? "Saving..." : "Confirm"}
+          </Button>
+        )}
+      </fieldset>
     </form>
   )
 }
