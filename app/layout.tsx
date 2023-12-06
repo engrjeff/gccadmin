@@ -2,6 +2,7 @@ import "@/styles/globals.css"
 
 import { Metadata, Viewport } from "next"
 import AuthProvider from "@/providers/auth-provider"
+import ReactQueryProvider from "@/providers/react-query-provider"
 
 import { siteConfig } from "@/config/site"
 import { fontSans } from "@/lib/fonts"
@@ -57,7 +58,9 @@ export default function RootLayout({ children }: RootLayoutProps) {
               <UnverifiedAccountView />
             )} */}
             <>
-              <AuthProvider>{children}</AuthProvider>
+              <AuthProvider>
+                <ReactQueryProvider>{children}</ReactQueryProvider>
+              </AuthProvider>
               <Toaster />
             </>
             <TailwindIndicator />

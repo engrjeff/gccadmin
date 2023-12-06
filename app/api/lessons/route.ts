@@ -8,6 +8,23 @@ import { lessonCreateSchema } from "./schema"
 
 export const dynamic = "force-dynamic"
 
+export async function GET() {
+  try {
+    const lessonSeriesList = await db.lessonSeries.findMany({
+      include: {
+        lessons: true,
+      },
+      orderBy: {
+        createdAt: "desc",
+      },
+    })
+
+    return NextResponse.json(lessonSeriesList)
+  } catch (error: any) {
+    return new NextResponse(error.message || "Error", { status: 500 })
+  }
+}
+
 export async function POST(req: Request) {
   try {
     const session = await getServerSession(authOptions)

@@ -3,11 +3,11 @@
 import { useState } from "react"
 import { useRouter } from "next/navigation"
 import { zodResolver } from "@hookform/resolvers/zod"
-import { Disciple } from "@prisma/client"
 import { useSession } from "next-auth/react"
 import { Controller, useForm } from "react-hook-form"
 
 import { cn } from "@/lib/utils"
+import { usePrimaryLeaders } from "@/hooks/use-primary-leaders"
 import { Button } from "@/components/ui/button"
 import FormErrorMessage from "@/components/ui/form-error-message"
 import { Input } from "@/components/ui/input"
@@ -43,16 +43,13 @@ const initialValues: Partial<DiscipleCreateInputs> = {
   process_level: "NONE",
 }
 
-interface DiscipleFormProps {
-  leaderOptions: Disciple[]
-}
-
-function DiscipleForm({ leaderOptions }: DiscipleFormProps) {
+function DiscipleForm() {
   const session = useSession()
 
   const isAdmin = session.data?.user?.role === "ADMIN"
   const userId = session.data?.user?.discipleId
 
+  const primaryLeaders = usePrimaryLeaders()
   const router = useRouter()
   const [isLoading, setIsLoading] = useState(false)
 
@@ -211,10 +208,12 @@ function DiscipleForm({ leaderOptions }: DiscipleFormProps) {
                   placeholderText="Select a leader"
                   value={field.value}
                   onChange={field.onChange}
-                  options={leaderOptions.map((i) => ({
-                    value: i.id,
-                    label: i.name,
-                  }))}
+                  options={
+                    primaryLeaders.data?.map((i) => ({
+                      value: i.id,
+                      label: i.name,
+                    })) ?? []
+                  }
                   error={!!formErrors.leaderId}
                 />
               )}
@@ -227,8 +226,8 @@ function DiscipleForm({ leaderOptions }: DiscipleFormProps) {
         ) : (
           <input hidden defaultValue={userId} {...form.register("leaderId")} />
         )}
-        <div className="grid gap-4 pt-1 lg:grid-cols-4">
-          <div className="flex w-full flex-col space-y-2">
+        <div className="flex gap-4 pt-1">
+          <div className="flex w-full max-w-xs flex-col space-y-2">
             <Label htmlFor="cell_status">Cell Status</Label>
             <Controller
               control={form.control}
@@ -260,7 +259,7 @@ function DiscipleForm({ leaderOptions }: DiscipleFormProps) {
               )}
             />
           </div>
-          <div className="flex w-full flex-col space-y-2">
+          <div className="flex w-full max-w-xs flex-col space-y-2">
             <Label htmlFor="church_status">Church Status</Label>
             <Controller
               control={form.control}
@@ -293,8 +292,8 @@ function DiscipleForm({ leaderOptions }: DiscipleFormProps) {
             />
           </div>
         </div>
-        <div className="grid gap-4 pt-1 lg:grid-cols-4">
-          <div className="flex w-full flex-col space-y-2">
+        <div className="flex gap-4 pt-1">
+          <div className="flex w-full max-w-xs flex-col space-y-2">
             <Label htmlFor="member_type">Member Type</Label>
             <Controller
               control={form.control}
@@ -332,7 +331,7 @@ function DiscipleForm({ leaderOptions }: DiscipleFormProps) {
               )}
             />
           </div>
-          <div className="flex w-full flex-col space-y-2">
+          <div className="flex w-full max-w-xs flex-col space-y-2">
             <Label htmlFor="process_level">Process Level</Label>
             <Controller
               control={form.control}
