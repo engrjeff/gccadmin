@@ -1,7 +1,13 @@
+import { Metadata } from "next"
+
 import PageTitle from "@/components/page-title"
 
 import CellReportAddButton from "./components/cell-report-add-button"
 import CellReportListing from "./components/cell-report-listing"
+
+export const metadata: Metadata = {
+  title: "Cell Reports",
+}
 
 interface PageProps {
   searchParams: { from?: string; to?: string }

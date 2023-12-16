@@ -25,7 +25,7 @@ async function DiscipleLessonsTakenPage({
             <a
               href="https://gcc-site.vercel.app/"
               target="_blank"
-              className="font-semibold text-primary hover:underline"
+              className="font-semibold text-sky-500 hover:underline"
             >
               GCC Resources
             </a>

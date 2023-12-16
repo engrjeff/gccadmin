@@ -48,7 +48,11 @@ export default function RootLayout({ children }: RootLayoutProps) {
           )}
         >
           {/* <NextTopLoader color="#6467F2" showSpinner={false} /> */}
-          <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
+          <ThemeProvider
+            attribute="class"
+            defaultTheme="dark"
+            enableSystem={false}
+          >
             {/* {user?.discipleId ? (
               <>
                 <AuthProvider>{children}</AuthProvider>

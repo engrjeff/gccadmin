@@ -1,5 +1,3 @@
-"use client"
-
 import { BarList, Bold, Flex, Text } from "@tremor/react"
 
 import {
@@ -10,22 +8,15 @@ import {
   CardTitle,
 } from "@/components/ui/card"
 
-interface WeeklyCellReportsProps {
-  totalCGDone: number
-  totalCGLastWeek: number
-  cgCountByLeaderData: {
-    id: string
-    name: string
-    cgCount: number
-    uniqueDisciplesDuringCgCount: number
-  }[]
-}
+import { getCellReportData } from "../service"
 
-function WeeklyCellReports({
-  totalCGDone,
-  totalCGLastWeek,
-  cgCountByLeaderData,
-}: WeeklyCellReportsProps) {
+async function WeeklyCellReports() {
+  const data = await getCellReportData()
+
+  const totalCGDone = data.weeklyReports.totalCGsDone
+  const totalCGLastWeek = data.pastWeeklyReports.totalCGsDone
+  const cgCountByLeaderData = data.weeklyReports.cgCountByLeaderData
+
   return (
     <Card>
       <CardHeader className="pb-0">
@@ -50,7 +41,7 @@ function WeeklyCellReports({
           </Text>
         </Flex>
         <BarList
-          color="indigo"
+          color="sky"
           data={cgCountByLeaderData.map((d) => ({
             name: `${d.name} - (${d.uniqueDisciplesDuringCgCount} disciples)`,
             value: d.cgCount,

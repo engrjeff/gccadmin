@@ -3,7 +3,7 @@ import { Metadata } from "next"
 import SignInForm from "./components/SignInForm"
 
 export const metadata: Metadata = {
-  title: "Sign In - Grace City App",
+  title: "Sign In",
 }
 
 export default function SigninPage() {

@@ -23,7 +23,11 @@ export const getCellReports = async ({
     redirect("/signin")
   }
 
-  const firstDay = previousSunday(new Date())
+  const now = new Date()
+
+  now.setHours(0, 0, 0, 0)
+
+  const firstDay = previousSunday(now)
   const lastDay = addDays(firstDay, 6)
 
   const cellReports = await db.cellReport.findMany({

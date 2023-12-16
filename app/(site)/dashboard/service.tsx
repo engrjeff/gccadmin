@@ -23,6 +23,7 @@ const getWeeklyReports = async (params: { startDate: Date; endDate: Date }) => {
       disciples: {
         where: {
           isActive: true,
+          isDeleted: false,
         },
       },
       cell_reports: {
@@ -253,6 +254,132 @@ export const getDashboardData = async () => {
       disciples: d._count.disciples,
     })),
   }
+}
+
+export const getKPIData = async () => {
+  const now = new Date()
+
+  now.setHours(0, 0, 0, 0)
+  const startDate = previousSunday(now)
+  const endDate = addDays(startDate, 6)
+
+  const totalDisciples = await db.disciple.count({
+    where: {
+      isActive: true,
+      isDeleted: false,
+      name: {
+        not: "GCC Admin",
+      },
+    },
+  })
+
+  const activeInChurch = await db.disciple.count({
+    where: {
+      church_status: "REGULAR",
+      isActive: true,
+      isDeleted: false,
+      name: {
+        not: "GCC Admin",
+      },
+    },
+  })
+
+  const activeInCell = await db.disciple.count({
+    where: {
+      cell_status: "REGULAR",
+      isActive: true,
+      isDeleted: false,
+      name: {
+        not: "GCC Admin",
+      },
+    },
+  })
+
+  const disciplesInProcess = await db.disciple.count({
+    where: {
+      process_level: { not: "NONE" },
+      isActive: true,
+      isDeleted: false,
+      name: {
+        not: "GCC Admin",
+      },
+    },
+  })
+
+  const newlyWonSouls = await db.disciple.count({
+    where: {
+      cell_status: "FIRST_TIMER",
+      church_status: "NACS",
+      createdAt: {
+        lte: startDate,
+        gte: endDate,
+      },
+    },
+  })
+
+  return {
+    totalDisciples,
+    activeInChurch,
+    activeInCell,
+    disciplesInProcess,
+    newlyWonSouls,
+  }
+}
+
+export const getLeadersData = async () => {
+  const leadersData = await db.disciple.findMany({
+    where: {
+      isPrimary: true,
+    },
+    select: {
+      id: true,
+      name: true,
+      _count: {
+        select: {
+          disciples: true,
+        },
+      },
+    },
+    orderBy: {
+      disciples: {
+        _count: "desc",
+      },
+    },
+  })
+
+  const totalDisciples = await db.disciple.count({
+    where: {
+      isActive: true,
+      isDeleted: false,
+      name: {
+        not: "GCC Admin",
+      },
+    },
+  })
+
+  return { leadersData, totalDisciples }
+}
+
+export const getCellReportData = async () => {
+  // this week reports
+  const now = new Date()
+
+  now.setHours(0, 0, 0, 0)
+  const startDate = previousSunday(now)
+  const endDate = addDays(startDate, 6)
+
+  // past week reports
+  const pastStartDate = previousSunday(startDate)
+  const pastEndDate = nextSaturday(pastStartDate)
+
+  const weeklyReports = await getWeeklyReports({ startDate, endDate })
+
+  const pastWeeklyReports = await getWeeklyReports({
+    startDate: pastStartDate,
+    endDate: pastEndDate,
+  })
+
+  return { weeklyReports, pastWeeklyReports }
 }
 
 const getChurchStatusText = (churchStatus: ChurchStatus) => {
