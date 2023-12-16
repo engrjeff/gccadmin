@@ -1,7 +1,32 @@
-import { Badge } from "@tremor/react"
+import { Metadata } from "next"
+import { CellReport } from "@prisma/client"
 import { format } from "date-fns"
 
-import { getCellgroupsAttendedByDisciple } from "../../service/disciples"
+import { cn } from "@/lib/utils"
+import { Badge } from "@/components/ui/badge"
+
+import {
+  getCellgroupsAttendedByDisciple,
+  getDiscipleById,
+} from "../../service/disciples"
+
+const typeColor: Record<CellReport["type"], string> = {
+  SOULWINNING: "text-black bg-green-500",
+  DISCIPLESHIP: "text-black bg-orange-500",
+  OPEN: "text-black bg-sky-500",
+}
+
+export const generateMetadata = async ({
+  params,
+}: {
+  params: { id: string }
+}): Promise<Metadata> => {
+  const disciple = await getDiscipleById(params.id)
+
+  return {
+    title: `Cell Groups Attended by ${disciple?.name}`,
+  }
+}
 
 async function DiscipleAttendedCellGroupsPage({
   params,
@@ -41,11 +66,13 @@ async function DiscipleAttendedCellGroupsPage({
                     {cg.cell_report.lessonId
                       ? cg.cell_report.lesson?.title
                       : cg.cell_report.lesson_name}
-                    <span>
-                      <Badge>Test</Badge>
-                    </span>
                   </h3>
-                  <span className="text-sm text-muted-foreground">
+                  <Badge
+                    className={cn("capitalize", typeColor[cg.cell_report.type])}
+                  >
+                    {cg.cell_report.type.split("_").join(" ").toLowerCase()}
+                  </Badge>
+                  <span className="mt-1 block text-sm text-muted-foreground">
                     Taken on {format(cg.cell_report.date, "MMM dd, yyyy")}
                   </span>
                 </div>

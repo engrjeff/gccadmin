@@ -1,3 +1,4 @@
+import { Metadata } from "next"
 import Link from "next/link"
 
 import { Badge } from "@/components/ui/badge"
@@ -5,7 +6,19 @@ import { Badge } from "@/components/ui/badge"
 import DiscipleAddButton from "../../components/disciple-add-button"
 import DiscipleDeleteDialog from "../../components/disciple-delete-dialog"
 import DiscipleRowActions from "../../components/disciple-row-actions"
-import { getDisciplesByLeader } from "../../service/disciples"
+import { getDiscipleById, getDisciplesByLeader } from "../../service/disciples"
+
+export const generateMetadata = async ({
+  params,
+}: {
+  params: { id: string }
+}): Promise<Metadata> => {
+  const disciple = await getDiscipleById(params.id)
+
+  return {
+    title: `Disciples of ${disciple?.name}`,
+  }
+}
 
 async function DiscipleListOfPrimary({ params }: { params: { id: string } }) {
   const disciples = await getDisciplesByLeader(params.id)

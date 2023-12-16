@@ -25,7 +25,7 @@ export const getCellReports = async ({
 
   const now = new Date()
 
-  now.setHours(0, 0, 0, 0)
+  // now.setHours(0, 0, 0, 0)
 
   const firstDay = previousSunday(now)
   const lastDay = addDays(firstDay, 6)

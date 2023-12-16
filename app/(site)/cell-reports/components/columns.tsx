@@ -13,6 +13,7 @@ import { format } from "date-fns"
 import { cn, formatTime } from "@/lib/utils"
 import { Badge } from "@/components/ui/badge"
 import { DataTableColumnHeader } from "@/components/ui/data-table/column-header"
+import DiscipleContextMenu from "@/components/disciple-context-menu"
 
 import CellReportRowActions from "./cell-report-row-actions"
 
@@ -36,7 +37,9 @@ export const columns: ColumnDef<CellReportRecord>[] = [
     header: ({ column }) => (
       <DataTableColumnHeader column={column} title="Leader" />
     ),
-    cell: (props) => props.getValue(),
+    cell: (props) => (
+      <DiscipleContextMenu disciple={props.row.original.leader} />
+    ),
     filterFn: (row, id, value) => {
       return value.includes(row.getValue(id))
     },

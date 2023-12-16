@@ -1,6 +1,22 @@
+import { Metadata } from "next"
 import { format } from "date-fns"
 
-import { getCellgroupsAttendedByDisciple } from "../../service/disciples"
+import {
+  getCellgroupsAttendedByDisciple,
+  getDiscipleById,
+} from "../../service/disciples"
+
+export const generateMetadata = async ({
+  params,
+}: {
+  params: { id: string }
+}): Promise<Metadata> => {
+  const disciple = await getDiscipleById(params.id)
+
+  return {
+    title: `Lessons Taken by ${disciple?.name}`,
+  }
+}
 
 async function DiscipleLessonsTakenPage({
   params,

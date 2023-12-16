@@ -1,14 +1,13 @@
 "use client"
 
-import Link from "next/link"
 import { Disciple } from "@prisma/client"
 import { ColumnDef } from "@tanstack/react-table"
-import { Verified } from "lucide-react"
 
 import { cn } from "@/lib/utils"
 import { Badge } from "@/components/ui/badge"
 import { Checkbox } from "@/components/ui/checkbox"
 import { DataTableColumnHeader } from "@/components/ui/data-table/column-header"
+import DiscipleContextMenu from "@/components/disciple-context-menu"
 
 import DiscipleRowActions from "./disciple-row-actions"
 
@@ -71,19 +70,7 @@ export const columns: ColumnDef<DiscipleWithLeader>[] = [
     header: ({ column }) => (
       <DataTableColumnHeader column={column} title="Name" />
     ),
-    cell: (props) => (
-      <Link
-        href={`/disciples/${props.row.original.id}`}
-        className="inline-block hover:underline"
-      >
-        <span className="flex items-center gap-2 whitespace-nowrap">
-          {props.row.getValue("name")}
-          {props.row.original.isPrimary ? (
-            <Verified className="h-4 w-4 text-sky-500" />
-          ) : null}{" "}
-        </span>
-      </Link>
-    ),
+    cell: (props) => <DiscipleContextMenu disciple={props.row.original} />,
   },
   {
     accessorFn: (row) => row.leader?.name,

@@ -1,6 +1,6 @@
-import Link from "next/link"
-import { Edit } from "lucide-react"
+import { Edit, Eye } from "lucide-react"
 
+import { Button } from "@/components/ui/button"
 import {
   Tooltip,
   TooltipContent,
@@ -14,13 +14,23 @@ function CellReportRowActions({ cellReportId }: { cellReportId: string }) {
       <TooltipProvider>
         <Tooltip>
           <TooltipTrigger asChild>
-            <Link
-              href={`/cell-reports/edit/${cellReportId}`}
-              className="inline-flex h-8 w-8 items-center justify-center rounded-md p-0 transition-colors hover:bg-accent hover:text-accent-foreground"
-            >
+            <Button size="icon" variant="ghost">
+              <span className="sr-only">View</span>
+              <Eye className="h-4 w-4" />
+            </Button>
+          </TooltipTrigger>
+          <TooltipContent>
+            <span>View Details</span>
+          </TooltipContent>
+        </Tooltip>
+      </TooltipProvider>
+      <TooltipProvider>
+        <Tooltip>
+          <TooltipTrigger asChild>
+            <Button size="icon" variant="ghost">
               <span className="sr-only">Edit</span>
               <Edit className="h-4 w-4" />
-            </Link>
+            </Button>
           </TooltipTrigger>
           <TooltipContent>
             <span>Edit Cell Report</span>

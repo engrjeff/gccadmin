@@ -1,8 +1,21 @@
+import { Metadata } from "next"
 import { notFound } from "next/navigation"
 
 import BasicDetailsCard from "../components/basic-details-card"
 import DiscipleAccountActions from "../components/disciple-account-actions"
 import { getDiscipleById, getUserAccounts } from "../service/disciples"
+
+export const generateMetadata = async ({
+  params,
+}: {
+  params: { id: string }
+}): Promise<Metadata> => {
+  const disciple = await getDiscipleById(params.id)
+
+  return {
+    title: disciple?.name,
+  }
+}
 
 async function DiscipleDetailPage({ params }: { params: { id: string } }) {
   const disciple = await getDiscipleById(params.id)
