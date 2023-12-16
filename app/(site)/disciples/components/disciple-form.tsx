@@ -43,7 +43,12 @@ const initialValues: Partial<DiscipleCreateInputs> = {
   process_level: "NONE",
 }
 
-function DiscipleForm() {
+interface DiscipleFormProps {
+  modalMode?: boolean
+  leaderId?: string
+}
+
+function DiscipleForm({ modalMode, leaderId }: DiscipleFormProps) {
   const session = useSession()
 
   const isAdmin = session.data?.user?.role === "ADMIN"
@@ -54,7 +59,7 @@ function DiscipleForm() {
   const [isLoading, setIsLoading] = useState(false)
 
   const form = useForm<DiscipleCreateInputs>({
-    defaultValues: initialValues,
+    defaultValues: { ...initialValues, leaderId },
     mode: "onChange",
     resolver: zodResolver(discipleCreateSchema),
   })
@@ -208,6 +213,7 @@ function DiscipleForm() {
                   placeholderText="Select a leader"
                   value={field.value}
                   onChange={field.onChange}
+                  disabled={modalMode}
                   options={
                     primaryLeaders.data?.map((i) => ({
                       value: i.id,
@@ -366,17 +372,28 @@ function DiscipleForm() {
           </div>
         </div>
         <div className="flex items-center gap-3 pt-10">
-          <Button type="submit">{isLoading ? "Saving..." : "Save"}</Button>
-          <Button
-            variant="outline"
-            type="button"
-            onClick={form.handleSubmit(onSubmit(true), onError)}
-          >
-            Save and Add Another
-          </Button>
           <Button variant="ghost" type="reset" onClick={() => form.reset()}>
             Reset
           </Button>
+          {modalMode ? null : (
+            <Button
+              variant="outline"
+              type="button"
+              onClick={form.handleSubmit(onSubmit(true), onError)}
+            >
+              Save and Add Another
+            </Button>
+          )}
+          {modalMode ? (
+            <Button
+              type="button"
+              onClick={form.handleSubmit(onSubmit(true), onError)}
+            >
+              {isLoading ? "Saving..." : "Save"}
+            </Button>
+          ) : (
+            <Button type="submit">{isLoading ? "Saving..." : "Save"}</Button>
+          )}
         </div>
       </form>
     </div>
