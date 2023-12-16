@@ -14,6 +14,8 @@ import { cn, formatTime } from "@/lib/utils"
 import { Badge } from "@/components/ui/badge"
 import { DataTableColumnHeader } from "@/components/ui/data-table/column-header"
 
+import CellReportRowActions from "./cell-report-row-actions"
+
 const typeColor: Record<CellReport["type"], string> = {
   SOULWINNING: "text-green-500",
   DISCIPLESHIP: "text-orange-500",
@@ -30,7 +32,7 @@ export type CellReportRecord = CellReport & {
 export const columns: ColumnDef<CellReportRecord>[] = [
   {
     accessorFn: (row) => row.leader.name,
-    id: "leader_name",
+    id: "leaderName",
     header: ({ column }) => (
       <DataTableColumnHeader column={column} title="Leader" />
     ),
@@ -97,5 +99,12 @@ export const columns: ColumnDef<CellReportRecord>[] = [
       <DataTableColumnHeader column={column} title="Venue" />
     ),
     cell: (props) => props.getValue(),
+  },
+  {
+    id: "actions",
+    header: "Actions",
+    cell: ({ row }) => {
+      return <CellReportRowActions cellReportId={row.original.id} />
+    },
   },
 ]

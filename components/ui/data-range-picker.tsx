@@ -1,9 +1,16 @@
 "use client"
 
 import * as React from "react"
-import { format } from "date-fns"
+import {
+  addDays,
+  format,
+  getMonth,
+  lastDayOfMonth,
+  previousSunday,
+  startOfMonth,
+} from "date-fns"
 import { Calendar as CalendarIcon } from "lucide-react"
-import { DateRange, SelectRangeEventHandler } from "react-day-picker"
+import { DateRange } from "react-day-picker"
 
 import { cn } from "@/lib/utils"
 import { Button } from "@/components/ui/button"
@@ -14,6 +21,14 @@ import {
   PopoverTrigger,
 } from "@/components/ui/popover"
 
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "./select"
+
 export default function DateRangePicker({
   className,
   align = "start",
@@ -22,7 +37,7 @@ export default function DateRangePicker({
 }: React.HTMLAttributes<HTMLDivElement> & {
   align?: "center" | "start" | "end"
   dateRange: DateRange | undefined
-  onDateRangeChange: SelectRangeEventHandler
+  onDateRangeChange: (dateRange: DateRange | undefined) => void
 }) {
   return (
     <div className={cn("grid gap-2", className)}>
@@ -53,6 +68,57 @@ export default function DateRangePicker({
           </Button>
         </PopoverTrigger>
         <PopoverContent className="w-auto p-0" align={align}>
+          <div className="p-3">
+            <Select
+              onValueChange={(value) => {
+                if (value === "today") {
+                  onDateRangeChange({ from: new Date(), to: new Date() })
+                }
+
+                if (value === "this-week") {
+                  const firstDay = previousSunday(new Date())
+                  const lastDay = addDays(firstDay, 6)
+
+                  onDateRangeChange({ from: firstDay, to: lastDay })
+                }
+
+                if (value === "last-week") {
+                  const firstDay = previousSunday(previousSunday(new Date()))
+                  const lastDay = addDays(firstDay, 6)
+
+                  onDateRangeChange({ from: firstDay, to: lastDay })
+                }
+
+                if (value === "last-month") {
+                  const monthNow = getMonth(new Date())
+                  const isJanuary = monthNow === 0 // january
+                  const previousMonth = isJanuary ? 11 : monthNow - 1
+                  const targetYear = isJanuary
+                    ? new Date().getFullYear() - 1
+                    : new Date().getFullYear()
+
+                  const firstDay = startOfMonth(
+                    new Date(targetYear, previousMonth)
+                  )
+                  const lastDay = lastDayOfMonth(
+                    new Date(targetYear, previousMonth)
+                  )
+
+                  onDateRangeChange({ from: firstDay, to: lastDay })
+                }
+              }}
+            >
+              <SelectTrigger>
+                <SelectValue placeholder="Select preset" />
+              </SelectTrigger>
+              <SelectContent position="popper">
+                <SelectItem value="today">Today</SelectItem>
+                <SelectItem value="this-week">This Week</SelectItem>
+                <SelectItem value="last-week">Last Week</SelectItem>
+                <SelectItem value="last-month">Last Month</SelectItem>
+              </SelectContent>
+            </Select>
+          </div>
           <Calendar
             initialFocus
             mode="range"

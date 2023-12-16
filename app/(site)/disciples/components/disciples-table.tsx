@@ -20,6 +20,7 @@ import DataTable from "@/components/ui/data-table/data-table"
 import { DataTablePagination } from "@/components/ui/data-table/table-pagination"
 import RefreshButton from "@/components/refresh-button"
 
+import DiscipleBulkActions from "../old_components/disciple-bulk-actions"
 import ActivityFilter from "./activity-filter"
 import { columns, DiscipleWithLeader } from "./columns"
 import DiscipleFilters from "./disciple-filters"
@@ -71,6 +72,7 @@ function DisciplesTable({ disciples, leaders }: Props) {
       <DiscipleSearch value={searchValue} onChange={handleSearch} />
       <div className="flex items-center border-b px-2 py-3">
         <DiscipleFilters table={table} leadersOptions={leadersOptions} />
+        <DiscipleBulkActions table={table} />
         <div className="ml-auto flex items-center gap-3">
           <RefreshButton />
           <ActivityFilter />

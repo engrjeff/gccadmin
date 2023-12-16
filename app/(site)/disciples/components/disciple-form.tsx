@@ -1,7 +1,7 @@
 "use client"
 
 import { useState } from "react"
-import { useRouter } from "next/navigation"
+import { useRouter, useSearchParams } from "next/navigation"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { useSession } from "next-auth/react"
 import { Controller, useForm } from "react-hook-form"
@@ -57,9 +57,15 @@ function DiscipleForm({ modalMode, leaderId }: DiscipleFormProps) {
   const primaryLeaders = usePrimaryLeaders()
   const router = useRouter()
   const [isLoading, setIsLoading] = useState(false)
+  const searchParams = useSearchParams()
+
+  const leaderIdQueryParam = searchParams.get("leaderId")
 
   const form = useForm<DiscipleCreateInputs>({
-    defaultValues: { ...initialValues, leaderId },
+    defaultValues: {
+      ...initialValues,
+      leaderId: leaderIdQueryParam ? leaderIdQueryParam : leaderId,
+    },
     mode: "onChange",
     resolver: zodResolver(discipleCreateSchema),
   })

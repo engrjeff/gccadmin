@@ -13,33 +13,33 @@ import { DataTableColumnHeader } from "@/components/ui/data-table/column-header"
 import DiscipleRowActions from "./disciple-row-actions"
 
 const memberColorMap: Record<Disciple["member_type"], string> = {
-  KIDS: "text-black bg-amber-500",
-  MEN: "text-black bg-sky-500",
-  WOMEN: "text-black bg-pink-500",
-  YOUTH: "text-black bg-emerald-500",
-  YOUNGPRO: "text-black bg-orange-500",
+  KIDS: "text-amber-500",
+  MEN: "text-sky-500",
+  WOMEN: "text-pink-500",
+  YOUTH: "text-emerald-500",
+  YOUNGPRO: "text-orange-500",
 }
 
 const cellStatusColorMap: Record<Disciple["cell_status"], string> = {
-  FIRST_TIMER: "text-black bg-emerald-500",
-  SECOND_TIMER: "text-black bg-sky-500",
-  THIRD_TIMER: "text-black bg-blue-500",
-  REGULAR: "text-black bg-primary",
+  FIRST_TIMER: "text-emerald-500",
+  SECOND_TIMER: "text-sky-500",
+  THIRD_TIMER: "text-blue-500",
+  REGULAR: "text-primary",
 }
 
 const churchStatusColorMap: Record<Disciple["church_status"], string> = {
-  NACS: "text-black bg-red-500",
-  ACS: "text-black bg-sky-500",
-  REGULAR: "text-black bg-primary",
+  NACS: "text-red-500",
+  ACS: "text-sky-500",
+  REGULAR: "text-primary",
 }
 
 const processColorMap: Record<Disciple["process_level"], string> = {
-  NONE: "text-black bg-red-500",
-  PREENC: "text-black bg-indigo-300",
-  ENCOUNTER: "text-black bg-indigo-400",
-  LEADERSHIP_1: "text-black bg-indigo-500",
-  LEADERSHIP_2: "text-black bg-indigo-600",
-  LEADERSHIP_3: "text-black bg-primary",
+  NONE: "text-red-500",
+  PREENC: "text-indigo-300",
+  ENCOUNTER: "text-indigo-400",
+  LEADERSHIP_1: "text-indigo-500",
+  LEADERSHIP_2: "text-indigo-600",
+  LEADERSHIP_3: "text-primary",
 }
 
 export type DiscipleWithLeader = Disciple & { leader: { name: string } | null }
@@ -102,17 +102,21 @@ export const columns: ColumnDef<DiscipleWithLeader>[] = [
   },
   {
     accessorKey: "gender",
-
     id: "gender",
     header: ({ column }) => (
       <DataTableColumnHeader column={column} title="Gender" />
     ),
     cell: (props) => (
-      <Badge
-        className="capitalize"
-        variant={props.row.getValue("gender") === "MALE" ? "info" : "pink"}
-      >
-        {String(props.row.getValue("gender")).toLowerCase()}
+      <Badge variant="outline" className="capitalize">
+        <span
+          className={cn("mr-2 scale-150", {
+            "text-rose-500": props.row.original.gender === "FEMALE",
+            "text-sky-500": props.row.original.gender === "MALE",
+          })}
+        >
+          &#x2022;
+        </span>
+        {props.row.original.gender}
       </Badge>
     ),
   },
@@ -123,13 +127,16 @@ export const columns: ColumnDef<DiscipleWithLeader>[] = [
       <DataTableColumnHeader column={column} title="Member Type" />
     ),
     cell: (props) => (
-      <Badge
-        className={cn(
-          "capitalize",
-          memberColorMap[props.row.original.member_type]
-        )}
-      >
-        {String(props.row.getValue("member_type")).toLowerCase()}
+      <Badge variant="outline" className={cn("capitalize")}>
+        <span
+          className={cn(
+            "mr-2 scale-150",
+            memberColorMap[props.row.original.member_type]
+          )}
+        >
+          &#x2022;
+        </span>
+        {props.row.original.member_type.toLowerCase()}
       </Badge>
     ),
     filterFn: (row, id, value) => {
@@ -143,12 +150,15 @@ export const columns: ColumnDef<DiscipleWithLeader>[] = [
       <DataTableColumnHeader column={column} title="Cell Status" />
     ),
     cell: (props) => (
-      <Badge
-        className={cn(
-          "capitalize",
-          cellStatusColorMap[props.row.original.cell_status]
-        )}
-      >
+      <Badge variant="outline" className={cn("capitalize")}>
+        <span
+          className={cn(
+            "mr-2 scale-150",
+            cellStatusColorMap[props.row.original.cell_status]
+          )}
+        >
+          &#x2022;
+        </span>
         {props.row.original.cell_status.split("_").join(" ").toLowerCase()}
       </Badge>
     ),
@@ -163,12 +173,15 @@ export const columns: ColumnDef<DiscipleWithLeader>[] = [
       <DataTableColumnHeader column={column} title="Church Status" />
     ),
     cell: (props) => (
-      <Badge
-        className={cn(
-          "capitalize",
-          churchStatusColorMap[props.row.original.church_status]
-        )}
-      >
+      <Badge variant="outline" className={cn("capitalize")}>
+        <span
+          className={cn(
+            "mr-2 scale-150",
+            churchStatusColorMap[props.row.original.church_status]
+          )}
+        >
+          &#x2022;
+        </span>
         {props.row.original.church_status === "REGULAR"
           ? props.row.original.church_status.toLowerCase()
           : props.row.original.church_status.split("_").join(" ")}
@@ -185,12 +198,15 @@ export const columns: ColumnDef<DiscipleWithLeader>[] = [
       <DataTableColumnHeader column={column} title="Process Level" />
     ),
     cell: (props) => (
-      <Badge
-        className={cn(
-          "capitalize",
-          processColorMap[props.row.original.process_level]
-        )}
-      >
+      <Badge variant="outline" className={cn("capitalize")}>
+        <span
+          className={cn(
+            "mr-2 scale-150",
+            processColorMap[props.row.original.process_level]
+          )}
+        >
+          &#x2022;
+        </span>
         {props.row.original.process_level.split("_").join(" ").toLowerCase()}
       </Badge>
     ),

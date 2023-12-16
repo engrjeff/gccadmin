@@ -10,6 +10,7 @@ export async function GET(
     const disciplesOfLeader = await db.disciple.findMany({
       where: {
         isActive: true,
+        isDeleted: false,
         leaderId: params.id,
       },
       orderBy: {

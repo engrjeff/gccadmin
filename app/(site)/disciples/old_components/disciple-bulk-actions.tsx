@@ -106,6 +106,10 @@ function DiscipleBulkActions({ table }: DiscipleBulkActionsProps) {
       description: "The disciples were updated successfully!",
       variant: "success",
     })
+
+    table.toggleAllRowsSelected(false)
+    table.resetColumnFilters()
+
     router.refresh()
 
     setAction(null)
@@ -180,7 +184,11 @@ function DiscipleBulkActions({ table }: DiscipleBulkActionsProps) {
                       Select {label}
                     </SelectLabel>
                     {optionsActionMap[action].map((option) => (
-                      <SelectItem key={option.value} value={option.value}>
+                      <SelectItem
+                        key={option.value}
+                        value={option.value}
+                        className="capitalize"
+                      >
                         {option.label.split("_").join(" ")}
                       </SelectItem>
                     ))}

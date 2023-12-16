@@ -1,4 +1,5 @@
 import { NextResponse } from "next/server"
+import { isToday } from "date-fns"
 import { getServerSession } from "next-auth"
 
 import { authOptions } from "@/lib/auth"
@@ -82,6 +83,7 @@ export async function POST(req: Request) {
         id: true,
         cell_status: true,
         church_status: true,
+        createdAt: true,
       },
     })
 
@@ -90,7 +92,9 @@ export async function POST(req: Request) {
         const updated = await db.disciple.update({
           where: { id: attendee.id },
           data: {
-            cell_status: getNextCellStatus(attendee.cell_status),
+            cell_status: isToday(attendee.createdAt)
+              ? attendee.cell_status
+              : getNextCellStatus(attendee.cell_status),
           },
         })
 

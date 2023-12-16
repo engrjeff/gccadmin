@@ -65,9 +65,12 @@ export async function DELETE(req: Request, { params }: Params) {
       return new NextResponse("Unauthorized", { status: 403 })
     }
 
-    await db.disciple.delete({
+    await db.disciple.update({
       where: {
         id: params.id,
+      },
+      data: {
+        isDeleted: true,
       },
     })
 
