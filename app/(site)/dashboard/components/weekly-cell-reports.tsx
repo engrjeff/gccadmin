@@ -24,7 +24,9 @@ async function WeeklyCellReports() {
         <CardDescription className="text-3xl font-bold text-foreground">
           {totalCGDone}{" "}
           <span className="text-sm font-normal text-muted-foreground">
-            cell groups this week
+            {totalCGDone === 0
+              ? "No cell groups this week yet"
+              : "cell groups this week"}
           </span>
         </CardDescription>
         <span className="text-xs font-normal text-muted-foreground">

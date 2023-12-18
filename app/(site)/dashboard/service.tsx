@@ -263,7 +263,7 @@ export const getKPIData = async () => {
   const startDate = previousSunday(now)
   const endDate = addDays(startDate, 6)
 
-  const totalDisciples = await db.disciple.count({
+  const disciples = await db.disciple.findMany({
     where: {
       isActive: true,
       isDeleted: false,
@@ -273,56 +273,54 @@ export const getKPIData = async () => {
     },
   })
 
-  const activeInChurch = await db.disciple.count({
+  const totalDisciples = disciples.length
+
+  const activeInChurch = disciples.filter(
+    (d) => d.church_status === "REGULAR"
+  ).length
+
+  const activeInCell = disciples.filter(
+    (d) => d.cell_status === "REGULAR"
+  ).length
+
+  const disciplesInProcess = disciples.filter(
+    (d) => d.process_level !== "NONE"
+  ).length
+
+  const cgThisWeek = await db.cellReport.findMany({
     where: {
-      church_status: "REGULAR",
-      isActive: true,
-      isDeleted: false,
-      name: {
-        not: "GCC Admin",
+      date: {
+        gte: startDate,
+        lte: endDate,
+      },
+    },
+    include: {
+      attendees: {
+        include: {
+          disciple: true,
+        },
       },
     },
   })
 
-  const activeInCell = await db.disciple.count({
-    where: {
-      cell_status: "REGULAR",
-      isActive: true,
-      isDeleted: false,
-      name: {
-        not: "GCC Admin",
-      },
-    },
-  })
+  const newSouls = cgThisWeek.reduce((total, cg) => {
+    const attendess = cg.attendees.filter(
+      (a) =>
+        isWithinInterval(a.disciple.createdAt, {
+          start: startDate,
+          end: endDate,
+        }) && a.disciple.cell_status === "FIRST_TIMER"
+    )
 
-  const disciplesInProcess = await db.disciple.count({
-    where: {
-      process_level: { not: "NONE" },
-      isActive: true,
-      isDeleted: false,
-      name: {
-        not: "GCC Admin",
-      },
-    },
-  })
-
-  const newlyWonSouls = await db.disciple.count({
-    where: {
-      cell_status: "FIRST_TIMER",
-      church_status: "NACS",
-      createdAt: {
-        lte: startDate,
-        gte: endDate,
-      },
-    },
-  })
+    return total + attendess.length
+  }, 0)
 
   return {
     totalDisciples,
     activeInChurch,
     activeInCell,
     disciplesInProcess,
-    newlyWonSouls,
+    newlyWonSouls: newSouls,
   }
 }
 
