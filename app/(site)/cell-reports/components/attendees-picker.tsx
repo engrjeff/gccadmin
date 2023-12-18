@@ -110,7 +110,11 @@ function AttendeesPicker({ disabled }: AttendeesPickerProps) {
                   <SheetTrigger asChild>
                     <Button type="button">Add Disciple</Button>
                   </SheetTrigger>
-                  <SheetContent>
+                  <SheetContent
+                    position="right"
+                    size="sm"
+                    className="w-1/3 overflow-y-auto"
+                  >
                     <SheetHeader>
                       <SheetTitle>Create Disciple</SheetTitle>
                       <SheetDescription>
