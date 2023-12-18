@@ -3,6 +3,7 @@ import { X } from "lucide-react"
 
 import { Option } from "@/types/common"
 import { cellStatuses, churchStatuses } from "@/lib/constants"
+import { useIsAdmin } from "@/hooks/use-isadmin"
 import { Button } from "@/components/ui/button"
 import { DataTableFacetedFilter } from "@/components/ui/data-table/faceted-filter"
 import { Separator } from "@/components/ui/separator"
@@ -20,9 +21,11 @@ function DiscipleFilters({ table, leadersOptions }: DiscipleFiltersProps) {
     table.getPreFilteredRowModel().rows.length >
     table.getFilteredRowModel().rows.length
 
+  const isAdmin = useIsAdmin()
+
   return (
     <>
-      <RenderIf condition={leadersOptions.length > 0}>
+      <RenderIf condition={leadersOptions.length > 0 && isAdmin}>
         <DataTableFacetedFilter
           column={table.getColumn("leaderName")}
           title="Leader"

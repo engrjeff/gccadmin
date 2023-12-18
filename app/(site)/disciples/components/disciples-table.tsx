@@ -15,6 +15,7 @@ import {
   VisibilityState,
 } from "@tanstack/react-table"
 
+import { useIsAdmin } from "@/hooks/use-isadmin"
 import { DataTableViewOptions } from "@/components/ui/data-table/column-visibility-toggle"
 import DataTable from "@/components/ui/data-table/data-table"
 import { DataTablePagination } from "@/components/ui/data-table/table-pagination"
@@ -37,9 +38,15 @@ function DisciplesTable({ disciples, leaders }: Props) {
   const [columnVisibility, setColumnVisibility] = useState<VisibilityState>({})
   const [rowSelection, setRowSelection] = useState({})
 
+  const isAdmin = useIsAdmin()
+
+  const columnsToDisplay = isAdmin
+    ? columns
+    : columns.filter((col) => col.id !== "leaderName")
+
   const table = useReactTable({
     data: disciples,
-    columns,
+    columns: columnsToDisplay,
     getCoreRowModel: getCoreRowModel(),
     getPaginationRowModel: getPaginationRowModel(),
     onSortingChange: setSorting,
