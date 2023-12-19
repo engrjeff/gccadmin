@@ -12,13 +12,13 @@ export const menuItems = [
     icon: <Users className="h-4 w-4" />,
   },
   {
-    title: "Resources",
-    href: "/resources",
-    icon: <Library className="h-4 w-4" />,
-  },
-  {
     title: "Cell Reports",
     href: "/cell-reports",
     icon: <StickyNote className="h-4 w-4" />,
+  },
+  {
+    title: "Resources",
+    href: "/resources",
+    icon: <Library className="h-4 w-4" />,
   },
 ]
