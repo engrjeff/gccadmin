@@ -39,6 +39,9 @@ export default function DateRangePicker({
   dateRange: DateRange | undefined
   onDateRangeChange: (dateRange: DateRange | undefined) => void
 }) {
+  const [selectedPreset, setSelectedPreset] =
+    React.useState<string>("this-week")
+
   return (
     <div className={cn("grid gap-2", className)}>
       <Popover>
@@ -71,6 +74,8 @@ export default function DateRangePicker({
           <div className="p-3">
             <Select
               onValueChange={(value) => {
+                setSelectedPreset(value)
+
                 if (value === "today") {
                   onDateRangeChange({ from: new Date(), to: new Date() })
                 }
@@ -120,12 +125,13 @@ export default function DateRangePicker({
             </Select>
           </div>
           <Calendar
+            key={selectedPreset}
             initialFocus
             mode="range"
             defaultMonth={dateRange?.from}
             selected={dateRange}
             onSelect={onDateRangeChange}
-            numberOfMonths={2}
+            numberOfMonths={1}
           />
         </PopoverContent>
       </Popover>

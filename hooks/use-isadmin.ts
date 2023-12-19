@@ -7,5 +7,7 @@ export function useIsAdmin() {
 
   const isAdmin = session.data?.user.role === "ADMIN"
 
-  return isAdmin
+  const status = session.status
+
+  return { isAdmin, status }
 }

@@ -4,9 +4,9 @@ import {
   MemberType,
   ProcessLevel,
 } from "@prisma/client"
+import { endOfWeek, format, parseISO, startOfWeek } from "date-fns"
 import addDays from "date-fns/addDays"
 import isWithinInterval from "date-fns/isWithinInterval"
-import nextSaturday from "date-fns/nextSaturday"
 import previousSunday from "date-fns/previousSunday"
 
 import { prisma as db } from "@/lib/db"
@@ -69,7 +69,13 @@ const getWeeklyReports = async (params: { startDate: Date; endDate: Date }) => {
   return { totalCGsDone, cgCountByLeaderData, leaders: reports }
 }
 
-export const getDashboardData = async () => {
+interface Options {
+  from?: string
+  to?: string
+  isAll?: boolean
+}
+
+export const getDashboardData = async ({ from, to, isAll }: Options) => {
   const primaryData = await db.disciple.findMany({
     where: {
       isPrimary: true,
@@ -91,17 +97,25 @@ export const getDashboardData = async () => {
   })
 
   // this week reports
-  const now = new Date()
 
-  now.setHours(0, 0, 0, 0)
-  const startDate = previousSunday(now)
-  const endDate = addDays(startDate, 6)
+  const now = new Date(new Date().toDateString()).toISOString()
+
+  const start = previousSunday(parseISO(now))
+
+  const startDate = parseISO(
+    from ? new Date(from).toISOString() : format(start, "yyyy-MM-dd")
+  )
+  const endDate = parseISO(
+    to ? new Date(to).toISOString() : format(addDays(start, 6), "yyyy-MM-dd")
+  )
 
   // console.log(startDate, endDate)
 
   // past week reports
   const pastStartDate = previousSunday(startDate)
-  const pastEndDate = nextSaturday(pastStartDate)
+  const pastEndDate = addDays(pastStartDate, 6)
+
+  console.log(pastStartDate, pastEndDate)
 
   const weeklyReports = await getWeeklyReports({ startDate, endDate })
 
@@ -358,35 +372,44 @@ export const getLeadersData = async () => {
   return { leadersData, totalDisciples }
 }
 
-export const getCellReportData = async () => {
-  // this week reports
+export const getCellReportData = async (options: Options = {}) => {
   const now = new Date()
 
-  // now.setHours(0, 0, 0, 0)
-  const startDate = previousSunday(now)
-  const endDate = addDays(startDate, 6)
+  const start = previousSunday(now)
 
-  console.log(startDate, endDate)
+  const startDate = options.from ? options.from : format(start, "yyyy-MM-dd")
 
-  const weeklyReports = await getWeeklyReports({ startDate, endDate })
+  const endDate = options.to
+    ? options.to
+    : format(addDays(start, 6), "yyyy-MM-dd")
+
+  console.log("CELL REPORT THIS DATE RANGE: ", startDate, endDate)
+
+  const weeklyReports = await getWeeklyReports({
+    startDate: new Date(startDate),
+    endDate: new Date(endDate),
+  })
 
   // past week reports
-  const pastStartDate = addDays(
-    previousSunday(startDate.setHours(0, 0, 0, 0)),
-    1
-  )
-  const pastEndDate = addDays(pastStartDate, 6)
-  console.log(pastStartDate, pastEndDate)
+  const sundayOfPastWeek = previousSunday(startOfWeek(new Date(startDate)))
+  const saturdayOfPastWeek = endOfWeek(sundayOfPastWeek)
+
+  const pastStartDate = format(sundayOfPastWeek, "yyyy-MM-dd")
+  const pastEndDate = format(saturdayOfPastWeek, "yyyy-MM-dd")
+
+  console.log("PAST WEEK: ", pastStartDate, pastEndDate)
 
   const pastWeeklyReports = await getWeeklyReports({
-    startDate: pastStartDate,
-    endDate: pastEndDate,
+    startDate: new Date(pastStartDate),
+    endDate: new Date(pastEndDate),
   })
 
   return { weeklyReports, pastWeeklyReports }
 }
 
 export const getStatusData = async () => {
+  console.time("status data")
+
   const rawMemberTypeData = await db.disciple.groupBy({
     by: ["member_type"],
     where: {
@@ -486,6 +509,8 @@ export const getStatusData = async () => {
     name: i.process_level.split("_").join(" "),
     valueDesc: getProcessLevelText(i.process_level),
   }))
+
+  console.timeEnd("status data")
 
   return {
     churchData,

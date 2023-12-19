@@ -21,7 +21,9 @@ function DiscipleFilters({ table, leadersOptions }: DiscipleFiltersProps) {
     table.getPreFilteredRowModel().rows.length >
     table.getFilteredRowModel().rows.length
 
-  const isAdmin = useIsAdmin()
+  const { isAdmin, status } = useIsAdmin()
+
+  if (status !== "authenticated") return null
 
   return (
     <>

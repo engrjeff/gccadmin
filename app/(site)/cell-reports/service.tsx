@@ -1,5 +1,5 @@
 import { notFound, redirect } from "next/navigation"
-import { addDays } from "date-fns"
+import { addDays, format } from "date-fns"
 import nextSaturday from "date-fns/nextSaturday"
 import previousSunday from "date-fns/previousSunday"
 
@@ -25,10 +25,12 @@ export const getCellReports = async ({
 
   const now = new Date()
 
-  // now.setHours(0, 0, 0, 0)
+  const start = previousSunday(now)
 
-  const firstDay = previousSunday(now)
-  const lastDay = addDays(firstDay, 6)
+  const firstDay = from ? from : format(start, "yyyy-MM-dd")
+  const lastDay = to ? to : format(addDays(start, 6), "yyyy-MM-dd")
+
+  console.log("CELL GROUPS: ", firstDay, lastDay)
 
   const cellReports = await db.cellReport.findMany({
     where: {
@@ -36,8 +38,8 @@ export const getCellReports = async ({
       date: isAll
         ? undefined
         : {
-            gte: from ? from : firstDay,
-            lte: to ? to : lastDay,
+            gte: new Date(firstDay),
+            lte: new Date(lastDay),
           },
     },
     include: {

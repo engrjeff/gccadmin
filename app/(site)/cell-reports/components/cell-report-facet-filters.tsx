@@ -2,8 +2,10 @@
 
 import { Table } from "@tanstack/react-table"
 
+import { useIsAdmin } from "@/hooks/use-isadmin"
 import { usePrimaryLeaders } from "@/hooks/use-primary-leaders"
 import { DataTableFacetedFilter } from "@/components/ui/data-table/faceted-filter"
+import RenderIf from "@/components/render-if"
 
 import { CellReportRecord } from "./columns"
 
@@ -13,6 +15,9 @@ interface CellReportFacetFiltersProps {
 
 function CellReportFacetFilters({ table }: CellReportFacetFiltersProps) {
   const primaryLeaders = usePrimaryLeaders()
+  const { isAdmin, status } = useIsAdmin()
+
+  if (status !== "authenticated") return null
 
   return (
     <>
@@ -26,7 +31,8 @@ function CellReportFacetFilters({ table }: CellReportFacetFiltersProps) {
           }))}
         />
       )}
-      {table.getColumn("leaderName") && (
+
+      <RenderIf condition={isAdmin}>
         <DataTableFacetedFilter
           column={table.getColumn("leaderName")}
           title="Leader"
@@ -37,7 +43,7 @@ function CellReportFacetFilters({ table }: CellReportFacetFiltersProps) {
             })) ?? []
           }
         />
-      )}
+      </RenderIf>
     </>
   )
 }
