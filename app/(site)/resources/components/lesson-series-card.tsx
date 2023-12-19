@@ -1,97 +1,81 @@
 "use client"
 
-import Link from "next/link"
+import { useCallback, useState } from "react"
+import { usePathname, useRouter, useSearchParams } from "next/navigation"
 import { Lesson, LessonSeries } from "@prisma/client"
-import { Edit, FilePlus, MoreVertical } from "lucide-react"
+import { BookmarkFilledIcon, StackIcon } from "@radix-ui/react-icons"
 
-import { useLessonFormSheetStore } from "@/lib/hooks"
-import { cn } from "@/lib/utils"
-import { Badge } from "@/components/ui/badge"
-import { Button, buttonVariants } from "@/components/ui/button"
 import {
   Card,
-  CardContent,
   CardDescription,
-  CardFooter,
   CardHeader,
   CardTitle,
 } from "@/components/ui/card"
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuLabel,
-  DropdownMenuSeparator,
-  DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu"
 
-function LessonSeriesCard({
-  lessonSeries,
-}: {
-  lessonSeries: LessonSeries & { lessons: Lesson[] }
-}) {
-  const { setSelectedSeries, openForm } = useLessonFormSheetStore()
+import LessonForm from "./lesson-form"
 
-  const handleAddLessonClick = () => {
-    setSelectedSeries(lessonSeries)
+type SeriesWithLessons = LessonSeries & { lessons: Lesson[] }
 
-    openForm()
-  }
+function LessonSeriesCard({ seriesItem }: { seriesItem: SeriesWithLessons }) {
+  const router = useRouter()
+  const pathname = usePathname()
+  const searchParams = useSearchParams()
+  const [lessonsShown, setLessonsShown] = useState(false)
+
+  const changeQueryParams = useCallback(() => {
+    const params = new URLSearchParams(searchParams)
+
+    params.set("seriesId", seriesItem.id)
+
+    router.push(`${pathname}?${params.toString()}`)
+  }, [pathname, router, searchParams, seriesItem.id])
 
   return (
-    <Card className="flex flex-col">
-      <CardHeader className="relative">
-        <CardTitle>{lessonSeries.title}</CardTitle>
-        <DropdownMenu>
-          <DropdownMenuTrigger asChild>
-            <Button
-              variant="ghost"
-              className="absolute right-3 top-2 h-8 w-8 p-0"
-            >
-              <span className="sr-only">Menu</span>
-              <MoreVertical className="h-4 w-4" />
-            </Button>
-          </DropdownMenuTrigger>
-          <DropdownMenuContent align="end" forceMount>
-            <DropdownMenuLabel>Options</DropdownMenuLabel>
-            <DropdownMenuSeparator />
-            <DropdownMenuItem asChild>
-              <button className="flex w-full">
-                <Edit className="mr-2 h-4 w-4" />
-                <span>Update</span>
-              </button>
-            </DropdownMenuItem>
-            <DropdownMenuItem asChild>
-              <button className="flex w-full" onClick={handleAddLessonClick}>
-                <FilePlus className="mr-2 h-4 w-4" />
-                <span>Add Lesson</span>
-              </button>
-            </DropdownMenuItem>
-          </DropdownMenuContent>
-        </DropdownMenu>
-        <Badge variant="outline" className="self-start rounded">
-          {lessonSeries.lessons.length} Lessons
-        </Badge>
-        <CardDescription>{lessonSeries.description}</CardDescription>
-      </CardHeader>
-      <CardContent className="flex-1">
-        <div className="flex flex-wrap items-center gap-2">
-          {lessonSeries.tags.map((tag, index) => (
-            <Badge key={index} variant="outline">
-              {tag}
-            </Badge>
-          ))}
-        </div>
-      </CardContent>
-      <CardFooter>
-        <Link
-          href={`/resources/${lessonSeries.id}`}
-          className={cn(buttonVariants(), "w-full")}
-        >
-          View
-        </Link>
-      </CardFooter>
-    </Card>
+    <div className="relative">
+      <LessonForm series={seriesItem} />
+      <Card
+        className="cursor-pointer lg:hover:bg-muted2"
+        onClick={(e) => {
+          e.stopPropagation()
+          changeQueryParams()
+
+          setLessonsShown((shown) => !shown)
+        }}
+      >
+        <CardHeader>
+          <CardTitle className="flex gap-x-2">
+            <BookmarkFilledIcon className="h-4 w-4 text-purple-600" />{" "}
+            {seriesItem.title}
+          </CardTitle>
+          <CardDescription>{seriesItem.description}</CardDescription>
+          <p className="flex items-center text-xs">
+            <StackIcon
+              className="mr-2 h-4 w-4 text-purple-600"
+              aria-hidden="true"
+            />
+            {seriesItem.lessons.length} Lessons
+          </p>
+          {lessonsShown ? (
+            <div className="mt-4 border-t pt-4 xl:hidden">
+              <h4 className="mb-4 text-sm font-semibold leading-none tracking-tight">
+                Lessons ({seriesItem.lessons.length})
+              </h4>
+              <ul className="max-h-[400px] space-y-2.5 overflow-y-auto">
+                {seriesItem.lessons.map((lesson) => (
+                  <li key={`lesson-${lesson.id}`}>
+                    <Card className="rounded bg-muted2 p-3">
+                      <h5 className="text-sm font-medium leading-none tracking-tight">
+                        {lesson.title}
+                      </h5>
+                    </Card>
+                  </li>
+                ))}
+              </ul>
+            </div>
+          ) : null}
+        </CardHeader>
+      </Card>
+    </div>
   )
 }
 
