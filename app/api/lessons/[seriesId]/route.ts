@@ -8,10 +8,6 @@ interface Params {
 
 export async function GET(req: Request, { params }: Params) {
   try {
-    if (!params.seriesId) {
-      return null
-    }
-
     const lessonSeries = await db.lessonSeries.findFirst({
       where: {
         id: params.seriesId,
