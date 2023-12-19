@@ -30,10 +30,14 @@ export default function QuickActions() {
         <DropdownMenuSeparator />
         <DropdownMenuGroup onClick={() => setOpen(false)}>
           <DropdownMenuItem>
-            <Link href="/disciples/new">Add Disciple</Link>
+            <Link href="/disciples/new" className="inline-block w-full">
+              Add Disciple
+            </Link>
           </DropdownMenuItem>
           <DropdownMenuItem>
-            <Link href="/cell-reports/new">Create Cell Report</Link>
+            <Link href="/cell-reports/new" className="inline-block w-full">
+              Create Cell Report
+            </Link>
           </DropdownMenuItem>
         </DropdownMenuGroup>
       </DropdownMenuContent>
