@@ -43,7 +43,7 @@ function DataTable<TData>({ table, columnCount }: DataTableProps<TData>) {
               data-state={row.getIsSelected() && "selected"}
             >
               {row.getVisibleCells().map((cell) => (
-                <TableCell key={cell.id}>
+                <TableCell key={cell.id} className="whitespace-nowrap">
                   {flexRender(cell.column.columnDef.cell, cell.getContext())}
                 </TableCell>
               ))}
