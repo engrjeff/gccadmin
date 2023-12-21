@@ -21,7 +21,10 @@ export const cellReportCreateSchema = z.object({
   scripture_references: z.string().array().optional(),
 
   assistant_id: z.string().optional(),
-  attendees: z.string().array().min(1, { message: "Attendees is required" }),
+  attendees: z
+    .string()
+    .array()
+    .min(1, { message: "Must have at least 1 attendee" }),
 
   leaderId: z
     .string({ required_error: "Leader is required" })
