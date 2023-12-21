@@ -117,29 +117,28 @@ const CellReportForm = () => {
       ? [...values.attendees, values.assistant_id]
       : values.attendees
 
-    await new Promise((resolve) => setTimeout(resolve, 3000))
-    // const response = await fetch("/api/cell-reports", {
-    //   method: "POST",
-    //   headers: {
-    //     "Content-Type": "application/json",
-    //   },
-    //   body: JSON.stringify({
-    //     ...values,
-    //     date: new Date(values.date as string),
-    //     attendees: attendeesData,
-    //   }),
-    // })
+    const response = await fetch("/api/cell-reports", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        ...values,
+        date: new Date(values.date as string),
+        attendees: attendeesData,
+      }),
+    })
 
-    // if (!response?.ok) {
-    //   toast({
-    //     title: "Something went wrong.",
-    //     description:
-    //       "The cell report record was not created. Please try again.",
-    //     variant: "destructive",
-    //   })
+    if (!response?.ok) {
+      toast({
+        title: "Something went wrong.",
+        description:
+          "The cell report record was not created. Please try again.",
+        variant: "destructive",
+      })
 
-    //   return
-    // }
+      return
+    }
 
     toast({
       title: "Success!",
