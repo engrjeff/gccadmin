@@ -87,10 +87,12 @@ export const columns: ColumnDef<CellReportRecord>[] = [
     header: ({ column }) => (
       <DataTableColumnHeader column={column} title="Date" />
     ),
-    cell: (props) =>
-      `${format(props.row.original.date, "MMM dd, yyyy")} at ${formatTime(
-        props.row.original.time
-      )}`,
+    cell: (props) => (
+      <span className="whitespace-nowrap">
+        {format(props.row.original.date, "MMM dd, yyyy")} at{" "}
+        {formatTime(props.row.original.time)}
+      </span>
+    ),
     filterFn: (row, id, value) => {
       return value.includes(row.getValue(id))
     },

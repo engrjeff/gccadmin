@@ -3,6 +3,7 @@ import "@/styles/globals.css"
 import { Metadata, Viewport } from "next"
 import AuthProvider from "@/providers/auth-provider"
 import ReactQueryProvider from "@/providers/react-query-provider"
+import NextTopLoader from "nextjs-toploader"
 
 import { siteConfig } from "@/config/site"
 import { fontSans } from "@/lib/fonts"
@@ -47,7 +48,7 @@ export default function RootLayout({ children }: RootLayoutProps) {
             "dark h-full overflow-hidden bg-background font-sans antialiased"
           )}
         >
-          {/* <NextTopLoader color="#6467F2" showSpinner={false} /> */}
+          <NextTopLoader color="#6467F2" showSpinner={false} />
           <ThemeProvider
             attribute="class"
             defaultTheme="dark"

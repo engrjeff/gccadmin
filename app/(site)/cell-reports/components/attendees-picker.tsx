@@ -30,9 +30,15 @@ import DiscipleForm from "../../disciples/components/disciple-form"
 
 interface AttendeesPickerProps {
   disabled?: boolean
+  attendees: string[]
+  onAttendeesValueChange: (val: string[]) => void
 }
 
-function AttendeesPicker({ disabled }: AttendeesPickerProps) {
+function AttendeesPicker({
+  disabled,
+  attendees,
+  onAttendeesValueChange,
+}: AttendeesPickerProps) {
   const [attendeesDialogShown, setAttendeesDialogShown] = useState(false)
   const [addDiscipleFormShown, setAddDiscipleFormShown] = useState(false)
   const [attendeesSearchQuery, setAttendeesSearchQuery] = useState("")
@@ -41,7 +47,6 @@ function AttendeesPicker({ disabled }: AttendeesPickerProps) {
 
   const leaderId = cellReportForm.watch("leaderId")
   const assistantId = cellReportForm.watch("assistant_id")
-  const attendees = cellReportForm.watch("attendees")
 
   const disciplesOfLeader = useDisciplesOfLeader(leaderId)
 
@@ -56,12 +61,11 @@ function AttendeesPicker({ disabled }: AttendeesPickerProps) {
     : sortedBySelected
 
   const handleAttendeesSelection = (attendeeId: string) => {
-    cellReportForm.setValue(
-      "attendees",
-      attendees.includes(attendeeId)
-        ? attendees.filter((i) => i !== attendeeId)
-        : [...attendees, attendeeId]
-    )
+    const updatedAttendees = attendees.includes(attendeeId)
+      ? attendees.filter((i) => i !== attendeeId)
+      : [...attendees, attendeeId]
+
+    onAttendeesValueChange(updatedAttendees)
   }
 
   return (
@@ -78,6 +82,7 @@ function AttendeesPicker({ disabled }: AttendeesPickerProps) {
           Select Attendees
         </Button>
       </DialogTrigger>
+      <span className="text-muted-foreground">{attendees.length} selected</span>
       <DialogContent>
         <DialogHeader>
           <DialogTitle>Select Cell Group Attendees</DialogTitle>
@@ -128,6 +133,13 @@ function AttendeesPicker({ disabled }: AttendeesPickerProps) {
                 </Sheet>
               </div>
             ) : null}
+            <input
+              type="hidden"
+              name="attendees"
+              hidden
+              defaultValue={attendees}
+              key={attendees.length}
+            />
             {attendeesOptions?.map((disciple) => (
               <div
                 key={disciple.id}

@@ -20,11 +20,11 @@ interface DiscipleContextMenuProps {
 function DiscipleContextMenu({ disciple }: DiscipleContextMenuProps) {
   return (
     <ContextMenu>
-      <ContextMenuTrigger
-        asChild
-        className="inline-flex cursor-pointer items-center gap-2 hover:underline"
-      >
-        <Link href={`/disciples/${disciple.id}`}>
+      <ContextMenuTrigger asChild>
+        <Link
+          href={`/disciples/${disciple.id}`}
+          className="inline-flex cursor-pointer items-center gap-2 whitespace-nowrap hover:underline"
+        >
           {disciple.isPrimary ? (
             <Verified className="h-4 w-4 text-sky-500" />
           ) : null}
