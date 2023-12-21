@@ -6,7 +6,6 @@ import { zodResolver } from "@hookform/resolvers/zod"
 import { useSession } from "next-auth/react"
 import { Controller, FormProvider, useForm } from "react-hook-form"
 
-import { cn } from "@/lib/utils"
 import { useDisciplesOfLeader } from "@/hooks/use-disciples-by-leader"
 import { useLessonsSeries } from "@/hooks/use-lessons-series"
 import { usePrimaryLeaders } from "@/hooks/use-primary-leaders"
@@ -55,14 +54,13 @@ const CellReportForm = () => {
     defaultValues: {
       attendees: [],
       scripture_references: [],
+      type: undefined,
     },
   })
 
   const {
-    formState: { errors },
+    formState: { errors, isSubmitting },
   } = form
-
-  const [isLoading, setIsLoading] = useState(false)
 
   const [withAssistant, setWithAssistant] = useState(false)
 
@@ -115,36 +113,34 @@ const CellReportForm = () => {
   }
 
   const onSubmit = async (values: CreateCellReportInputs) => {
-    setIsLoading(true)
-
     const attendeesData = values.assistant_id
       ? [...values.attendees, values.assistant_id]
       : values.attendees
 
-    const response = await fetch("/api/cell-reports", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        ...values,
-        date: new Date(values.date as string),
-        attendees: attendeesData,
-      }),
-    })
+    await new Promise((resolve) => setTimeout(resolve, 3000))
+    // const response = await fetch("/api/cell-reports", {
+    //   method: "POST",
+    //   headers: {
+    //     "Content-Type": "application/json",
+    //   },
+    //   body: JSON.stringify({
+    //     ...values,
+    //     date: new Date(values.date as string),
+    //     attendees: attendeesData,
+    //   }),
+    // })
 
-    setIsLoading(false)
+    // if (!response?.ok) {
+    //   toast({
+    //     title: "Something went wrong.",
+    //     description:
+    //       "The cell report record was not created. Please try again.",
+    //     variant: "destructive",
+    //   })
 
-    if (!response?.ok) {
-      toast({
-        title: "Something went wrong.",
-        description:
-          "The cell report record was not created. Please try again.",
-        variant: "destructive",
-      })
+    //   return
+    // }
 
-      return
-    }
     toast({
       title: "Success!",
       description: "The cell report was created successfully!",
@@ -152,7 +148,6 @@ const CellReportForm = () => {
     })
 
     form.reset()
-
     router.refresh()
   }
 
@@ -161,10 +156,9 @@ const CellReportForm = () => {
       <FormProvider {...form}>
         <form onSubmit={form.handleSubmit(onSubmit, onError)}>
           <fieldset
-            disabled={isLoading}
-            className={cn("space-y-3", {
-              "pointer-events-none opacity-80": isLoading,
-            })}
+            disabled={isSubmitting}
+            className="space-y-3
+              disabled:pointer-events-none disabled:opacity-80"
           >
             <p className="pb-3 text-xs uppercase text-muted-foreground">
               General Details
@@ -208,7 +202,7 @@ const CellReportForm = () => {
                   render={({ field }) => (
                     <Select
                       name="type"
-                      value={field.value}
+                      value={field.value === undefined ? "" : field.value}
                       onValueChange={field.onChange}
                     >
                       <SelectTrigger
@@ -421,17 +415,17 @@ const CellReportForm = () => {
               Attendees
             </p>
             <div className="my-2 space-x-3">
-              <input
-                type="hidden"
+              <Controller
+                control={form.control}
                 name="attendees"
-                hidden
-                defaultValue={attendees}
-                key={attendees.length}
+                render={({ field }) => (
+                  <AttendeesPicker
+                    attendees={field.value}
+                    onAttendeesValueChange={field.onChange}
+                    disabled={!leaderId && isAdmin}
+                  />
+                )}
               />
-              <AttendeesPicker disabled={!leaderId && isAdmin} />
-              <span className="text-muted-foreground">
-                {attendees.length} selected
-              </span>
               <FormErrorMessage
                 id="attendeesError"
                 error={errors.attendees?.message}
@@ -439,11 +433,11 @@ const CellReportForm = () => {
               />
             </div>
             <div className="flex items-center gap-2 pt-10">
-              <Button variant="ghost" type="reset" disabled={isLoading}>
+              <Button variant="ghost" type="reset" disabled={isSubmitting}>
                 Reset
               </Button>
-              <Button type="submit" disabled={isLoading}>
-                {isLoading ? "Saving..." : "Submit Report"}
+              <Button type="submit" disabled={isSubmitting}>
+                {isSubmitting ? "Saving..." : "Submit Report"}
               </Button>
             </div>
           </fieldset>
