@@ -98,14 +98,6 @@ export const columns: ColumnDef<CellReportRecord>[] = [
     },
   },
   {
-    accessorKey: "venue",
-    id: "venue",
-    header: ({ column }) => (
-      <DataTableColumnHeader column={column} title="Venue" />
-    ),
-    cell: (props) => props.getValue(),
-  },
-  {
     id: "actions",
     header: "Actions",
     cell: ({ row }) => {
