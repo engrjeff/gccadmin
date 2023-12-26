@@ -35,7 +35,11 @@ const getWeeklyReports = async (params: { startDate: Date; endDate: Date }) => {
         },
         include: {
           leader: true,
-          assistant: true,
+          assistant: {
+            select: {
+              disciple: true,
+            },
+          },
           attendees: {
             select: {
               disciple: true,
@@ -59,6 +63,36 @@ const getWeeklyReports = async (params: { startDate: Date; endDate: Date }) => {
       uniqueDisciplesDuringCgCount: new Set(
         r.cell_reports.map((c) => c.attendees.map((a) => a.disciple.id)).flat()
       ).size,
+      cgByAssistant: r.cell_reports
+        .filter((cg) => Boolean(cg.assistant_id))
+        .reduce<
+          {
+            id: string
+            name: string
+            assistedCG: number
+          }[]
+        >((grouped, cg) => {
+          const found = grouped.find((a) => a.id === cg.assistant?.disciple.id)
+
+          if (found) {
+            grouped = grouped.map((a) =>
+              a.id === found.id ? { ...a, assistedCG: a.assistedCG + 1 } : a
+            )
+          }
+
+          if (!found) {
+            grouped = [
+              ...grouped,
+              {
+                id: cg.assistant?.disciple.id!,
+                name: cg.assistant?.disciple.name!,
+                assistedCG: 1,
+              },
+            ]
+          }
+
+          return grouped
+        }, []),
     })),
   ].sort((a, b) => {
     if (a.cgCount > b.cgCount) return -1

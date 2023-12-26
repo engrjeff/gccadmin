@@ -5,6 +5,7 @@ import PageTitle from "@/components/page-title"
 import GroupStatusData from "./components/group-status-data"
 import KPIStats from "./components/kpi-stats"
 import LeadersData from "./components/leaders-data"
+import RefreshDataButton from "./components/refresh-data-button"
 import WeeklyCellReports from "./components/weekly-cell-reports"
 
 export const metadata: Metadata = {
@@ -18,13 +19,14 @@ interface PageProps {
 async function DashboardPage({ searchParams }: PageProps) {
   return (
     <div className="space-y-6">
-      <PageTitle title="Dashboard" />
-      <KPIStats />
-      <div className="grid gap-6 xl:grid-cols-2">
-        <WeeklyCellReports searchParams={searchParams} />
-        <LeadersData />
+      <div className="flex items-center justify-between">
+        <PageTitle title="Dashboard" />
+        <RefreshDataButton />
       </div>
+      <KPIStats />
+      <WeeklyCellReports searchParams={searchParams} />
       <GroupStatusData />
+      <LeadersData />
     </div>
   )
 }

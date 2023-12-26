@@ -19,9 +19,10 @@ export const generateMetadata = async ({
 
 async function DiscipleDetailPage({ params }: { params: { id: string } }) {
   const disciple = await getDiscipleById(params.id)
-  const userAccounts = await getUserAccounts()
 
   if (!disciple) return notFound()
+
+  const userAccounts = await getUserAccounts()
 
   return (
     <div className="flex flex-col gap-6 lg:flex-row">

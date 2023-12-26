@@ -45,7 +45,7 @@ export default function RootLayout({ children }: RootLayoutProps) {
         <body
           className={cn(
             fontSans.variable,
-            "bg-background dark h-full overflow-hidden font-sans antialiased"
+            "dark h-full overflow-hidden bg-background font-sans antialiased"
           )}
         >
           <NextTopLoader color="#6467F2" showSpinner={false} />

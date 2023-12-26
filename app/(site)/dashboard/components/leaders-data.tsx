@@ -25,7 +25,7 @@ async function LeadersData() {
         </CardDescription>
       </CardHeader>
       <CardContent>
-        <Flex className="mt-4">
+        <Flex>
           <Text className="text-muted-foreground">
             <Bold>Leader</Bold>
           </Text>
