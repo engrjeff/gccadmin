@@ -3,40 +3,50 @@
 import { useState } from "react"
 import {
   ColumnFiltersState,
-  SortingState,
-  VisibilityState,
   getCoreRowModel,
   getFacetedRowModel,
   getFacetedUniqueValues,
   getFilteredRowModel,
   getPaginationRowModel,
   getSortedRowModel,
+  SortingState,
   useReactTable,
+  VisibilityState,
 } from "@tanstack/react-table"
 
-import { Option } from "@/types/common"
-import DateRangePicker from "@/components/ui/data-range-picker"
+import { useIsAdmin } from "@/hooks/use-isadmin"
+import { useSelectedCellReport } from "@/hooks/use-selected-cell-report"
 import { DataTableViewOptions } from "@/components/ui/data-table/column-visibility-toggle"
 import DataTable from "@/components/ui/data-table/data-table"
-import { DataTableFacetedFilter } from "@/components/ui/data-table/faceted-filter"
 import { DataTablePagination } from "@/components/ui/data-table/table-pagination"
+import RefreshButton from "@/components/refresh-button"
 
-import { columns, type CellReportRecord } from "./columns"
+import { CellReportRecord } from "../types"
+import CellReportFacetFilters from "./cell-report-facet-filters"
+import { columns } from "./columns"
+import ReportDateRangeFilter from "./report-date-range-filter"
 
 interface CellReportTableProps {
   data: CellReportRecord[]
-  leadersOptions: Option[]
 }
 
-function CellReportTable({ data, leadersOptions }: CellReportTableProps) {
+function CellReportTable({ data }: CellReportTableProps) {
   const [sorting, setSorting] = useState<SortingState>([])
   const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([])
   const [columnVisibility, setColumnVisibility] = useState<VisibilityState>({})
   const [rowSelection, setRowSelection] = useState({})
 
+  const isAdmin = useIsAdmin()
+
+  const setCellReport = useSelectedCellReport((state) => state.setCellReport)
+
+  const columnsToDisplay = isAdmin
+    ? columns
+    : columns.filter((col) => col.id !== "leaderName")
+
   const table = useReactTable({
     data,
-    columns,
+    columns: columnsToDisplay,
     getCoreRowModel: getCoreRowModel(),
     getPaginationRowModel: getPaginationRowModel(),
     onSortingChange: setSorting,
@@ -53,33 +63,24 @@ function CellReportTable({ data, leadersOptions }: CellReportTableProps) {
       columnVisibility,
       rowSelection,
     },
+    enableMultiRowSelection: false,
   })
 
   return (
     <>
-      <div className="flex h-16 items-center gap-4">
-        <DateRangePicker />
-        {/* {table.getColumn("type") && (
-          <DataTableFacetedFilter
-            column={table.getColumn("type")}
-            title="Cell Type"
-            options={["SOULWINNING", "OPEN", "DISCIPLESHIP"].map((i) => ({
-              label: i,
-              value: i,
-            }))}
-          />
-        )}
-        {table.getColumn("leader_name") && (
-          <DataTableFacetedFilter
-            column={table.getColumn("leader_name")}
-            title="Leader"
-            options={leadersOptions}
-          />
-        )} */}
-        <DataTableViewOptions table={table} />
+      <div className="flex items-center px-2 py-3">
+        <ReportDateRangeFilter />
+        <div className="ml-auto flex items-center justify-end gap-2">
+          <CellReportFacetFilters table={table} />
+          <RefreshButton />
+          <DataTableViewOptions table={table} />
+        </div>
       </div>
-      <DataTable table={table} columnCount={columns.length} />
-      {/* Pagination */}
+      <DataTable
+        table={table}
+        columnCount={columns.length}
+        onRowClick={(row) => setCellReport(row.original)}
+      />
       <DataTablePagination table={table} />
     </>
   )

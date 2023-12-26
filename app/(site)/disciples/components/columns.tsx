@@ -1,14 +1,13 @@
 "use client"
 
-import Link from "next/link"
 import { Disciple } from "@prisma/client"
 import { ColumnDef } from "@tanstack/react-table"
-import { Verified } from "lucide-react"
 
 import { cn } from "@/lib/utils"
 import { Badge } from "@/components/ui/badge"
 import { Checkbox } from "@/components/ui/checkbox"
 import { DataTableColumnHeader } from "@/components/ui/data-table/column-header"
+import DiscipleContextMenu from "@/components/disciple-context-menu"
 
 import DiscipleRowActions from "./disciple-row-actions"
 
@@ -18,6 +17,28 @@ const memberColorMap: Record<Disciple["member_type"], string> = {
   WOMEN: "text-pink-500",
   YOUTH: "text-emerald-500",
   YOUNGPRO: "text-orange-500",
+}
+
+const cellStatusColorMap: Record<Disciple["cell_status"], string> = {
+  FIRST_TIMER: "text-emerald-500",
+  SECOND_TIMER: "text-sky-500",
+  THIRD_TIMER: "text-blue-500",
+  REGULAR: "text-primary",
+}
+
+const churchStatusColorMap: Record<Disciple["church_status"], string> = {
+  NACS: "text-red-500",
+  ACS: "text-sky-500",
+  REGULAR: "text-primary",
+}
+
+const processColorMap: Record<Disciple["process_level"], string> = {
+  NONE: "text-red-500",
+  PREENC: "text-indigo-300",
+  ENCOUNTER: "text-indigo-400",
+  LEADERSHIP_1: "text-indigo-500",
+  LEADERSHIP_2: "text-indigo-600",
+  LEADERSHIP_3: "text-primary",
 }
 
 export type DiscipleWithLeader = Disciple & { leader: { name: string } | null }
@@ -49,19 +70,7 @@ export const columns: ColumnDef<DiscipleWithLeader>[] = [
     header: ({ column }) => (
       <DataTableColumnHeader column={column} title="Name" />
     ),
-    cell: (props) => (
-      <Link
-        href={`/disciples/${props.row.original.id}`}
-        className="inline-block hover:underline"
-      >
-        <span className="flex items-center gap-2 whitespace-nowrap">
-          {props.row.getValue("name")}
-          {props.row.original.isPrimary ? (
-            <Verified className="h-4 w-4 text-sky-500" />
-          ) : null}{" "}
-        </span>
-      </Link>
-    ),
+    cell: (props) => <DiscipleContextMenu disciple={props.row.original} />,
   },
   {
     accessorFn: (row) => row.leader?.name,
@@ -80,7 +89,6 @@ export const columns: ColumnDef<DiscipleWithLeader>[] = [
   },
   {
     accessorKey: "gender",
-
     id: "gender",
     header: ({ column }) => (
       <DataTableColumnHeader column={column} title="Gender" />
@@ -88,16 +96,14 @@ export const columns: ColumnDef<DiscipleWithLeader>[] = [
     cell: (props) => (
       <Badge variant="outline" className="capitalize">
         <span
-          className={cn(
-            "mr-2 scale-150",
-            props.row.original.gender === "MALE"
-              ? "text-sky-700"
-              : "text-pink-700"
-          )}
+          className={cn("mr-2 scale-150", {
+            "text-rose-500": props.row.original.gender === "FEMALE",
+            "text-sky-500": props.row.original.gender === "MALE",
+          })}
         >
           &#x2022;
         </span>
-        {props.row.getValue("gender")}
+        {props.row.original.gender}
       </Badge>
     ),
   },
@@ -108,7 +114,7 @@ export const columns: ColumnDef<DiscipleWithLeader>[] = [
       <DataTableColumnHeader column={column} title="Member Type" />
     ),
     cell: (props) => (
-      <Badge variant="outline" className="capitalize">
+      <Badge variant="outline" className={cn("capitalize")}>
         <span
           className={cn(
             "mr-2 scale-150",
@@ -117,7 +123,7 @@ export const columns: ColumnDef<DiscipleWithLeader>[] = [
         >
           &#x2022;
         </span>
-        {props.row.getValue("member_type")}
+        {props.row.original.member_type.toLowerCase()}
       </Badge>
     ),
     filterFn: (row, id, value) => {
@@ -131,8 +137,16 @@ export const columns: ColumnDef<DiscipleWithLeader>[] = [
       <DataTableColumnHeader column={column} title="Cell Status" />
     ),
     cell: (props) => (
-      <Badge variant="outline" className="capitalize">
-        {props.row.original.cell_status.split("_").join(" ")}
+      <Badge variant="outline" className={cn("capitalize")}>
+        <span
+          className={cn(
+            "mr-2 scale-150",
+            cellStatusColorMap[props.row.original.cell_status]
+          )}
+        >
+          &#x2022;
+        </span>
+        {props.row.original.cell_status.split("_").join(" ").toLowerCase()}
       </Badge>
     ),
     filterFn: (row, id, value) => {
@@ -146,8 +160,18 @@ export const columns: ColumnDef<DiscipleWithLeader>[] = [
       <DataTableColumnHeader column={column} title="Church Status" />
     ),
     cell: (props) => (
-      <Badge variant="outline" className="capitalize">
-        {props.row.original.church_status.split("_").join(" ")}
+      <Badge variant="outline" className={cn("capitalize")}>
+        <span
+          className={cn(
+            "mr-2 scale-150",
+            churchStatusColorMap[props.row.original.church_status]
+          )}
+        >
+          &#x2022;
+        </span>
+        {props.row.original.church_status === "REGULAR"
+          ? props.row.original.church_status.toLowerCase()
+          : props.row.original.church_status.split("_").join(" ")}
       </Badge>
     ),
     filterFn: (row, id, value) => {
@@ -161,8 +185,16 @@ export const columns: ColumnDef<DiscipleWithLeader>[] = [
       <DataTableColumnHeader column={column} title="Process Level" />
     ),
     cell: (props) => (
-      <Badge variant="outline" className="capitalize">
-        {props.row.original.process_level.split("_").join(" ")}
+      <Badge variant="outline" className={cn("capitalize")}>
+        <span
+          className={cn(
+            "mr-2 scale-150",
+            processColorMap[props.row.original.process_level]
+          )}
+        >
+          &#x2022;
+        </span>
+        {props.row.original.process_level.split("_").join(" ").toLowerCase()}
       </Badge>
     ),
     filterFn: (row, id, value) => {

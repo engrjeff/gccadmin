@@ -1,6 +1,5 @@
-import * as React from "react"
 import { Column } from "@tanstack/react-table"
-import { Check, LucideIcon, PlusCircle } from "lucide-react"
+import { Check, ChevronDown, LucideIcon } from "lucide-react"
 
 import { cn } from "@/lib/utils"
 import { Badge } from "@/components/ui/badge"
@@ -44,8 +43,7 @@ export function DataTableFacetedFilter<TData, TValue>({
   return (
     <Popover>
       <PopoverTrigger asChild>
-        <Button variant="outline" size="sm" className="h-8 border-dashed">
-          <PlusCircle className="mr-2 h-4 w-4" />
+        <Button variant="ghost" size="sm" disabled={facets?.size === 0}>
           {title}
           {selectedValues?.size > 0 && (
             <>
@@ -70,18 +68,19 @@ export function DataTableFacetedFilter<TData, TValue>({
                     .map((option) => (
                       <Badge
                         key={option.value}
-                        className="rounded-sm bg-sky-500 px-1 font-normal capitalize dark:bg-sky-700"
+                        className="rounded-sm bg-primary px-1 font-normal capitalize"
                       >
-                        {option.label}
+                        {option.label.replace("_", " ").toLowerCase()}
                       </Badge>
                     ))
                 )}
               </div>
             </>
           )}
+          <ChevronDown className="ml-3 h-4 w-4" />
         </Button>
       </PopoverTrigger>
-      <PopoverContent className="w-[230px] p-0" align="start">
+      <PopoverContent className="w-60  p-0" align="start">
         <Command>
           <CommandInput placeholder={title} />
           <CommandList>
@@ -89,6 +88,10 @@ export function DataTableFacetedFilter<TData, TValue>({
             <CommandGroup>
               {options.map((option) => {
                 const isSelected = selectedValues.has(option.value)
+                const optionValueCount = facets?.get(option.value)
+
+                if (!optionValueCount) return null
+
                 return (
                   <CommandItem
                     key={option.value}
@@ -106,10 +109,10 @@ export function DataTableFacetedFilter<TData, TValue>({
                   >
                     <div
                       className={cn(
-                        "mr-2 flex h-4 w-4 items-center justify-center rounded-sm border border-foreground",
+                        "mr-2 flex h-4 w-4 items-center justify-center rounded-sm border",
                         isSelected
-                          ? "border-primary bg-primary text-primary-foreground"
-                          : "opacity-50 [&_svg]:invisible"
+                          ? "border bg-primary text-primary-foreground"
+                          : "[&_svg]:invisible"
                       )}
                     >
                       <Check className={cn("h-4 w-4")} />
@@ -121,7 +124,7 @@ export function DataTableFacetedFilter<TData, TValue>({
                       {option.label.split("_").join(" ")}
                     </span>
                     {facets?.get(option.value) && (
-                      <span className="ml-auto flex h-4 w-5 items-center justify-center rounded bg-sky-700 font-mono text-xs">
+                      <span className="ml-auto flex h-4 min-w-[20px] items-center justify-center rounded bg-primary px-0.5 font-mono text-xs font-medium text-primary-foreground">
                         {facets.get(option.value)}
                       </span>
                     )}

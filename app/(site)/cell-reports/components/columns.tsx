@@ -1,18 +1,15 @@
 "use client"
 
-import {
-  CellReport,
-  CellReportAssistant,
-  CellReportAttendees,
-  Disciple,
-  Lesson,
-} from "@prisma/client"
+import { CellReport } from "@prisma/client"
 import { ColumnDef } from "@tanstack/react-table"
 import { format } from "date-fns"
 
 import { cn, formatTime } from "@/lib/utils"
 import { Badge } from "@/components/ui/badge"
 import { DataTableColumnHeader } from "@/components/ui/data-table/column-header"
+import DiscipleContextMenu from "@/components/disciple-context-menu"
+
+import { CellReportRecord } from "../types"
 
 const typeColor: Record<CellReport["type"], string> = {
   SOULWINNING: "text-green-500",
@@ -20,21 +17,16 @@ const typeColor: Record<CellReport["type"], string> = {
   OPEN: "text-sky-500",
 }
 
-export type CellReportRecord = CellReport & {
-  leader: Disciple
-  lesson: Lesson | null
-  attendees: CellReportAttendees[]
-  assistant: CellReportAssistant | null
-}
-
 export const columns: ColumnDef<CellReportRecord>[] = [
   {
     accessorFn: (row) => row.leader.name,
-    id: "leader_name",
+    id: "leaderName",
     header: ({ column }) => (
       <DataTableColumnHeader column={column} title="Leader" />
     ),
-    cell: (props) => props.getValue(),
+    cell: (props) => (
+      <DiscipleContextMenu disciple={props.row.original.leader} />
+    ),
     filterFn: (row, id, value) => {
       return value.includes(row.getValue(id))
     },
@@ -82,20 +74,21 @@ export const columns: ColumnDef<CellReportRecord>[] = [
     header: ({ column }) => (
       <DataTableColumnHeader column={column} title="Date" />
     ),
-    cell: (props) =>
-      `${format(props.row.original.date, "MM dd, yyyy")} at ${formatTime(
-        props.row.original.time
-      )}`,
+    cell: (props) => (
+      <span className="whitespace-nowrap">
+        {format(props.row.original.date, "MMM dd, yyyy")} at{" "}
+        {formatTime(props.row.original.time)}
+      </span>
+    ),
     filterFn: (row, id, value) => {
       return value.includes(row.getValue(id))
     },
   },
-  {
-    accessorKey: "venue",
-    id: "venue",
-    header: ({ column }) => (
-      <DataTableColumnHeader column={column} title="Venue" />
-    ),
-    cell: (props) => props.getValue(),
-  },
+  // {
+  //   id: "actions",
+  //   header: "Actions",
+  //   cell: ({ row }) => {
+  //     return <CellReportRowActions cellReportId={row.original.id} />
+  //   },
+  // },
 ]

@@ -1,4 +1,8 @@
-import { flexRender, type Table as ReactTable } from "@tanstack/react-table"
+import {
+  flexRender,
+  Row,
+  type Table as ReactTable,
+} from "@tanstack/react-table"
 
 import {
   Table,
@@ -12,11 +16,16 @@ import {
 interface DataTableProps<TData> {
   table: ReactTable<TData>
   columnCount: number
+  onRowClick?: (row: Row<TData>) => void
 }
 
-function DataTable<TData>({ table, columnCount }: DataTableProps<TData>) {
+function DataTable<TData>({
+  table,
+  columnCount,
+  onRowClick,
+}: DataTableProps<TData>) {
   return (
-    <Table className="relative max-h-[calc(100%-128px)] w-full overflow-auto rounded-md border">
+    <Table className="relative w-full overflow-auto">
       <TableHeader>
         {table.getHeaderGroups().map((headerGroup) => (
           <TableRow key={headerGroup.id}>
@@ -41,9 +50,15 @@ function DataTable<TData>({ table, columnCount }: DataTableProps<TData>) {
             <TableRow
               key={row.id}
               data-state={row.getIsSelected() && "selected"}
+              onClick={() => {
+                if (onRowClick) {
+                  // row.toggleSelected(!row.getIsSelected())
+                  onRowClick(row)
+                }
+              }}
             >
               {row.getVisibleCells().map((cell) => (
-                <TableCell key={cell.id}>
+                <TableCell key={cell.id} className="whitespace-nowrap">
                   {flexRender(cell.column.columnDef.cell, cell.getContext())}
                 </TableCell>
               ))}

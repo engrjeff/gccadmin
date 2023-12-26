@@ -1,7 +1,7 @@
-import { Skeleton } from "@/components/ui/skeleton"
+import PageLoadingSpinner from "@/components/page-loading-spinner"
 
 function Loading() {
-  return <Skeleton className="h-full w-full rounded" />
+  return <PageLoadingSpinner />
 }
 
 export default Loading

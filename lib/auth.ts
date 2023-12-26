@@ -39,6 +39,7 @@ export const authOptions: NextAuthOptions = {
 
       if (discipleUser) {
         token.discipleId = discipleUser?.id
+        token.isPrimary = discipleUser?.isPrimary
       }
 
       return token
@@ -51,6 +52,7 @@ export const authOptions: NextAuthOptions = {
         session.user.image = token.picture
         session.user.role = token.role
         session.user.discipleId = token.discipleId
+        session.user.isPrimary = token.isPrimary
       }
 
       return session

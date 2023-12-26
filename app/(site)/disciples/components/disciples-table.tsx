@@ -1,41 +1,52 @@
 "use client"
 
 import { useState } from "react"
+import { Disciple } from "@prisma/client"
 import {
   ColumnFiltersState,
-  SortingState,
-  VisibilityState,
   getCoreRowModel,
   getFacetedRowModel,
   getFacetedUniqueValues,
   getFilteredRowModel,
   getPaginationRowModel,
   getSortedRowModel,
+  SortingState,
   useReactTable,
+  VisibilityState,
 } from "@tanstack/react-table"
 
+import { useIsAdmin } from "@/hooks/use-isadmin"
 import { DataTableViewOptions } from "@/components/ui/data-table/column-visibility-toggle"
 import DataTable from "@/components/ui/data-table/data-table"
 import { DataTablePagination } from "@/components/ui/data-table/table-pagination"
-import { Input } from "@/components/ui/input"
+import RefreshButton from "@/components/refresh-button"
 
-import { columns, type DiscipleWithLeader } from "./columns"
-import DiscipleBulkActions from "./disciple-bulk-actions"
+import DiscipleBulkActions from "../old_components/disciple-bulk-actions"
+import ActivityFilter from "./activity-filter"
+import { columns, DiscipleWithLeader } from "./columns"
 import DiscipleFilters from "./disciple-filters"
+import DiscipleSearch from "./disciple-search"
 
-interface DisciplesTableProps {
-  data: DiscipleWithLeader[]
+interface Props {
+  disciples: DiscipleWithLeader[]
+  leaders: Disciple[]
 }
 
-export function DisciplesTable({ data }: DisciplesTableProps) {
+function DisciplesTable({ disciples, leaders }: Props) {
   const [sorting, setSorting] = useState<SortingState>([])
   const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([])
   const [columnVisibility, setColumnVisibility] = useState<VisibilityState>({})
   const [rowSelection, setRowSelection] = useState({})
 
+  const isAdmin = useIsAdmin()
+
+  const columnsToDisplay = isAdmin
+    ? columns
+    : columns.filter((col) => col.id !== "leaderName")
+
   const table = useReactTable({
-    data,
-    columns,
+    data: disciples,
+    columns: columnsToDisplay,
     getCoreRowModel: getCoreRowModel(),
     getPaginationRowModel: getPaginationRowModel(),
     onSortingChange: setSorting,
@@ -54,29 +65,33 @@ export function DisciplesTable({ data }: DisciplesTableProps) {
     },
   })
 
-  const leaders = data
-    .filter((d) => d.isPrimary)
-    .map((i) => ({ label: i.name, value: i.name }))
+  //   search
+  const searchValue =
+    (table.getColumn("name")?.getFilterValue() as string) ?? ""
+  const handleSearch = (searchValue: string) =>
+    table.getColumn("name")?.setFilterValue(searchValue)
+
+  // leaders options
+  const leadersOptions = leaders.map((i) => ({ label: i.name, value: i.name }))
 
   return (
     <>
-      <div className="flex h-16 items-center gap-4">
-        <Input
-          placeholder="Filter by name..."
-          value={(table.getColumn("name")?.getFilterValue() as string) ?? ""}
-          onChange={(event) =>
-            table.getColumn("name")?.setFilterValue(event.target.value)
-          }
-          className="h-8 w-[230px]"
-        />
-        <DiscipleFilters table={table} leadersOptions={leaders} />
+      <DiscipleSearch value={searchValue} onChange={handleSearch} />
+      <div className="flex items-center border-b px-2 py-3">
+        <DiscipleFilters table={table} leadersOptions={leadersOptions} />
         <DiscipleBulkActions table={table} />
-        <DataTableViewOptions table={table} />
+        <div className="ml-auto flex items-center gap-3">
+          <RefreshButton />
+          <ActivityFilter />
+          <DataTableViewOptions table={table} />
+        </div>
       </div>
-
-      <DataTable table={table} columnCount={columns.length} />
-      {/* Pagination */}
+      <div className="data-table-container">
+        <DataTable table={table} columnCount={columns.length} />
+      </div>
       <DataTablePagination table={table} />
     </>
   )
 }
+
+export default DisciplesTable

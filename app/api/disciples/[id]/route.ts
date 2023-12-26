@@ -6,14 +6,13 @@ import { prisma as db } from "@/lib/db"
 
 import { discipleUpdateSchema } from "../schema"
 
-export async function PUT(
-  req: Request,
-  {
-    params,
-  }: {
-    params: { id: string }
-  }
-) {
+export const dynamic = "force-dynamic"
+
+interface Params {
+  params: { id: string }
+}
+
+export async function PUT(req: Request, { params }: Params) {
   try {
     const session = await getServerSession(authOptions)
 
@@ -31,7 +30,6 @@ export async function PUT(
       },
       data: {
         ...body,
-
         leaderId: body.leaderId ? body.leaderId : undefined,
       },
 
@@ -41,20 +39,25 @@ export async function PUT(
       },
     })
 
+    // if assigning a userAccount, update that account : isAlreadyLinked = true
+    if (body.userAccountId) {
+      await db.user.update({
+        where: {
+          id: body.userAccountId,
+        },
+        data: {
+          isAlreadyLinked: true,
+        },
+      })
+    }
+
     return NextResponse.json(disciple)
   } catch (error: any) {
     return new NextResponse(error.message || "Error", { status: 500 })
   }
 }
 
-export async function DELETE(
-  req: Request,
-  {
-    params,
-  }: {
-    params: { id: string }
-  }
-) {
+export async function DELETE(req: Request, { params }: Params) {
   try {
     const session = await getServerSession(authOptions)
 
@@ -62,9 +65,12 @@ export async function DELETE(
       return new NextResponse("Unauthorized", { status: 403 })
     }
 
-    await db.disciple.delete({
+    await db.disciple.update({
       where: {
         id: params.id,
+      },
+      data: {
+        isDeleted: true,
       },
     })
 

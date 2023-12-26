@@ -1,3 +1,4 @@
+import { CellStatus } from "@prisma/client"
 import { clsx, type ClassValue } from "clsx"
 import { twMerge } from "tailwind-merge"
 
@@ -15,4 +16,17 @@ export const formatTime = (timeStr: string) => {
   const minutesStr = minutes.toString().padStart(2, "0")
   let strTime = hours + ":" + minutesStr + " " + ampm
   return strTime
+}
+
+export const getNextCellStatus = (cellStatus: CellStatus): CellStatus => {
+  switch (cellStatus) {
+    case "FIRST_TIMER":
+      return "SECOND_TIMER"
+    case "SECOND_TIMER":
+      return "THIRD_TIMER"
+    case "THIRD_TIMER":
+      return "REGULAR"
+    default:
+      return "REGULAR"
+  }
 }

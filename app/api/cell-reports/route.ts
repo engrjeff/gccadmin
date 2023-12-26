@@ -1,10 +1,14 @@
 import { NextResponse } from "next/server"
+import { isToday } from "date-fns"
 import { getServerSession } from "next-auth"
 
 import { authOptions } from "@/lib/auth"
 import { prisma as db } from "@/lib/db"
+import { getNextCellStatus } from "@/lib/utils"
 
 import { cellReportCreateSchema } from "./schema"
+
+export const dynamic = "force-dynamic"
 
 export async function POST(req: Request) {
   try {
@@ -56,8 +60,6 @@ export async function POST(req: Request) {
         },
         select: { disciple_id: true },
       })
-
-      console.log(assistant.disciple_id)
     }
 
     //update lesson taken here
@@ -71,9 +73,34 @@ export async function POST(req: Request) {
           }
         }),
       })
-
-      console.log(lessonsTaken.count)
     }
+
+    // update attendees' cell status
+    // get first the attendees
+    const attendedDisciples = await db.disciple.findMany({
+      where: { id: { in: attendees } },
+      select: {
+        id: true,
+        cell_status: true,
+        church_status: true,
+        createdAt: true,
+      },
+    })
+
+    const updatedDisciples = await Promise.all(
+      attendedDisciples.map(async (attendee) => {
+        const updated = await db.disciple.update({
+          where: { id: attendee.id },
+          data: {
+            cell_status: isToday(attendee.createdAt)
+              ? attendee.cell_status
+              : getNextCellStatus(attendee.cell_status),
+          },
+        })
+
+        return updated
+      })
+    ).then((values) => values)
 
     return NextResponse.json(cellReport)
   } catch (error: any) {

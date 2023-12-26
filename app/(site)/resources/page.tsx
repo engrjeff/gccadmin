@@ -1,30 +1,26 @@
-import { Plus } from "lucide-react"
+import { Metadata } from "next"
 
-import { Button } from "@/components/ui/button"
+import { getCurrentUser } from "@/lib/session"
 import PageTitle from "@/components/page-title"
 
-import LessonForm from "./components/lesson-form"
-import LessonSeriesCard from "./components/lesson-series-card"
-import { getLessonSeries } from "./service"
+import SeriesAddForm from "./components/series-add-form"
+import SeriesList from "./components/series-list"
+
+export const metadata: Metadata = {
+  title: "Resources",
+}
 
 async function ResourcesPage() {
-  const lessonSeriesList = await getLessonSeries()
+  const user = await getCurrentUser()
 
   return (
-    <div className="space-y-6">
-      <div className="flex justify-between">
-        <PageTitle title="Lessons" subtitle="GCC Resources for cell groups" />
-        <Button size="sm">
-          <Plus className="mr-2 h-4 w-4" /> Add Series
-        </Button>
+    <>
+      <div className="mb-4 flex justify-between">
+        <PageTitle title="Resources" subtitle="GCC Lessons" />
+        {user?.role === "ADMIN" ? <SeriesAddForm /> : null}
       </div>
-      <ul className="grid grid-cols-4 gap-6">
-        {lessonSeriesList.map((lessonSeries) => (
-          <LessonSeriesCard key={lessonSeries.id} lessonSeries={lessonSeries} />
-        ))}
-      </ul>
-      <LessonForm />
-    </div>
+      <SeriesList />
+    </>
   )
 }
 

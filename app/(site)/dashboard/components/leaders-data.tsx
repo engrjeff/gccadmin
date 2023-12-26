@@ -1,5 +1,3 @@
-"use client"
-
 import { BarList, Bold, Flex, Text } from "@tremor/react"
 
 import {
@@ -10,15 +8,10 @@ import {
   CardTitle,
 } from "@/components/ui/card"
 
-function LeadersData({
-  leadersDiscipleData,
-}: {
-  leadersDiscipleData: { name: string; disciples: number }[]
-}) {
-  const totalDisciples = leadersDiscipleData.reduce(
-    (sum, curr) => sum + curr.disciples,
-    0
-  )
+import { getLeadersData } from "../service"
+
+async function LeadersData() {
+  const { leadersData, totalDisciples } = await getLeadersData()
 
   return (
     <Card>
@@ -32,7 +25,7 @@ function LeadersData({
         </CardDescription>
       </CardHeader>
       <CardContent>
-        <Flex className="mt-4">
+        <Flex>
           <Text className="text-muted-foreground">
             <Bold>Leader</Bold>
           </Text>
@@ -41,51 +34,12 @@ function LeadersData({
           </Text>
         </Flex>
         <BarList
-          color="indigo"
-          data={leadersDiscipleData.map((d) => ({ ...d, value: d.disciples }))}
+          color="sky"
+          data={leadersData.map((d) => ({ ...d, value: d._count.disciples }))}
           className="mt-2"
         />
       </CardContent>
     </Card>
-    // <ResponsiveContainer width="100%" height={300} className="-ml-16">
-    //   <BarChart data={leadersDiscipleData} barSize={16} layout="vertical">
-    //     <XAxis
-    //       dataKey="disciples"
-    //       type="number"
-    //       stroke="#7F8EA3"
-    //       fontSize={12}
-    //       tickLine={false}
-    //       axisLine={false}
-    //     />
-    //     <YAxis
-    //       width={200}
-    //       stroke="#7F8EA3"
-    //       fontSize={12}
-    //       tickLine={false}
-    //       axisLine={false}
-    //       type="category"
-    //       dataKey="name"
-    //     />
-    //     <Tooltip
-    //       cursor={{ fill: "#1d283a" }}
-    //       content={({ active, payload, label }) => {
-    //         if (active && payload && payload.length) {
-    //           return (
-    //             <div className="rounded border bg-background p-3">
-    //               <p className="text-sm font-semibold">{label}</p>
-    //               <p className="text-sm text-muted-foreground">
-    //                 {payload[0].value} Disciples
-    //               </p>
-    //             </div>
-    //           )
-    //         }
-
-    //         return null
-    //       }}
-    //     />
-    //     <Bar dataKey="disciples" fill="#0ea5e9" radius={[0, 4, 4, 0]} />
-    //   </BarChart>
-    // </ResponsiveContainer>
   )
 }
 

@@ -37,3 +37,5 @@ yarn-error.log*
 
 # test data
 # gcc_members_data.json
+.vercel
+.env*.local

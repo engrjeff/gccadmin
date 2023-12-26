@@ -1,61 +1,86 @@
-import Link from "next/link"
+import { Metadata } from "next"
+import { CellReport } from "@prisma/client"
 import { format } from "date-fns"
 
-import PageTitle from "@/components/page-title"
+import { cn } from "@/lib/utils"
+import { Badge } from "@/components/ui/badge"
 
-import { getDiscipleById } from "../../service/disciples"
+import {
+  getCellgroupsAttendedByDisciple,
+  getDiscipleById,
+} from "../../service/disciples"
+
+const typeColor: Record<CellReport["type"], string> = {
+  SOULWINNING: "text-black bg-green-500",
+  DISCIPLESHIP: "text-black bg-orange-500",
+  OPEN: "text-black bg-sky-500",
+}
+
+export const generateMetadata = async ({
+  params,
+}: {
+  params: { id: string }
+}): Promise<Metadata> => {
+  const disciple = await getDiscipleById(params.id)
+
+  return {
+    title: `Cell Groups Attended by ${disciple?.name}`,
+  }
+}
 
 async function DiscipleAttendedCellGroupsPage({
   params,
 }: {
   params: { id: string }
 }) {
-  const disciple = await getDiscipleById(params.id)
+  const cellgroupsAttended = await getCellgroupsAttendedByDisciple(params.id)
 
-  if (!disciple) return <p>Not found...</p>
+  const count = cellgroupsAttended?.attended_cell_reports.length ?? 0
 
   return (
-    <div className="h-full space-y-6 overflow-y-auto">
-      <div className="flex justify-between">
-        <PageTitle
-          title={`Cell Groups Attended by ${disciple.name}`}
-          subtitle="List of cell groups attended"
-        />
-        <Link
-          href={`/disciples/${params.id}`}
-          className="underline hover:text-primary"
-        >
-          Back
-        </Link>
+    <div className="rounded-lg border dark:bg-muted">
+      <div className="flex items-center justify-between border-b px-4 py-3">
+        <div>
+          <h2 className="text-lg font-bold tracking-tight">
+            Attended Cell Groups
+          </h2>
+          <p className="text-sm text-muted-foreground">
+            Showing {count} {count > 1 ? "lessons" : "lesson"} attended.
+          </p>
+        </div>
       </div>
-      <ul>
-        <li className="mb-3">
-          <div className="grid grid-cols-3">
-            <h3 className="text-sm font-semibold uppercase text-muted-foreground">
-              Topic
-            </h3>
-            <h3 className="text-sm font-semibold uppercase text-muted-foreground">
-              Venue
-            </h3>
-            <p className="text-sm font-semibold uppercase text-muted-foreground">
-              Date Attended
-            </p>
-          </div>
-        </li>
-        {disciple.attended_cell_reports.map(({ cell_report, assignedAt }) => (
-          <li key={cell_report.id} className="border-b py-4">
-            <div className="grid grid-cols-3">
-              <h3>
-                {cell_report.lesson_name
-                  ? cell_report.lesson_name
-                  : cell_report.lesson?.title}
-              </h3>
-              <p className="text-sm">{cell_report.venue}</p>
-              <p className="text-sm">{format(assignedAt, "MMM dd, yyyy")}</p>
-            </div>
-          </li>
-        ))}
-      </ul>
+      {count === 0 ? (
+        <div className="flex h-28 items-center justify-center px-4 py-3">
+          <p className="text-muted-foreground">
+            No attended cell group yet. Make sure that this disciple is
+            attending a cell group.
+          </p>
+        </div>
+      ) : (
+        <ul className="divide-y">
+          {cellgroupsAttended?.attended_cell_reports?.map((cg) => (
+            <li key={cg.cell_report_id}>
+              <div className="flex items-center justify-between px-4 py-3">
+                <div>
+                  <h3 className="flex items-center gap-2 whitespace-nowrap text-sm font-semibold">
+                    {cg.cell_report.lessonId
+                      ? cg.cell_report.lesson?.title
+                      : cg.cell_report.lesson_name}
+                  </h3>
+                  <Badge
+                    className={cn("capitalize", typeColor[cg.cell_report.type])}
+                  >
+                    {cg.cell_report.type.split("_").join(" ").toLowerCase()}
+                  </Badge>
+                  <span className="mt-1 block text-sm text-muted-foreground">
+                    Taken on {format(cg.cell_report.date, "MMM dd, yyyy")}
+                  </span>
+                </div>
+              </div>
+            </li>
+          ))}
+        </ul>
+      )}
     </div>
   )
 }
