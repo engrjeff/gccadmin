@@ -15,13 +15,15 @@ import {
 } from "@tanstack/react-table"
 
 import { useIsAdmin } from "@/hooks/use-isadmin"
+import { useSelectedCellReport } from "@/hooks/use-selected-cell-report"
 import { DataTableViewOptions } from "@/components/ui/data-table/column-visibility-toggle"
 import DataTable from "@/components/ui/data-table/data-table"
 import { DataTablePagination } from "@/components/ui/data-table/table-pagination"
 import RefreshButton from "@/components/refresh-button"
 
+import { CellReportRecord } from "../types"
 import CellReportFacetFilters from "./cell-report-facet-filters"
-import { columns, type CellReportRecord } from "./columns"
+import { columns } from "./columns"
 import ReportDateRangeFilter from "./report-date-range-filter"
 
 interface CellReportTableProps {
@@ -35,6 +37,8 @@ function CellReportTable({ data }: CellReportTableProps) {
   const [rowSelection, setRowSelection] = useState({})
 
   const isAdmin = useIsAdmin()
+
+  const setCellReport = useSelectedCellReport((state) => state.setCellReport)
 
   const columnsToDisplay = isAdmin
     ? columns
@@ -59,6 +63,7 @@ function CellReportTable({ data }: CellReportTableProps) {
       columnVisibility,
       rowSelection,
     },
+    enableMultiRowSelection: false,
   })
 
   return (
@@ -71,7 +76,11 @@ function CellReportTable({ data }: CellReportTableProps) {
           <DataTableViewOptions table={table} />
         </div>
       </div>
-      <DataTable table={table} columnCount={columns.length} />
+      <DataTable
+        table={table}
+        columnCount={columns.length}
+        onRowClick={(row) => setCellReport(row.original)}
+      />
       <DataTablePagination table={table} />
     </>
   )

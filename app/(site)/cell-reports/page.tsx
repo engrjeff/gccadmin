@@ -4,6 +4,7 @@ import PageTitle from "@/components/page-title"
 
 import CellReportAddButton from "./components/cell-report-add-button"
 import CellReportListing from "./components/cell-report-listing"
+import CellReportView from "./components/cell-report-view"
 
 export const metadata: Metadata = {
   title: "Cell Reports",
@@ -24,6 +25,7 @@ function CellReportsPage({ searchParams }: PageProps) {
         <CellReportAddButton />
       </div>
       <CellReportListing searchParams={searchParams} />
+      <CellReportView />
     </>
   )
 }
