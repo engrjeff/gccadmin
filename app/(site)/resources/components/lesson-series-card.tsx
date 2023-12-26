@@ -5,6 +5,7 @@ import { usePathname, useRouter, useSearchParams } from "next/navigation"
 import { Lesson, LessonSeries } from "@prisma/client"
 import { BookmarkFilledIcon, StackIcon } from "@radix-ui/react-icons"
 
+import { useIsAdmin } from "@/hooks/use-isadmin"
 import {
   Card,
   CardDescription,
@@ -21,6 +22,7 @@ function LessonSeriesCard({ seriesItem }: { seriesItem: SeriesWithLessons }) {
   const pathname = usePathname()
   const searchParams = useSearchParams()
   const [lessonsShown, setLessonsShown] = useState(false)
+  const { isAdmin } = useIsAdmin()
 
   const changeQueryParams = useCallback(() => {
     const params = new URLSearchParams(searchParams)
@@ -32,7 +34,7 @@ function LessonSeriesCard({ seriesItem }: { seriesItem: SeriesWithLessons }) {
 
   return (
     <div className="relative">
-      <LessonForm series={seriesItem} />
+      {isAdmin ? <LessonForm series={seriesItem} /> : null}
       <Card
         className="cursor-pointer lg:hover:bg-muted2"
         onClick={(e) => {

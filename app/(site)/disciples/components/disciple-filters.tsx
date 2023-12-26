@@ -9,6 +9,7 @@ import { DataTableFacetedFilter } from "@/components/ui/data-table/faceted-filte
 import { Separator } from "@/components/ui/separator"
 import RenderIf from "@/components/render-if"
 
+import { processLevels } from "../constants"
 import { DiscipleWithLeader } from "./columns"
 
 interface DiscipleFiltersProps {
@@ -43,6 +44,11 @@ function DiscipleFilters({ table, leadersOptions }: DiscipleFiltersProps) {
         column={table.getColumn("church_status")}
         title="Church Status"
         options={churchStatuses}
+      />
+      <DataTableFacetedFilter
+        column={table.getColumn("process_level")}
+        title="Process"
+        options={processLevels}
       />
       {isFiltered && (
         <>

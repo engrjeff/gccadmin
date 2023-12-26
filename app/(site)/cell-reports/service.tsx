@@ -43,8 +43,16 @@ export const getCellReports = async ({
           },
     },
     include: {
-      assistant: true,
-      attendees: true,
+      assistant: {
+        include: {
+          disciple: true,
+        },
+      },
+      attendees: {
+        include: {
+          disciple: true,
+        },
+      },
       lesson: true,
       leader: true,
     },

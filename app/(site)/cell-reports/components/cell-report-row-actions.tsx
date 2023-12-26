@@ -1,42 +1,21 @@
-import { Edit, Eye } from "lucide-react"
+import Link from "next/link"
+import { Edit } from "lucide-react"
 
-import { Button } from "@/components/ui/button"
-import {
-  Tooltip,
-  TooltipContent,
-  TooltipProvider,
-  TooltipTrigger,
-} from "@/components/ui/tooltip"
+import { buttonVariants } from "@/components/ui/button"
 
 function CellReportRowActions({ cellReportId }: { cellReportId: string }) {
   return (
     <div>
-      <TooltipProvider>
-        <Tooltip>
-          <TooltipTrigger asChild>
-            <Button size="icon" variant="ghost">
-              <span className="sr-only">View</span>
-              <Eye className="h-4 w-4" />
-            </Button>
-          </TooltipTrigger>
-          <TooltipContent>
-            <span>View Details</span>
-          </TooltipContent>
-        </Tooltip>
-      </TooltipProvider>
-      <TooltipProvider>
-        <Tooltip>
-          <TooltipTrigger asChild>
-            <Button size="icon" variant="ghost">
-              <span className="sr-only">Edit</span>
-              <Edit className="h-4 w-4" />
-            </Button>
-          </TooltipTrigger>
-          <TooltipContent>
-            <span>Edit Cell Report</span>
-          </TooltipContent>
-        </Tooltip>
-      </TooltipProvider>
+      <Link
+        href={`/cell-reports/edit/${cellReportId}`}
+        className={buttonVariants({ size: "icon", variant: "ghost" })}
+        onClick={(e) => {
+          e.stopPropagation()
+        }}
+      >
+        <span className="sr-only">Edit</span>
+        <Edit className="h-4 w-4" />
+      </Link>
     </div>
   )
 }

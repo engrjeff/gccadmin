@@ -1,6 +1,4 @@
-import Link from "next/link"
-import { ArrowLeft } from "lucide-react"
-
+import BackButton from "@/components/back-button"
 import PageTitle from "@/components/page-title"
 
 import DiscipleForm from "../components/disciple-form"
@@ -8,14 +6,7 @@ import DiscipleForm from "../components/disciple-form"
 function CreateDisciplePage() {
   return (
     <div className="max-h-full space-y-4 overflow-y-auto">
-      <Link
-        href="/disciples"
-        className="inline-flex items-center gap-3 font-medium hover:underline"
-      >
-        <ArrowLeft className="h-5 w-5" />
-        <span className="sr-only">Back to </span>
-        <span>Disciples</span>
-      </Link>
+      <BackButton />
       <div className="mx-auto max-w-screen-lg space-y-4">
         <PageTitle
           title="Add Disciple"

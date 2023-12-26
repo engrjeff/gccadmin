@@ -7,7 +7,7 @@ import { usePrimaryLeaders } from "@/hooks/use-primary-leaders"
 import { DataTableFacetedFilter } from "@/components/ui/data-table/faceted-filter"
 import RenderIf from "@/components/render-if"
 
-import { CellReportRecord } from "./columns"
+import { CellReportRecord } from "../types"
 
 interface CellReportFacetFiltersProps {
   table: Table<CellReportRecord>

@@ -1,7 +1,6 @@
-import Link from "next/link"
 import { notFound } from "next/navigation"
-import { ArrowLeft } from "lucide-react"
 
+import BackButton from "@/components/back-button"
 import PageTitle from "@/components/page-title"
 
 import DiscipleEditForm from "../../components/disciple-edit-form"
@@ -16,14 +15,7 @@ async function UpdateDisciplePage({ params }: { params: { id: string } }) {
 
   return (
     <div className="max-h-full space-y-4 overflow-y-auto">
-      <Link
-        href="/disciples"
-        className="inline-flex items-center gap-3 font-medium hover:underline"
-      >
-        <ArrowLeft className="h-5 w-5" />
-        <span className="sr-only">Back to </span>
-        <span>Disciples</span>
-      </Link>
+      <BackButton />
       <PageTitle
         title={`Update ${disciple.name}`}
         subtitle={`User ID: ${disciple.id}`}

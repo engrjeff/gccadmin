@@ -1,12 +1,6 @@
 "use client"
 
-import {
-  CellReport,
-  CellReportAssistant,
-  CellReportAttendees,
-  Disciple,
-  Lesson,
-} from "@prisma/client"
+import { CellReport } from "@prisma/client"
 import { ColumnDef } from "@tanstack/react-table"
 import { format } from "date-fns"
 
@@ -15,19 +9,12 @@ import { Badge } from "@/components/ui/badge"
 import { DataTableColumnHeader } from "@/components/ui/data-table/column-header"
 import DiscipleContextMenu from "@/components/disciple-context-menu"
 
-import CellReportRowActions from "./cell-report-row-actions"
+import { CellReportRecord } from "../types"
 
 const typeColor: Record<CellReport["type"], string> = {
   SOULWINNING: "text-green-500",
   DISCIPLESHIP: "text-orange-500",
   OPEN: "text-sky-500",
-}
-
-export type CellReportRecord = CellReport & {
-  leader: Disciple
-  lesson: Lesson | null
-  attendees: CellReportAttendees[]
-  assistant: CellReportAssistant | null
 }
 
 export const columns: ColumnDef<CellReportRecord>[] = [
@@ -97,19 +84,11 @@ export const columns: ColumnDef<CellReportRecord>[] = [
       return value.includes(row.getValue(id))
     },
   },
-  {
-    accessorKey: "venue",
-    id: "venue",
-    header: ({ column }) => (
-      <DataTableColumnHeader column={column} title="Venue" />
-    ),
-    cell: (props) => props.getValue(),
-  },
-  {
-    id: "actions",
-    header: "Actions",
-    cell: ({ row }) => {
-      return <CellReportRowActions cellReportId={row.original.id} />
-    },
-  },
+  // {
+  //   id: "actions",
+  //   header: "Actions",
+  //   cell: ({ row }) => {
+  //     return <CellReportRowActions cellReportId={row.original.id} />
+  //   },
+  // },
 ]
