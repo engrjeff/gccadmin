@@ -8,7 +8,7 @@ async function GroupStatusData() {
   const data = await getStatusData()
 
   return (
-    <div className="grid gap-6 lg:grid-cols-2">
+    <div className="grid gap-6 md:grid-cols-2 xl:grid-cols-4">
       <ChurchStatusData data={data.churchData} />
       <CellStatusData data={data.cellData} />
       <MemberTypeData data={data.memberTypeData} />

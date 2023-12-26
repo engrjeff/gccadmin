@@ -1,4 +1,3 @@
-import { BarList, Bold, Flex, Text } from "@tremor/react"
 import { addDays, format, previousSunday } from "date-fns"
 
 import {
@@ -11,6 +10,7 @@ import {
 
 import ReportDateRangeFilter from "../../cell-reports/components/report-date-range-filter"
 import { getCellReportData } from "../service"
+import WeeklyCellReportsTable from "./weekly-reports-table"
 
 function getDateRangeThisWeek(from?: string, to?: string) {
   const now = new Date()
@@ -40,7 +40,6 @@ async function WeeklyCellReports({ searchParams }: PageProps) {
 
   const totalCGDone = data.weeklyReports.totalCGsDone
   const totalCGLastWeek = data.pastWeeklyReports.totalCGsDone
-  const cgCountByLeaderData = data.weeklyReports.cgCountByLeaderData
 
   const { firstDay, lastDay } = getDateRangeThisWeek(
     searchParams.from,
@@ -54,8 +53,8 @@ async function WeeklyCellReports({ searchParams }: PageProps) {
           <CardTitle>Weekly Cell Report</CardTitle>
           <ReportDateRangeFilter />
         </div>
-        <CardDescription className="text-3xl font-bold text-foreground">
-          {totalCGDone}{" "}
+        <CardDescription className="flex flex-col gap-2 text-3xl font-bold text-foreground lg:flex-col">
+          <span>{totalCGDone}</span>
           <span className="text-sm font-normal text-muted-foreground">
             {totalCGDone === 0
               ? "No cell groups this week yet"
@@ -66,23 +65,8 @@ async function WeeklyCellReports({ searchParams }: PageProps) {
           Last week was {totalCGLastWeek}
         </span>
       </CardHeader>
-      <CardContent>
-        <Flex className="mt-4">
-          <Text className="text-muted-foreground">
-            <Bold>Leader</Bold>
-          </Text>
-          <Text className="text-muted-foreground">
-            <Bold>No. of CGs Done</Bold>
-          </Text>
-        </Flex>
-        <BarList
-          color="sky"
-          data={cgCountByLeaderData.map((d) => ({
-            name: `${d.name} - (${d.uniqueDisciplesDuringCgCount} disciples)`,
-            value: d.cgCount,
-          }))}
-          className="mt-2"
-        />
+      <CardContent className="p-0 pt-6">
+        <WeeklyCellReportsTable data={data} />
       </CardContent>
     </Card>
   )

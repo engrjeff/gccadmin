@@ -12,7 +12,9 @@ function UserGreeting() {
 
   return (
     <div>
-      <p className="text-xl font-semibold">Hi, {session.data?.user?.name}!</p>
+      <p className="font-semibold lg:text-xl">
+        Hi, {session.data?.user?.name}!
+      </p>
     </div>
   )
 }

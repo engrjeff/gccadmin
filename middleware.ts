@@ -10,6 +10,12 @@ export default withAuth(
       req.nextUrl.pathname.startsWith("/signin") ||
       req.nextUrl.pathname.startsWith("/register")
 
+    if (isAuth) {
+      if (!token.discipleId) {
+        return NextResponse.redirect(new URL("/unassigned", req.url))
+      }
+    }
+
     if (isAuthPage) {
       if (isAuth) {
         return NextResponse.redirect(new URL("/dashboard", req.url))
@@ -42,5 +48,12 @@ export default withAuth(
 )
 
 export const config = {
-  matcher: ["/dashboard/:path*", "/members/:path*", "/signin", "/register"],
+  matcher: [
+    "/dashboard/:path*",
+    "/disciples/:path*",
+    "/cell-reports/:path*",
+    "/resources/:path*",
+    "/signin",
+    "/register",
+  ],
 }

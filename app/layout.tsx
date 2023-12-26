@@ -1,4 +1,4 @@
-import "@/styles/globals.css"
+import "./globals.css"
 
 import { Metadata, Viewport } from "next"
 import AuthProvider from "@/providers/auth-provider"
