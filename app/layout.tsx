@@ -40,12 +40,12 @@ interface RootLayoutProps {
 export default function RootLayout({ children }: RootLayoutProps) {
   return (
     <>
-      <html lang="en" suppressHydrationWarning>
+      <html lang="en" className="h-full" suppressHydrationWarning>
         <head />
         <body
           className={cn(
             fontSans.variable,
-            "dark h-full overflow-hidden bg-background font-sans antialiased"
+            "dark h-full bg-background font-sans antialiased"
           )}
         >
           <NextTopLoader color="#6467F2" showSpinner={false} />
@@ -54,20 +54,10 @@ export default function RootLayout({ children }: RootLayoutProps) {
             defaultTheme="dark"
             enableSystem={false}
           >
-            {/* {user?.discipleId ? (
-              <>
-                <AuthProvider>{children}</AuthProvider>
-                <Toaster />
-              </>
-            ) : (
-              <UnverifiedAccountView />
-            )} */}
-            <>
-              <AuthProvider>
-                <ReactQueryProvider>{children}</ReactQueryProvider>
-              </AuthProvider>
-              <Toaster />
-            </>
+            <AuthProvider>
+              <ReactQueryProvider>{children}</ReactQueryProvider>
+            </AuthProvider>
+            <Toaster />
             <TailwindIndicator />
           </ThemeProvider>
         </body>

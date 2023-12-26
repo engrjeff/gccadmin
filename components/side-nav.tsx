@@ -6,7 +6,7 @@ import NavLink from "./nav-link"
 
 function SideNav() {
   return (
-    <nav className="hidden min-h-screen w-[220px] shrink-0 border-r bg-muted text-muted-foreground lg:block">
+    <nav className="fixed hidden h-full w-[220px] border-r bg-muted text-muted-foreground lg:block">
       <div className="flex h-16 items-center gap-3 px-4 pt-4">
         <Image
           src="/gcc-app-logo.png"
@@ -14,7 +14,7 @@ function SideNav() {
           width={48}
           height={48}
         />
-        <span className="text-xl font-semibold">GCC System</span>
+        <span className="text-xl font-semibold text-white">GCC System</span>
       </div>
       <div className="space-y-2 p-4">
         <p className="py-3 text-xs font-semibold uppercase tracking-wider text-muted-foreground">

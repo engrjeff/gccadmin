@@ -3,15 +3,15 @@ import { SiteHeader } from "@/components/site-header"
 
 async function SiteLayout({ children }: { children: React.ReactNode }) {
   return (
-    <div className="flex">
+    <>
       <SideNav />
-      <div className="flex flex-1 flex-col lg:max-w-[calc(100vw-220px)]">
+      <div className="h-full overflow-hidden lg:pl-[220px]">
         <SiteHeader />
-        <main className="container h-[calc(100vh-88px)] max-h-[calc(100vh-88px)] overflow-y-auto px-4 py-6">
-          <div className="h-full">{children}</div>
+        <main className="container relative flex h-[calc(100%-64px)] max-h-[calc(100%-64px)] flex-col p-4 lg:p-6">
+          {children}
         </main>
       </div>
-    </div>
+    </>
   )
 }
 
