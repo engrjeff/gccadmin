@@ -18,16 +18,18 @@ interface PageProps {
 
 async function DashboardPage({ searchParams }: PageProps) {
   return (
-    <div className="space-y-6">
-      <div className="flex items-center justify-between">
+    <>
+      <div className="mb-6 flex items-center justify-between">
         <PageTitle title="Dashboard" />
         <RefreshDataButton />
       </div>
-      <KPIStats />
-      <WeeklyCellReports searchParams={searchParams} />
-      <GroupStatusData />
-      <LeadersData />
-    </div>
+      <div className="flex-1 space-y-6 overflow-auto">
+        <KPIStats />
+        <WeeklyCellReports searchParams={searchParams} />
+        <GroupStatusData />
+        <LeadersData />
+      </div>
+    </>
   )
 }
 
