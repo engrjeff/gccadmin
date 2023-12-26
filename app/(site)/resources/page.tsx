@@ -1,5 +1,6 @@
 import { Metadata } from "next"
 
+import { getCurrentUser } from "@/lib/session"
 import PageTitle from "@/components/page-title"
 
 import SeriesAddForm from "./components/series-add-form"
@@ -9,12 +10,14 @@ export const metadata: Metadata = {
   title: "Resources",
 }
 
-function ResourcesPage() {
+async function ResourcesPage() {
+  const user = await getCurrentUser()
+
   return (
     <>
       <div className="mb-4 flex justify-between">
         <PageTitle title="Resources" subtitle="GCC Lessons" />
-        <SeriesAddForm />
+        {user?.role === "ADMIN" ? <SeriesAddForm /> : null}
       </div>
       <SeriesList />
     </>
