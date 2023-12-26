@@ -1,4 +1,4 @@
-import "@/styles/globals.css"
+import "./globals.css"
 
 import { Metadata, Viewport } from "next"
 import AuthProvider from "@/providers/auth-provider"
@@ -45,7 +45,7 @@ export default function RootLayout({ children }: RootLayoutProps) {
         <body
           className={cn(
             fontSans.variable,
-            "dark h-full overflow-hidden bg-background font-sans antialiased"
+            "bg-background dark h-full overflow-hidden font-sans antialiased"
           )}
         >
           <NextTopLoader color="#6467F2" showSpinner={false} />
