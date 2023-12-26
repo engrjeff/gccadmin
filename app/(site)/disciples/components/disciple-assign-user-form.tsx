@@ -4,6 +4,7 @@ import { FormEvent, useState } from "react"
 import { useParams, useRouter } from "next/navigation"
 import { User } from "@prisma/client"
 
+import { useIsAdmin } from "@/hooks/use-isadmin"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { toast } from "@/components/ui/use-toast"
@@ -23,6 +24,9 @@ function DiscipleAssignUserForm({
 
   const router = useRouter()
   const params = useParams<{ id: string }>()
+  const { isAdmin } = useIsAdmin()
+
+  if (!isAdmin) return null
 
   const handleConfirm = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault()

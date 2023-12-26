@@ -1,9 +1,10 @@
 import Link from "next/link"
 import { notFound } from "next/navigation"
-import { ArrowLeft, Edit2 } from "lucide-react"
+import { Edit2 } from "lucide-react"
 
 import { Badge } from "@/components/ui/badge"
 import { buttonVariants } from "@/components/ui/button"
+import BackButton from "@/components/back-button"
 import PageTitle from "@/components/page-title"
 
 import { getDiscipleById } from "../service/disciples"
@@ -17,14 +18,7 @@ async function DiscipleDetailHeader({ discipleId }: { discipleId: string }) {
     <>
       <div className="flex items-center justify-between">
         <div className="space-y-4">
-          <Link
-            href="/disciples"
-            className="inline-flex items-center gap-3 font-medium hover:underline"
-          >
-            <ArrowLeft className="h-5 w-5" />
-            <span className="sr-only">Back to </span>
-            <span>Disciples</span>
-          </Link>
+          <BackButton />
           <PageTitle title={disciple.name} />
           <span className="flex items-center gap-2 text-muted-foreground">
             ID:{" "}
