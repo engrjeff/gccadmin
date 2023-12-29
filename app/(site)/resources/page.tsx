@@ -19,7 +19,9 @@ async function ResourcesPage() {
         <PageTitle title="Resources" subtitle="GCC Lessons" />
         {user?.role === "ADMIN" ? <SeriesAddForm /> : null}
       </div>
-      <SeriesList />
+      <div className="flex-1 space-y-6 overflow-auto pr-2">
+        <SeriesList />
+      </div>
     </>
   )
 }

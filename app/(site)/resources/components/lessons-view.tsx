@@ -24,7 +24,7 @@ function LessonsView() {
 
   if (lessonSeries.isLoading)
     return (
-      <Card className="w-full max-w-md">
+      <Card className="w-[400px]">
         <Skeleton className="h-full w-full" />
       </Card>
     )
@@ -34,7 +34,7 @@ function LessonsView() {
   const series = lessonSeries.data
 
   return (
-    <Card className="relative hidden w-full max-w-md xl:block">
+    <Card className="relative hidden w-[400px] xl:block">
       <Button
         size="icon"
         variant="ghost"

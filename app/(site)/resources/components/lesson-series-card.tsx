@@ -37,7 +37,7 @@ function LessonSeriesCard({ seriesItem }: { seriesItem: SeriesWithLessons }) {
       {isAdmin ? <LessonForm series={seriesItem} /> : null}
       <Card
         data-lessons-shown={searchParams.get("seriesId") === seriesItem.id}
-        className="cursor-pointer data-[lessons-shown=true]:bg-muted2 lg:hover:bg-muted2"
+        className="cursor-pointer xl:hover:bg-muted2 xl:data-[lessons-shown=true]:bg-muted2"
         onClick={(e) => {
           e.stopPropagation()
           changeQueryParams()
