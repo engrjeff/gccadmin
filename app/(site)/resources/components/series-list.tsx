@@ -14,7 +14,9 @@ async function SeriesList() {
           </li>
         ))}
       </ul>
-      <LessonsView />
+      <div className="hidden xl:block">
+        <LessonsView />
+      </div>
     </div>
   )
 }

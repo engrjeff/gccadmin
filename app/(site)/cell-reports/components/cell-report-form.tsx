@@ -68,7 +68,6 @@ const CellReportForm = () => {
 
   const leaderId = form.watch("leaderId")
   const selectedLesson = form.watch("lessonId")
-  const attendees = form.watch("attendees")
 
   const primaryLeaders = usePrimaryLeaders()
   const lessonsSeries = useLessonsSeries()
@@ -147,6 +146,8 @@ const CellReportForm = () => {
     })
 
     form.reset()
+    setWithAssistant(false)
+    setSelectedSeries(undefined)
     router.refresh()
   }
 
