@@ -36,3 +36,12 @@ export const discipleBulkUpdateSchema = z.object({
 
 export type DiscipleCreateInputs = z.infer<typeof discipleCreateSchema>
 export type DiscipleUpdateInputs = z.infer<typeof discipleUpdateSchema>
+
+export const bulkDiscipleCreateSchema = z.object({
+  leaderId: z
+    .string({ required_error: "Leader is required" })
+    .min(1, { message: "Leader is required" }),
+  disciples: z.array(discipleCreateSchema.omit({ leaderId: true })),
+})
+
+export type BulkDiscipleCreateInputs = z.infer<typeof bulkDiscipleCreateSchema>
