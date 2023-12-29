@@ -5,7 +5,7 @@ import CellReportForm from "../components/cell-report-form"
 
 function CreateCellReportPage() {
   return (
-    <div className="max-h-full space-y-4">
+    <div className="max-h-full space-y-4 overflow-y-auto">
       <BackButton />
       <div className="mx-auto max-w-screen-lg space-y-4">
         <PageTitle
