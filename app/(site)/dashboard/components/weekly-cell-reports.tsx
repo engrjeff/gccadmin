@@ -77,7 +77,7 @@ async function WeeklyCellReports({ searchParams }: PageProps) {
           Last week was {totalCGLastWeek}
         </span>
       </CardHeader>
-      <CardContent className="grid gap-6 p-0 pt-6 xl:grid-cols-3">
+      <CardContent className="grid gap-6 pt-4 xl:grid-cols-3">
         <div className="overflow-hidden rounded-md border xl:col-span-2">
           <WeeklyCellReportsTable data={data} />
         </div>
