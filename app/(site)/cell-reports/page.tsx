@@ -17,14 +17,16 @@ interface PageProps {
 function CellReportsPage({ searchParams }: PageProps) {
   return (
     <>
-      <div className="mb-4 flex justify-between">
+      <div className="mb-4 flex justify-between px-4 lg:px-6">
         <PageTitle
           title="Cell Reports"
           subtitle="Manage your cell reports here"
         />
         <CellReportAddButton />
       </div>
-      <CellReportListing searchParams={searchParams} />
+      <div className="flex-1 overflow-auto px-4 lg:px-6">
+        <CellReportListing searchParams={searchParams} />
+      </div>
       <CellReportView />
     </>
   )

@@ -12,7 +12,7 @@ async function CellReportListing({ searchParams }: PageProps) {
   })
 
   return (
-    <div className="rounded-lg border dark:bg-muted">
+    <div className="h-full max-h-full rounded-lg border dark:bg-muted">
       <CellReportTable data={cellReports} />
     </div>
   )

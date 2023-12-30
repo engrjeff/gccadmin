@@ -68,7 +68,7 @@ function CellReportTable({ data }: CellReportTableProps) {
 
   return (
     <>
-      <div className="flex items-center px-2 py-3">
+      <div className="flex items-center p-3">
         <ReportDateRangeFilter />
         <div className="ml-auto flex items-center justify-end gap-2">
           <CellReportFacetFilters table={table} />
@@ -76,11 +76,13 @@ function CellReportTable({ data }: CellReportTableProps) {
           <DataTableViewOptions table={table} />
         </div>
       </div>
-      <DataTable
-        table={table}
-        columnCount={columns.length}
-        onRowClick={(row) => setCellReport(row.original)}
-      />
+      <div className="h-[calc(100%-109px)] max-h-[calc(100%-109px)] overflow-auto">
+        <DataTable
+          table={table}
+          columnCount={columns.length}
+          onRowClick={(row) => setCellReport(row.original)}
+        />
+      </div>
       <DataTablePagination table={table} />
     </>
   )

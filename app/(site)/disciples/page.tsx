@@ -13,11 +13,13 @@ export const metadata: Metadata = {
 function DisciplesPage({ searchParams }: { searchParams: { active: string } }) {
   return (
     <>
-      <div className="mb-4 flex justify-between">
+      <div className="mb-4 flex justify-between px-4 lg:px-6">
         <PageTitle title="Disciples" subtitle="Manage your disciples here" />
         <DiscipleAddButton />
       </div>
-      <DisciplesListing active={searchParams?.active} />
+      <div className="flex-1 overflow-auto px-4 lg:px-6">
+        <DisciplesListing active={searchParams?.active} />
+      </div>
       <DiscipleDeleteDialog />
     </>
   )

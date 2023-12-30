@@ -77,7 +77,7 @@ function DisciplesTable({ disciples, leaders }: Props) {
   return (
     <>
       <DiscipleSearch value={searchValue} onChange={handleSearch} />
-      <div className="flex items-center border-b px-2 py-3">
+      <div className="flex items-center border-b p-2">
         <DiscipleFilters table={table} leadersOptions={leadersOptions} />
         <DiscipleBulkActions table={table} />
         <div className="ml-auto flex items-center gap-3">
@@ -86,7 +86,7 @@ function DisciplesTable({ disciples, leaders }: Props) {
           <DataTableViewOptions table={table} />
         </div>
       </div>
-      <div className="data-table-container">
+      <div className="h-[calc(100%-152px)] max-h-[calc(100%-152px)] overflow-auto">
         <DataTable table={table} columnCount={columns.length} />
       </div>
       <DataTablePagination table={table} />
