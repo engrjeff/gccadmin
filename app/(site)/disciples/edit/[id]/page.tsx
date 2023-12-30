@@ -14,7 +14,7 @@ async function UpdateDisciplePage({ params }: { params: { id: string } }) {
   if (!disciple) return notFound()
 
   return (
-    <div className="max-h-full space-y-4 overflow-y-auto">
+    <div className="max-h-full space-y-4 overflow-y-auto px-4 lg:px-6">
       <BackButton />
       <PageTitle
         title={`Update ${disciple.name}`}
