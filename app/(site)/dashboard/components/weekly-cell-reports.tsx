@@ -55,7 +55,7 @@ async function WeeklyCellReports({ searchParams }: PageProps) {
           <CardTitle>Weekly Cell Report</CardTitle>
           <ReportDateRangeFilter />
         </div>
-        <CardDescription className="flex gap-2 text-3xl font-bold text-foreground lg:flex-col">
+        <CardDescription className="flex flex-col gap-2 text-3xl font-bold text-foreground">
           <div>
             <span>{totalCGDone}</span>
             <BadgeDelta
@@ -67,7 +67,7 @@ async function WeeklyCellReports({ searchParams }: PageProps) {
               className="ml-2"
             />
           </div>
-          <span className="text-sm font-normal text-muted-foreground">
+          <span className="block text-sm font-normal text-muted-foreground">
             {totalCGDone === 0
               ? "No cell groups this week yet"
               : `cell groups from ${firstDay} to ${lastDay}`}
