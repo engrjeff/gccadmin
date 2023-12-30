@@ -19,11 +19,11 @@ interface PageProps {
 async function DashboardPage({ searchParams }: PageProps) {
   return (
     <>
-      <div className="mb-6 flex items-center justify-between">
+      <div className="mb-6 flex items-center justify-between px-4 lg:px-6">
         <PageTitle title="Dashboard" />
         <RefreshDataButton />
       </div>
-      <div className="flex-1 space-y-6 overflow-auto">
+      <div className="flex-1 space-y-6 overflow-auto px-4 lg:px-6">
         <KPIStats />
         <WeeklyCellReports searchParams={searchParams} />
         <GroupStatusData />

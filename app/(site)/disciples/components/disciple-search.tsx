@@ -10,7 +10,7 @@ function DiscipleSearch({
   onChange: (searchValue: string) => void
 }) {
   return (
-    <div className="flex items-center gap-2 border-b px-4 py-3">
+    <div className="flex items-center gap-2 border-b px-4 py-2">
       <SearchIcon className="h-5 w-5" />
       <Input
         placeholder="Search disciples by name..."

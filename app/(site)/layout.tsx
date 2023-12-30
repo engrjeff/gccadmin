@@ -7,7 +7,7 @@ async function SiteLayout({ children }: { children: React.ReactNode }) {
       <SideNav />
       <div className="h-full overflow-hidden lg:pl-[220px]">
         <SiteHeader />
-        <main className="container relative flex h-[calc(100%-64px)] max-h-[calc(100%-64px)] flex-col p-4 lg:p-6">
+        <main className="container relative flex h-[calc(100%-64px)] max-h-[calc(100%-64px)] flex-col px-0 py-4 lg:py-6">
           {children}
         </main>
       </div>

@@ -58,26 +58,31 @@ function LessonSeriesCard({ seriesItem }: { seriesItem: SeriesWithLessons }) {
             />
             {seriesItem.lessons.length} Lessons
           </p>
-          {lessonsShown ? (
-            <div className="mt-4 border-t pt-4 xl:hidden">
-              <h4 className="mb-4 text-sm font-semibold leading-none tracking-tight">
-                Lessons ({seriesItem.lessons.length})
-              </h4>
-              <ul className="max-h-[400px] space-y-2.5 overflow-y-auto">
-                {seriesItem.lessons.map((lesson) => (
-                  <li key={`lesson-${lesson.id}`}>
-                    <Card className="rounded bg-muted2 p-3">
-                      <h5 className="text-sm font-medium leading-none tracking-tight">
-                        {lesson.title}
-                      </h5>
-                    </Card>
-                  </li>
-                ))}
-              </ul>
-            </div>
-          ) : null}
         </CardHeader>
       </Card>
+      {lessonsShown ? (
+        <div className="mt-4 rounded-lg bg-card xl:hidden">
+          <div className="p-4">
+            <h3 className="text-sm font-semibold">{seriesItem.title}</h3>
+            <h4 className="text-sm font-semibold leading-none tracking-tight text-muted-foreground">
+              Lessons ({seriesItem.lessons.length})
+            </h4>
+          </div>
+          <div className="max-h-[400px] overflow-y-auto px-4 pb-4">
+            <ul className="space-y-2.5">
+              {seriesItem.lessons.map((lesson) => (
+                <li key={`lesson-${lesson.id}`}>
+                  <Card className="rounded bg-muted2 p-3">
+                    <h5 className="text-sm font-medium leading-none tracking-tight">
+                      {lesson.title}
+                    </h5>
+                  </Card>
+                </li>
+              ))}
+            </ul>
+          </div>
+        </div>
+      ) : null}
     </div>
   )
 }

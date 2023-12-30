@@ -24,6 +24,7 @@ function DiscipleContextMenu({ disciple }: DiscipleContextMenuProps) {
         <Link
           href={`/disciples/${disciple.id}`}
           className="inline-flex cursor-pointer items-center gap-2 whitespace-nowrap hover:underline"
+          onClick={(e) => e.stopPropagation()}
         >
           {disciple.isPrimary ? (
             <Verified className="h-4 w-4 text-sky-500" />

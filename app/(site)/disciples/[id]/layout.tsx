@@ -10,7 +10,7 @@ interface Props {
 
 function DiscipleDetailLayout({ children, params }: Props) {
   return (
-    <div className="max-h-full space-y-4 overflow-y-auto lg:pr-4">
+    <div className="max-h-full space-y-4 overflow-y-auto px-4 lg:px-6">
       <DiscipleDetailHeader discipleId={params.id} />
       <DiscipleDetailsTabs />
       {children}
