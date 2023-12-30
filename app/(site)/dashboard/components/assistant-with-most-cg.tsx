@@ -29,6 +29,8 @@ function AssistantWithMostCG({ totalCGs, assistantWithMostCG }: Props) {
     0
   )
 
+  const percentage = (totalMostAssisted / totalCGs) * 100
+
   return (
     <Card className="border shadow-none">
       <CardHeader className="p-4 lg:p-4">
@@ -37,12 +39,11 @@ function AssistantWithMostCG({ totalCGs, assistantWithMostCG }: Props) {
         </CardTitle>
         <Flex>
           <Text>
-            {totalMostAssisted} &bull;{" "}
-            {((totalMostAssisted / totalCGs) * 100).toFixed(0)}%
+            {totalMostAssisted} &bull; {percentage.toFixed(0)}%
           </Text>
           <Text>of {totalCGs} cellgroups</Text>
         </Flex>
-        <ProgressBar value={45} color="amber" className="mt-3" />
+        <ProgressBar value={percentage} color="amber" className="mt-3" />
       </CardHeader>
       <CardContent className="px-0 lg:px-0">
         <Table className="max-w-full">
