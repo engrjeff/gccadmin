@@ -37,7 +37,10 @@ function CellReportView() {
         }
       }}
     >
-      <SheetContent onClick={(e) => e.stopPropagation()}>
+      <SheetContent
+        onClick={(e) => e.stopPropagation()}
+        className="overflow-y-auto"
+      >
         <SheetHeader>
           <SheetTitle>
             {cellReport.lessonId
@@ -48,7 +51,7 @@ function CellReportView() {
             {cellReport.type.toLowerCase()}
           </Badge>
           <SheetDescription>
-            Led by:{" "}
+            <span className="font-semibold">Led by:</span>{" "}
             <Link
               href={`/disciples/${
                 cellReport.assistant_id
@@ -63,7 +66,15 @@ function CellReportView() {
             </Link>
           </SheetDescription>
           {cellReport.assistant_id ? (
-            <SheetDescription>Under: {cellReport.leader.name}</SheetDescription>
+            <SheetDescription>
+              <span className="font-semibold">Under:</span>{" "}
+              <Link
+                href={`/disciples/${cellReport.leader.id}`}
+                className="underline hover:text-white hover:no-underline"
+              >
+                {cellReport.leader.name}
+              </Link>
+            </SheetDescription>
           ) : null}
         </SheetHeader>
         <div className="divide-y">
@@ -109,7 +120,7 @@ function CellReportView() {
             <p className="mb-2 text-sm font-semibold text-muted-foreground">
               Attendees ({cellReport.attendees.length})
             </p>
-            <ul className="max-h-[400px] space-y-2 overflow-y-auto pb-4">
+            <ul className="space-y-2 pb-4">
               {cellReport.attendees.map((attendee) => (
                 <li key={attendee.disciple_id}>
                   {

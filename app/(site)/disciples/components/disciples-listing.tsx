@@ -9,7 +9,7 @@ async function DisciplesListing({ active }: Props) {
   const { disciples } = await getDisciples({ isActive: active })
   const leaders = await getPrimaryLeaders()
   return (
-    <div className="rounded-lg border dark:bg-muted">
+    <div className="h-full max-h-full rounded-lg border dark:bg-muted">
       <DisciplesTable disciples={disciples} leaders={leaders} />
     </div>
   )
