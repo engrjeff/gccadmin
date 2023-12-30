@@ -1,4 +1,5 @@
 import { useState } from "react"
+import { useSession } from "next-auth/react"
 import { useFormContext } from "react-hook-form"
 
 import { cn } from "@/lib/utils"
@@ -45,10 +46,16 @@ function AttendeesPicker({
 
   const cellReportForm = useFormContext<CreateCellReportInputs>()
 
+  const session = useSession()
+
+  const isAdmin = session.data?.user?.role === "ADMIN"
+
   const leaderId = cellReportForm.watch("leaderId")
   const assistantId = cellReportForm.watch("assistant_id")
 
-  const disciplesOfLeader = useDisciplesOfLeader(leaderId)
+  const disciplesOfLeader = useDisciplesOfLeader(
+    isAdmin ? leaderId : session.data?.user.discipleId
+  )
 
   const sortedBySelected = disciplesOfLeader.data
     ?.sort((a, b) => (a.name < b.name ? -1 : 1))
