@@ -1,6 +1,6 @@
 "use client"
 
-import { useState } from "react"
+import { useEffect, useState } from "react"
 import { useRouter } from "next/navigation"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { useSession } from "next-auth/react"
@@ -49,6 +49,8 @@ const CellReportForm = () => {
   const router = useRouter()
   const session = useSession()
 
+  const isAdmin = session.data?.user?.role === "ADMIN"
+
   const form = useForm<CreateCellReportInputs>({
     resolver: zodResolver(cellReportCreateSchema),
     defaultValues: {
@@ -71,11 +73,18 @@ const CellReportForm = () => {
 
   const primaryLeaders = usePrimaryLeaders()
   const lessonsSeries = useLessonsSeries()
-  const disciplesOfLeader = useDisciplesOfLeader(leaderId)
+
+  const disciplesOfLeader = useDisciplesOfLeader(
+    isAdmin ? leaderId : session.data?.user.discipleId
+  )
+
+  useEffect(() => {
+    if (!session.data?.user || isAdmin) return
+
+    form.setValue("leaderId", session.data.user.discipleId!)
+  }, [form, isAdmin, session.data?.user])
 
   if (session.status !== "authenticated") return <SectionSpinner />
-
-  const isAdmin = session.data?.user?.role === "ADMIN"
 
   const lessons =
     lessonsSeries.data?.find((i) => i.id === selectedSeries)?.lessons ?? []
@@ -91,27 +100,37 @@ const CellReportForm = () => {
 
     if (withAssistant && !assistant_id) {
       form.setError("assistant_id", { message: "Assistant is required." })
+      return false
     }
 
     if (!lessonId && !lesson_name) {
       form.setError("lessonId", { message: "Lesson is required" })
       form.setError("lesson_name", { message: "Lesson is required" })
+      return false
     }
 
     if (!lessonId) {
       if (!form.watch("lesson_name")) {
         form.setError("lesson_name", { message: "Lesson is required" })
+        return false
       }
 
       if (!scripture_references || scripture_references?.length === 0) {
         form.setError("scripture_references", {
           message: "Scripture reference is required",
         })
+        return false
       }
     }
+
+    return true
   }
 
   const onSubmit = async (values: CreateCellReportInputs) => {
+    const hasNoError = onError()
+
+    if (!hasNoError) return
+
     const attendeesData = values.assistant_id
       ? [...values.attendees, values.assistant_id]
       : values.attendees
@@ -146,6 +165,11 @@ const CellReportForm = () => {
     })
 
     form.reset()
+
+    if (!isAdmin) {
+      form.setValue("leaderId", session.data.user.discipleId!)
+    }
+
     setWithAssistant(false)
     setSelectedSeries(undefined)
     router.refresh()
@@ -164,36 +188,35 @@ const CellReportForm = () => {
               General Details
             </p>
             <div className="grid gap-4 lg:grid-cols-2">
-              {isAdmin && (
-                <div className="flex flex-col gap-2">
-                  <Label htmlFor="leaderId">Cell Leader</Label>
-                  <Controller
-                    control={form.control}
-                    name="leaderId"
-                    render={({ field }) => (
-                      <Autocomplete
-                        searchText="Search leader"
-                        placeholderText="Choose a cell leader"
-                        value={field.value}
-                        error={!!errors?.leaderId}
-                        onChange={(value) => {
-                          field.onChange(value)
-                          form.setValue("attendees", [])
-                        }}
-                        options={maptoOptions(
-                          primaryLeaders.data ?? [],
-                          "id",
-                          "name"
-                        )}
-                      />
-                    )}
-                  />
-                  <FormErrorMessage
-                    id="leaderIdError"
-                    error={errors.leaderId?.message}
-                  />
-                </div>
-              )}
+              <div className="flex flex-col gap-2">
+                <Label htmlFor="leaderId">Cell Leader</Label>
+                <Controller
+                  control={form.control}
+                  name="leaderId"
+                  render={({ field }) => (
+                    <Autocomplete
+                      disabled={!isAdmin}
+                      searchText="Search leader"
+                      placeholderText="Choose a cell leader"
+                      value={field.value}
+                      error={!!errors?.leaderId}
+                      onChange={(value) => {
+                        field.onChange(value)
+                        form.setValue("attendees", [])
+                      }}
+                      options={maptoOptions(
+                        primaryLeaders.data ?? [],
+                        "id",
+                        "name"
+                      )}
+                    />
+                  )}
+                />
+                <FormErrorMessage
+                  id="leaderIdError"
+                  error={errors.leaderId?.message}
+                />
+              </div>
               <div className="flex flex-col gap-2">
                 <Label htmlFor="type">Cell Type</Label>
                 <Controller
@@ -275,9 +298,12 @@ const CellReportForm = () => {
             </div>
             <div className="flex items-center space-x-2 pt-4">
               <Switch
-                disabled={!leaderId}
+                disabled={!leaderId && isAdmin}
                 checked={withAssistant}
-                onCheckedChange={(checked) => setWithAssistant(checked)}
+                onCheckedChange={(checked) => {
+                  setWithAssistant(checked)
+                  form.setValue("assistant_id", undefined)
+                }}
               />
               <Label>I have an assistant leader</Label>
             </div>
