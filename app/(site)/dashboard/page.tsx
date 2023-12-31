@@ -2,6 +2,7 @@ import { Metadata } from "next"
 
 import PageTitle from "@/components/page-title"
 
+import AnnualCellReports from "./components/annual-cell-reports"
 import GroupStatusData from "./components/group-status-data"
 import KPIStats from "./components/kpi-stats"
 import LeadersData from "./components/leaders-data"
@@ -27,6 +28,7 @@ async function DashboardPage({ searchParams }: PageProps) {
         <KPIStats />
         <WeeklyCellReports searchParams={searchParams} />
         <GroupStatusData />
+        <AnnualCellReports />
         <LeadersData />
       </div>
     </>

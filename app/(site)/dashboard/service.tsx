@@ -4,7 +4,16 @@ import {
   MemberType,
   ProcessLevel,
 } from "@prisma/client"
-import { endOfWeek, format, parseISO, startOfWeek } from "date-fns"
+import {
+  eachMonthOfInterval,
+  endOfWeek,
+  endOfYear,
+  format,
+  lastDayOfMonth,
+  parseISO,
+  startOfWeek,
+  startOfYear,
+} from "date-fns"
 import addDays from "date-fns/addDays"
 import isWithinInterval from "date-fns/isWithinInterval"
 import previousSunday from "date-fns/previousSunday"
@@ -653,4 +662,49 @@ const getMemberTypeText = (value: MemberType) => {
         desc: "Young, unmarried professionals",
       }
   }
+}
+
+// GET MONTHLY CELL REPORTS
+export async function getAnnualCellReports() {
+  const year = 2023
+  const startDayOfYear = startOfYear(new Date(year, 0))
+  const lastDayOfYear = endOfYear(new Date(year, 11))
+
+  const annualCellReports = await db.cellReport.findMany({
+    where: {
+      date: {
+        gte: startDayOfYear,
+        lte: lastDayOfYear,
+      },
+    },
+  })
+
+  const beginningOfMonths = eachMonthOfInterval({
+    start: startDayOfYear,
+    end: lastDayOfYear,
+  })
+
+  const monthStartAndEndArray = beginningOfMonths.map((month) => ({
+    month: format(month, "MMM"),
+    start: month,
+    end: lastDayOfMonth(month),
+  }))
+
+  const result = monthStartAndEndArray.reduce<
+    { month: string; start: Date; end: Date; monthlyCgCount: number }[]
+  >((report, current) => {
+    const monthlyCgCount = annualCellReports.filter((cg) =>
+      isWithinInterval(cg.date, { start: current.start, end: current.end })
+    ).length
+
+    return [
+      ...report,
+      {
+        ...current,
+        monthlyCgCount,
+      },
+    ]
+  }, [])
+
+  return result
 }
