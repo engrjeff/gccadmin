@@ -38,7 +38,7 @@ function DisciplesTable({ disciples, leaders }: Props) {
   const [columnVisibility, setColumnVisibility] = useState<VisibilityState>({})
   const [rowSelection, setRowSelection] = useState({})
 
-  const isAdmin = useIsAdmin()
+  const { isAdmin } = useIsAdmin()
 
   const columnsToDisplay = isAdmin
     ? columns
