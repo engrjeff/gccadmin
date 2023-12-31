@@ -50,7 +50,8 @@ function LessonsView() {
       </CardHeader>
       <CardContent>
         <h4 className="mb-4 text-sm font-semibold leading-none tracking-tight">
-          Lessons ({series.lessons.length})
+          {series.lessons.length > 1 ? "Lessons" : "Lesson"} (
+          {series.lessons.length})
         </h4>
         <ul className="space-y-2.5 pr-2">
           {series.lessons.map((lesson) => (
