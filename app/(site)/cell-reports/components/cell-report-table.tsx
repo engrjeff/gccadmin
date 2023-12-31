@@ -36,7 +36,7 @@ function CellReportTable({ data }: CellReportTableProps) {
   const [columnVisibility, setColumnVisibility] = useState<VisibilityState>({})
   const [rowSelection, setRowSelection] = useState({})
 
-  const isAdmin = useIsAdmin()
+  const { isAdmin } = useIsAdmin()
 
   const setCellReport = useSelectedCellReport((state) => state.setCellReport)
 

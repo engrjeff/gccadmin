@@ -3,7 +3,6 @@
 import { ComponentPropsWithRef, useState } from "react"
 import { useRouter } from "next/navigation"
 import { zodResolver } from "@hookform/resolvers/zod"
-import { DropdownMenuItem } from "@radix-ui/react-dropdown-menu"
 import { ChevronDown, ListPlus, Plus, XIcon } from "lucide-react"
 import { useSession } from "next-auth/react"
 import {
@@ -28,6 +27,7 @@ import {
 import {
   DropdownMenu,
   DropdownMenuContent,
+  DropdownMenuItem,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu"
 import FormErrorMessage from "@/components/ui/form-error-message"

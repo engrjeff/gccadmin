@@ -13,7 +13,7 @@ import {
   CardTitle,
 } from "@/components/ui/card"
 
-import LessonForm from "./lesson-form"
+import LessonSeriesActions from "./lesson-series-actions"
 
 type SeriesWithLessons = LessonSeries & { lessons: Lesson[] }
 
@@ -34,7 +34,11 @@ function LessonSeriesCard({ seriesItem }: { seriesItem: SeriesWithLessons }) {
 
   return (
     <div className="relative">
-      {isAdmin ? <LessonForm series={seriesItem} /> : null}
+      {isAdmin ? (
+        <div className="absolute right-2 top-2">
+          <LessonSeriesActions series={seriesItem} />
+        </div>
+      ) : null}
       <Card
         data-lessons-shown={searchParams.get("seriesId") === seriesItem.id}
         className="cursor-pointer xl:hover:bg-muted2 xl:data-[lessons-shown=true]:bg-muted2"
@@ -56,7 +60,8 @@ function LessonSeriesCard({ seriesItem }: { seriesItem: SeriesWithLessons }) {
               className="mr-2 h-4 w-4 text-purple-600"
               aria-hidden="true"
             />
-            {seriesItem.lessons.length} Lessons
+            {seriesItem.lessons.length}{" "}
+            {seriesItem.lessons.length > 1 ? "Lessons" : "Lesson"}
           </p>
         </CardHeader>
       </Card>
@@ -65,7 +70,8 @@ function LessonSeriesCard({ seriesItem }: { seriesItem: SeriesWithLessons }) {
           <div className="p-4">
             <h3 className="text-sm font-semibold">{seriesItem.title}</h3>
             <h4 className="text-sm font-semibold leading-none tracking-tight text-muted-foreground">
-              Lessons ({seriesItem.lessons.length})
+              {seriesItem.lessons.length > 1 ? "Lessons" : "Lesson"} (
+              {seriesItem.lessons.length})
             </h4>
           </div>
           <div className="max-h-[400px] overflow-y-auto px-4 pb-4">
