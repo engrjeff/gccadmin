@@ -13,7 +13,7 @@ function DiscipleAddButton({ leaderId }: { leaderId?: string }) {
     <div className="grow-0 divide-x divide-violet-600 self-start rounded-md">
       <Link
         href={{ pathname: "/disciples/new", query: { leaderId } }}
-        className={cn(buttonVariants(), "rounded-r-none")}
+        className={cn(buttonVariants({ size: "sm" }), "rounded-r-none")}
       >
         <Plus className="mr-3 h-4 w-4" />
         <span>Add</span>
