@@ -37,13 +37,17 @@ function AssistantWithMostCG({ totalCGs, assistantWithMostCG }: Props) {
         <CardTitle className="text-base">
           Assistants With Most Handled CGs
         </CardTitle>
-        <Flex>
-          <Text>
-            {totalMostAssisted} &bull; {percentage.toFixed(0)}%
-          </Text>
-          <Text>of {totalCGs} cellgroups</Text>
-        </Flex>
-        <ProgressBar value={percentage} color="amber" className="mt-3" />
+        {totalCGs > 0 ? (
+          <>
+            <Flex>
+              <Text>
+                {totalMostAssisted} &bull; {percentage.toFixed(0)}%
+              </Text>
+              <Text>of {totalCGs} cellgroups</Text>
+            </Flex>
+            <ProgressBar value={percentage} color="amber" className="mt-3" />
+          </>
+        ) : null}
       </CardHeader>
       <CardContent className="px-0 lg:px-0">
         <Table className="max-w-full">
@@ -55,19 +59,32 @@ function AssistantWithMostCG({ totalCGs, assistantWithMostCG }: Props) {
           </TableHeader>
 
           <TableBody>
-            {assistantWithMostCG.filter(Boolean).map((acg) => (
-              <TableRow key={`row-with-most-assistant-${acg?.id}`}>
-                <TableCell>
-                  <Link
-                    href={`/disciples/${acg?.id}`}
-                    className="hover:underline"
-                  >
-                    {acg?.name}
-                  </Link>
+            {assistantWithMostCG.length === 0 ? (
+              <TableRow>
+                <TableCell
+                  colSpan={2}
+                  className="text-center text-muted-foreground"
+                >
+                  No data to show
                 </TableCell>
-                <TableCell className="text-center">{acg?.assistedCG}</TableCell>
               </TableRow>
-            ))}
+            ) : (
+              assistantWithMostCG.filter(Boolean).map((acg) => (
+                <TableRow key={`row-with-most-assistant-${acg?.id}`}>
+                  <TableCell>
+                    <Link
+                      href={`/disciples/${acg?.id}`}
+                      className="hover:underline"
+                    >
+                      {acg?.name}
+                    </Link>
+                  </TableCell>
+                  <TableCell className="text-center">
+                    {acg?.assistedCG}
+                  </TableCell>
+                </TableRow>
+              ))
+            )}
           </TableBody>
         </Table>
       </CardContent>
