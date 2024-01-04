@@ -1,4 +1,5 @@
 import { useState } from "react"
+import { XIcon } from "lucide-react"
 import { useSession } from "next-auth/react"
 import { useFormContext } from "react-hook-form"
 
@@ -98,11 +99,25 @@ function AttendeesPicker({
           </DialogDescription>
         </DialogHeader>
         <div>
-          <Input
-            placeholder="Search here"
-            value={attendeesSearchQuery}
-            onChange={(e) => setAttendeesSearchQuery(e.currentTarget.value)}
-          />
+          <div className="relative">
+            <Input
+              placeholder="Search here"
+              value={attendeesSearchQuery}
+              onChange={(e) => setAttendeesSearchQuery(e.currentTarget.value)}
+            />
+            {attendeesSearchQuery.length > 0 ? (
+              <Button
+                onClick={() => setAttendeesSearchQuery("")}
+                type="button"
+                size="icon"
+                variant="ghost"
+                className="absolute right-1 top-1"
+              >
+                <span className="sr-only">clear</span>
+                <XIcon className="h-4 w-4" />
+              </Button>
+            ) : null}
+          </div>
           <div className="my-3 h-[350px] max-h-[350px] overflow-y-auto py-3 pr-2">
             {attendeesOptions?.length === 0 ? (
               <div className="space-y-4 text-center">

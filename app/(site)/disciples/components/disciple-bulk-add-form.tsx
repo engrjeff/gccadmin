@@ -1,7 +1,7 @@
 "use client"
 
 import { ComponentPropsWithRef, useState } from "react"
-import { useRouter } from "next/navigation"
+import { useParams, useRouter } from "next/navigation"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { ChevronDown, ListPlus, Plus, XIcon } from "lucide-react"
 import { useSession } from "next-auth/react"
@@ -63,7 +63,7 @@ function DiscipleBulkAddForm() {
     <>
       <DropdownMenu>
         <DropdownMenuTrigger asChild>
-          <Button className="rounded-l-none px-3">
+          <Button size="sm" className="rounded-l-none px-3">
             <ChevronDown className="h-4 w-4" />
           </Button>
         </DropdownMenuTrigger>
@@ -122,13 +122,14 @@ function BulkForm({ onDone }: BulkFormProps) {
   const session = useSession()
   const primaryLeaders = usePrimaryLeaders()
   const router = useRouter()
+  const params = useParams<{ id: string }>()
 
   const user = session.data?.user
 
   const form = useForm<BulkDiscipleCreateInputs>({
     resolver: zodResolver(bulkDiscipleCreateSchema),
     defaultValues: {
-      leaderId: user?.role === "ADMIN" ? undefined : user?.discipleId,
+      leaderId: user?.role === "ADMIN" ? params.id : user?.discipleId,
       disciples: [initialRowValue, initialRowValue],
     },
   })
@@ -204,7 +205,11 @@ function BulkForm({ onDone }: BulkFormProps) {
             control={form.control}
             name="leaderId"
             render={({ field }) => (
-              <Select value={field.value} onValueChange={field.onChange}>
+              <Select
+                value={field.value}
+                onValueChange={field.onChange}
+                disabled={Boolean(params.id)}
+              >
                 <SelectTrigger
                   aria-invalid={!!errors.leaderId}
                   aria-describedby="leaderIdError"
