@@ -53,14 +53,21 @@ export const getDiscipleById = async (id: string) => {
     redirect("/signin")
   }
 
+  const isAdmin = user.role === "ADMIN"
+
   const disciple = await db.disciple.findFirst({
     where: {
       id,
+      leaderId: isAdmin ? undefined : user.discipleId,
     },
     include: {
       leader: true,
     },
   })
+
+  if (!disciple && !isAdmin) {
+    redirect("/dashboard")
+  }
 
   if (!disciple) {
     return null
