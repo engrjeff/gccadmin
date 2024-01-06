@@ -1,14 +1,8 @@
 import Link from "next/link"
-import { redirect } from "next/navigation"
 
-import { getCurrentUser } from "@/lib/session"
 import { buttonVariants } from "@/components/ui/button"
 
-async function UnassignedUserPage() {
-  const user = await getCurrentUser()
-
-  if (user?.discipleId) redirect("/dashboard")
-
+function UnassignedUserPage() {
   return (
     <div className="container flex min-h-screen flex-col items-center justify-center gap-3">
       <h1 className="text-2xl font-bold">Unconfirmed Account</h1>
@@ -19,7 +13,7 @@ async function UnassignedUserPage() {
       <p className="mb-6 text-center text-muted-foreground">
         You may refresh this page to check if your account has been verified.
       </p>
-      <Link href="/unassigned" className={buttonVariants()}>
+      <Link href="/dashboard" className={buttonVariants()}>
         Refresh
       </Link>
       <span className="mt-6">&mdash; Jeff & Kim</span>

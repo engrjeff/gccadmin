@@ -1,7 +1,14 @@
+import { redirect } from "next/navigation"
+
+import { getCurrentUser } from "@/lib/session"
 import SideNav from "@/components/side-nav"
 import { SiteHeader } from "@/components/site-header"
 
 async function SiteLayout({ children }: { children: React.ReactNode }) {
+  const user = await getCurrentUser()
+
+  if (!user?.discipleId) redirect("/unassigned")
+
   return (
     <>
       <SideNav />
