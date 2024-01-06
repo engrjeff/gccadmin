@@ -111,23 +111,7 @@ const getWeeklyReports = async (params: { startDate: Date; endDate: Date }) => {
 
   const assistantWithMostCG = cgCountByLeaderData
     .filter((i) => i.cgByAssistant.length > 0)
-    .map((a) => {
-      const withMostAssisted = a.cgByAssistant.reduce<
-        { id: string; name: string; assistedCG: number } | undefined
-      >((withMax, curr) => {
-        if (withMax) {
-          if (curr.assistedCG > withMax!.assistedCG) {
-            return curr
-          }
-        } else {
-          return curr
-        }
-
-        return withMax
-      }, undefined)
-
-      return withMostAssisted
-    })
+    .flatMap((a) => a.cgByAssistant)
     .sort((a, b) => {
       if (a!.assistedCG > b!.assistedCG) return -1
       if (a!.assistedCG < b!.assistedCG) return 1
