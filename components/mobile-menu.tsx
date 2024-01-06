@@ -18,7 +18,7 @@ function MobileMenu() {
       <SheetTrigger asChild>
         <Button size="icon" variant="ghost">
           <span className="sr-only">Menu</span>
-          <Menu className="h-4 w-4" />
+          <Menu className="h-5 w-5" />
         </Button>
       </SheetTrigger>
       <SheetContent position="left" className="w-[80%]">
