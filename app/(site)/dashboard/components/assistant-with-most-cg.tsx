@@ -67,68 +67,21 @@ function AssistantWithMostCG({ totalCGs, assistantWithMostCG }: Props) {
                 </TableCell>
               </TableRow>
             ) : (
-              <>
-                {assistantWithMostCG.filter(Boolean).map((acg) => (
-                  <TableRow key={`row-with-most-assistant-${acg?.id}`}>
-                    <TableCell>
-                      <Link
-                        href={`/disciples/${acg?.id}`}
-                        className="hover:underline"
-                      >
-                        {acg?.name}
-                      </Link>
-                    </TableCell>
-                    <TableCell className="text-center">
-                      {acg?.assistedCG}
-                    </TableCell>
-                  </TableRow>
-                ))}
-                {assistantWithMostCG.filter(Boolean).map((acg) => (
-                  <TableRow key={`row-with-most-assistant-${acg?.id}`}>
-                    <TableCell>
-                      <Link
-                        href={`/disciples/${acg?.id}`}
-                        className="hover:underline"
-                      >
-                        {acg?.name}
-                      </Link>
-                    </TableCell>
-                    <TableCell className="text-center">
-                      {acg?.assistedCG}
-                    </TableCell>
-                  </TableRow>
-                ))}
-                {assistantWithMostCG.filter(Boolean).map((acg) => (
-                  <TableRow key={`row-with-most-assistant-${acg?.id}`}>
-                    <TableCell>
-                      <Link
-                        href={`/disciples/${acg?.id}`}
-                        className="hover:underline"
-                      >
-                        {acg?.name}
-                      </Link>
-                    </TableCell>
-                    <TableCell className="text-center">
-                      {acg?.assistedCG}
-                    </TableCell>
-                  </TableRow>
-                ))}
-                {assistantWithMostCG.filter(Boolean).map((acg) => (
-                  <TableRow key={`row-with-most-assistant-${acg?.id}`}>
-                    <TableCell>
-                      <Link
-                        href={`/disciples/${acg?.id}`}
-                        className="hover:underline"
-                      >
-                        {acg?.name}
-                      </Link>
-                    </TableCell>
-                    <TableCell className="text-center">
-                      {acg?.assistedCG}
-                    </TableCell>
-                  </TableRow>
-                ))}
-              </>
+              assistantWithMostCG.filter(Boolean).map((acg) => (
+                <TableRow key={`row-with-most-assistant-${acg?.id}`}>
+                  <TableCell>
+                    <Link
+                      href={`/disciples/${acg?.id}`}
+                      className="hover:underline"
+                    >
+                      {acg?.name}
+                    </Link>
+                  </TableCell>
+                  <TableCell className="text-center">
+                    {acg?.assistedCG}
+                  </TableCell>
+                </TableRow>
+              ))
             )}
           </TableBody>
         </Table>
