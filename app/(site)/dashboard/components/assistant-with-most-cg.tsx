@@ -34,14 +34,12 @@ function AssistantWithMostCG({ totalCGs, assistantWithMostCG }: Props) {
   return (
     <Card className="border shadow-none">
       <CardHeader className="p-4 lg:p-4">
-        <CardTitle className="text-base">
-          Assistants With Most Handled CGs
-        </CardTitle>
+        <CardTitle className="text-base">Disciples With Cell Groups</CardTitle>
         {totalCGs > 0 ? (
           <>
             <Flex>
               <Text>
-                {totalMostAssisted} &bull; {percentage.toFixed(0)}%
+                They handled {totalMostAssisted} &bull; {percentage.toFixed(0)}%
               </Text>
               <Text>of {totalCGs} cellgroups</Text>
             </Flex>
@@ -49,12 +47,12 @@ function AssistantWithMostCG({ totalCGs, assistantWithMostCG }: Props) {
           </>
         ) : null}
       </CardHeader>
-      <CardContent className="px-0 lg:px-0">
+      <CardContent className="max-h-[400px] overflow-y-auto px-0 lg:px-0">
         <Table className="max-w-full">
           <TableHeader>
             <TableRow>
               <TableHead>Name</TableHead>
-              <TableHead className="text-center">Assited CGs</TableHead>
+              <TableHead className="text-center">Handled CGs</TableHead>
             </TableRow>
           </TableHeader>
 
@@ -69,21 +67,68 @@ function AssistantWithMostCG({ totalCGs, assistantWithMostCG }: Props) {
                 </TableCell>
               </TableRow>
             ) : (
-              assistantWithMostCG.filter(Boolean).map((acg) => (
-                <TableRow key={`row-with-most-assistant-${acg?.id}`}>
-                  <TableCell>
-                    <Link
-                      href={`/disciples/${acg?.id}`}
-                      className="hover:underline"
-                    >
-                      {acg?.name}
-                    </Link>
-                  </TableCell>
-                  <TableCell className="text-center">
-                    {acg?.assistedCG}
-                  </TableCell>
-                </TableRow>
-              ))
+              <>
+                {assistantWithMostCG.filter(Boolean).map((acg) => (
+                  <TableRow key={`row-with-most-assistant-${acg?.id}`}>
+                    <TableCell>
+                      <Link
+                        href={`/disciples/${acg?.id}`}
+                        className="hover:underline"
+                      >
+                        {acg?.name}
+                      </Link>
+                    </TableCell>
+                    <TableCell className="text-center">
+                      {acg?.assistedCG}
+                    </TableCell>
+                  </TableRow>
+                ))}
+                {assistantWithMostCG.filter(Boolean).map((acg) => (
+                  <TableRow key={`row-with-most-assistant-${acg?.id}`}>
+                    <TableCell>
+                      <Link
+                        href={`/disciples/${acg?.id}`}
+                        className="hover:underline"
+                      >
+                        {acg?.name}
+                      </Link>
+                    </TableCell>
+                    <TableCell className="text-center">
+                      {acg?.assistedCG}
+                    </TableCell>
+                  </TableRow>
+                ))}
+                {assistantWithMostCG.filter(Boolean).map((acg) => (
+                  <TableRow key={`row-with-most-assistant-${acg?.id}`}>
+                    <TableCell>
+                      <Link
+                        href={`/disciples/${acg?.id}`}
+                        className="hover:underline"
+                      >
+                        {acg?.name}
+                      </Link>
+                    </TableCell>
+                    <TableCell className="text-center">
+                      {acg?.assistedCG}
+                    </TableCell>
+                  </TableRow>
+                ))}
+                {assistantWithMostCG.filter(Boolean).map((acg) => (
+                  <TableRow key={`row-with-most-assistant-${acg?.id}`}>
+                    <TableCell>
+                      <Link
+                        href={`/disciples/${acg?.id}`}
+                        className="hover:underline"
+                      >
+                        {acg?.name}
+                      </Link>
+                    </TableCell>
+                    <TableCell className="text-center">
+                      {acg?.assistedCG}
+                    </TableCell>
+                  </TableRow>
+                ))}
+              </>
             )}
           </TableBody>
         </Table>
