@@ -2,7 +2,7 @@ import { Spinner } from "@/components/spinner"
 
 function SectionSpinner() {
   return (
-    <div className="absolute inset-0 left-[220px] flex items-center justify-center">
+    <div className="absolute inset-0 flex items-center justify-center lg:left-[220px]">
       <Spinner />
     </div>
   )

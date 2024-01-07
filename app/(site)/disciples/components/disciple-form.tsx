@@ -107,7 +107,7 @@ function DiscipleForm({ modalMode, leaderId }: DiscipleFormProps) {
   }
 
   return (
-    <div className="rounded-lg border p-6 shadow-lg">
+    <div className="rounded-lg shadow-lg md:border md:p-6">
       <form onSubmit={form.handleSubmit(onSubmit(), onError)}>
         <fieldset
           disabled={isSubmitting}
@@ -381,6 +381,7 @@ function DiscipleForm({ modalMode, leaderId }: DiscipleFormProps) {
               <Button
                 variant="outline"
                 type="button"
+                className="hidden"
                 onClick={form.handleSubmit(onSubmit(true), onError)}
               >
                 Save and Add Another

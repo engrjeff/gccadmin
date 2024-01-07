@@ -262,18 +262,25 @@ function BulkForm({ onDone }: BulkFormProps) {
           {disciplesFields.fields.map((disciple, index) => (
             <TableRow key={disciple.id} className="group">
               <TableCell className="bg-muted2 p-0">
-                <span className="flex h-full w-full items-center justify-center border-r group-hover:hidden">
+                <span
+                  className={cn(
+                    "flex h-full w-full items-center justify-center border-r",
+                    { "group-hover:hidden": disciplesFields.fields.length > 1 }
+                  )}
+                >
                   {index + 1}
                 </span>
-                <Button
-                  size="icon"
-                  variant="destructive"
-                  className="hidden h-full w-full rounded-none group-hover:flex"
-                  onClick={() => disciplesFields.remove(index)}
-                >
-                  <XIcon className="h-4 w-4" />
-                  <span className="sr-only">delete row</span>
-                </Button>
+                {disciplesFields.fields.length > 1 ? (
+                  <Button
+                    size="icon"
+                    variant="destructive"
+                    className="hidden h-full w-full rounded-none group-hover:flex"
+                    onClick={() => disciplesFields.remove(index)}
+                  >
+                    <XIcon className="h-4 w-4" />
+                    <span className="sr-only">delete row</span>
+                  </Button>
+                ) : null}
               </TableCell>
               <TableCell className="border-r p-0">
                 <Controller
