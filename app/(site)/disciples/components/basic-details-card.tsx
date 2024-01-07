@@ -8,7 +8,7 @@ interface Props {
 
 function BasicDetailsCard({ disciple }: Props) {
   return (
-    <div className="divide-y rounded-lg bg-muted shadow-lg">
+    <div className="divide-y rounded-lg border shadow-lg">
       <div className="p-4">
         <h3 className="font-semibold">Basic Information</h3>
       </div>

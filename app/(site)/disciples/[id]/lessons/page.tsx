@@ -32,7 +32,7 @@ async function DiscipleLessonsTakenPage({
   const count = cgToDisplay?.length ?? 0
 
   return (
-    <div className="rounded-lg border dark:bg-muted">
+    <div className="rounded-lg border">
       <div className="flex items-center justify-between border-b px-4 py-3">
         <div>
           <h2 className="text-lg font-bold tracking-tight">Lessons Taken</h2>

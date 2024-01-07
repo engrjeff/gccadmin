@@ -41,7 +41,7 @@ function LessonSeriesCard({ seriesItem }: { seriesItem: SeriesWithLessons }) {
       ) : null}
       <Card
         data-lessons-shown={searchParams.get("seriesId") === seriesItem.id}
-        className="cursor-pointer xl:hover:bg-muted2 xl:data-[lessons-shown=true]:bg-muted2"
+        className="cursor-pointer border xl:hover:bg-muted xl:data-[lessons-shown=true]:bg-muted"
         onClick={(e) => {
           e.stopPropagation()
           changeQueryParams()
@@ -66,7 +66,7 @@ function LessonSeriesCard({ seriesItem }: { seriesItem: SeriesWithLessons }) {
         </CardHeader>
       </Card>
       {lessonsShown ? (
-        <div className="mt-4 rounded-lg bg-card xl:hidden">
+        <div className="mt-4 rounded-lg border bg-card xl:hidden">
           <div className="p-4">
             <h3 className="text-sm font-semibold">{seriesItem.title}</h3>
             <h4 className="text-sm font-semibold leading-none tracking-tight text-muted-foreground">

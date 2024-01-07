@@ -49,7 +49,7 @@ async function WeeklyCellReports({ searchParams }: PageProps) {
   )
 
   return (
-    <Card>
+    <Card className="border">
       <CardHeader className="pb-0">
         <div className="flex flex-col gap-y-3 md:flex-row  md:items-center md:justify-between">
           <CardTitle>Weekly Cell Report</CardTitle>

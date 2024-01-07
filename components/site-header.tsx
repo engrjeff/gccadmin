@@ -16,8 +16,8 @@ export function SiteHeader() {
           <UserGreeting />
         </div>
         <div className="ml-auto flex items-center space-x-5">
-          <ThemeToggle />
           <QuickActions />
+          <ThemeToggle />
           <UserMenu />
         </div>
       </div>

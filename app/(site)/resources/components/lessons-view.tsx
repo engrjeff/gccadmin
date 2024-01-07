@@ -34,7 +34,7 @@ function LessonsView() {
   const series = lessonSeries.data
 
   return (
-    <Card className="relative hidden w-[400px] xl:block">
+    <Card className="relative hidden w-[400px] border xl:block">
       <Button
         size="icon"
         variant="ghost"
