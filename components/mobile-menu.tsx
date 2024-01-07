@@ -25,7 +25,7 @@ function MobileMenu() {
         <nav className="h-full w-full text-muted-foreground">
           <div className="flex h-16 items-center gap-3">
             <Image
-              src="/gcc-app-logo.png"
+              src="/gcc-logo.svg"
               alt="gcc system"
               width={48}
               height={48}

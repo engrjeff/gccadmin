@@ -10,16 +10,26 @@ import DiscipleBulkAddForm from "./disciple-bulk-add-form"
 
 function DiscipleAddButton({ leaderId }: { leaderId?: string }) {
   return (
-    <div className="grow-0 divide-x divide-amber-500 self-start rounded-md">
+    <>
       <Link
         href={{ pathname: "/disciples/new", query: { leaderId } }}
-        className={cn(buttonVariants({ size: "sm" }), "rounded-r-none")}
+        className={cn(buttonVariants({ size: "sm" }), "xl:hidden")}
       >
         <Plus className="mr-3 h-4 w-4" />
         <span>Add</span>
       </Link>
-      <DiscipleBulkAddForm />
-    </div>
+
+      <div className="hidden grow-0 divide-x divide-amber-500 self-start rounded-md xl:block">
+        <Link
+          href={{ pathname: "/disciples/new", query: { leaderId } }}
+          className={cn(buttonVariants({ size: "sm" }), "rounded-r-none")}
+        >
+          <Plus className="mr-3 h-4 w-4" />
+          <span>Add</span>
+        </Link>
+        <DiscipleBulkAddForm />
+      </div>
+    </>
   )
 }
 

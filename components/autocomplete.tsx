@@ -49,7 +49,7 @@ function Autocomplete({
           role="combobox"
           aria-expanded={open}
           className={cn(
-            "h-10 w-full justify-between px-3 shadow-none ring-offset-background placeholder:text-muted-foreground hover:bg-transparent focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50",
+            "h-12 w-full justify-between px-3 shadow-none ring-offset-background placeholder:text-muted-foreground hover:bg-transparent focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 md:h-10",
             { "focus:ring-danger border-danger": error }
           )}
           disabled={disabled}
