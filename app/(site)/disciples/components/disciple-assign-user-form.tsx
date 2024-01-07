@@ -63,10 +63,7 @@ function DiscipleAssignUserForm({
   }
 
   return (
-    <form
-      onSubmit={handleConfirm}
-      className="rounded-lg bg-muted p-4 shadow-lg"
-    >
+    <form onSubmit={handleConfirm} className="rounded-lg border p-4 shadow-lg">
       <fieldset
         className="space-y-4"
         disabled={isLoading || userAccounts.length === 0}

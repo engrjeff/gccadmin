@@ -24,7 +24,7 @@ const colors = ["bg-rose-500", "bg-cyan-500", "bg-amber-500"]
 
 function ChurchStatusData({ data }: ChurchStatusDataProps) {
   return (
-    <Card className="border-0">
+    <Card className="border">
       <CardHeader>
         <CardTitle>Church Data</CardTitle>
         <CardDescription>Church members data by status</CardDescription>

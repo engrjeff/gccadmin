@@ -40,15 +40,16 @@ interface RootLayoutProps {
 export default function RootLayout({ children }: RootLayoutProps) {
   return (
     <>
-      <html lang="en" className="h-full" suppressHydrationWarning>
+      <html lang="en" className="dark h-full" suppressHydrationWarning>
         <head />
         <body
           className={cn(
             fontSans.variable,
-            "dark h-full bg-background font-sans antialiased"
+            "h-full bg-background font-sans antialiased"
           )}
         >
-          <NextTopLoader color="#6467F2" showSpinner={false} />
+          {/* <NextTopLoader color="#6467F2" showSpinner={false} /> */}
+          <NextTopLoader color="#FDB21C" showSpinner={false} />
           <ThemeProvider
             attribute="class"
             defaultTheme="dark"
