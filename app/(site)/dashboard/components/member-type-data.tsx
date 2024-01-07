@@ -30,7 +30,7 @@ const colors = [
 
 function MemberTypeData({ data }: MemberTypeDataProps) {
   return (
-    <Card className="border-0">
+    <Card>
       <CardHeader>
         <CardTitle>Members by Type</CardTitle>
         <CardDescription>GCC members by type</CardDescription>

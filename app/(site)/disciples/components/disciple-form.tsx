@@ -107,7 +107,7 @@ function DiscipleForm({ modalMode, leaderId }: DiscipleFormProps) {
   }
 
   return (
-    <div className="rounded-lg bg-muted p-6 shadow-lg">
+    <div className="rounded-lg border p-6 shadow-lg">
       <form onSubmit={form.handleSubmit(onSubmit(), onError)}>
         <fieldset
           disabled={isSubmitting}

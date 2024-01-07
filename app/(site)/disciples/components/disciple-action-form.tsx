@@ -50,7 +50,7 @@ function DiscipleActionForm({ disciple }: { disciple: Disciple }) {
   return (
     <form
       onSubmit={handleAccountActions}
-      className="space-y-4 rounded-lg bg-muted p-4 shadow-lg"
+      className="space-y-4 rounded-lg border p-4 shadow-lg"
     >
       <h3 className="font-semibold">Account Actions</h3>
       <div className="flex items-center justify-between">

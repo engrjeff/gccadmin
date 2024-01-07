@@ -30,7 +30,7 @@ const colors = [
 
 function ProcessLevelData({ data }: ProcessLevelDataProps) {
   return (
-    <Card className="border-0">
+    <Card>
       <CardHeader>
         <CardTitle>GPS (Process)</CardTitle>
         <CardDescription>Growth Process System Data</CardDescription>

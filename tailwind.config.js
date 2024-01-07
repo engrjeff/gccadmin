@@ -23,8 +23,10 @@ module.exports = {
     extend: {
       colors: {
         // app
-        sidenav: "hsl(var(--muted-2))",
-        muted2: "hsl(var(--muted-2))",
+        // sidenav: "hsl(var(--muted-2))",
+        // muted2: "hsl(var(--muted-2))",
+        sidenav: "hsl(var(--background))",
+        muted2: "hsl(var(--muted))",
         border: "hsl(var(--border))",
         input: "hsl(var(--input))",
         ring: "hsl(var(--ring))",

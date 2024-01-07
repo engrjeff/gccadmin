@@ -17,12 +17,7 @@ function SignInForm() {
   return (
     <>
       <div className="flex flex-col items-center space-y-2 text-center">
-        <Image
-          src="/gcc-app-logo.png"
-          alt="gcc system"
-          width={64}
-          height={64}
-        />
+        <Image src="/gcc-logo.svg" alt="gcc system" width={64} height={64} />
         <h1 className="text-2xl font-semibold tracking-tight">
           Welcome to GCC App
         </h1>

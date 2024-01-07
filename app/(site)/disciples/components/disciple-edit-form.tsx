@@ -105,7 +105,7 @@ function DiscipleEditForm({ leaderOptions, disciple }: DiscipleFormProps) {
   }
 
   return (
-    <div className="rounded-lg bg-muted p-6 shadow-lg">
+    <div className="rounded-lg border p-6 shadow-lg">
       <form
         className={cn("space-y-3", {
           "pointer-events-none opacity-80": isLoading,

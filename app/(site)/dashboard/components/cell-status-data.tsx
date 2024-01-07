@@ -24,7 +24,7 @@ const colors = ["bg-rose-500", "bg-cyan-500", "bg-amber-500", "bg-emerald-500"]
 
 function CellStatusData({ data }: CellStatusDataProps) {
   return (
-    <Card className="border-0">
+    <Card>
       <CardHeader>
         <CardTitle>Cell Group Data</CardTitle>
         <CardDescription>Cell Group data by status</CardDescription>

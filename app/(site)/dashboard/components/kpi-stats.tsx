@@ -14,12 +14,12 @@ async function KPIStats() {
   const kpi = await getKPIData()
 
   return (
-    <Card>
+    <Card className="border">
       <CardHeader>
         <CardTitle>Stats as of this week</CardTitle>
       </CardHeader>
       <CardContent className="grid gap-6 md:grid-cols-2 xl:grid-cols-4">
-        <Card className="border-l-4 border-l-amber-500 bg-muted2 shadow-none">
+        <Card className="border border-l-4 border-l-amber-500 shadow-none">
           <CardHeader>
             <CardDescription>Active Church Members</CardDescription>
             <p className="text-2xl font-semibold leading-none tracking-tight">
@@ -30,7 +30,7 @@ async function KPIStats() {
             </CardDescription>
           </CardHeader>
         </Card>
-        <Card className="border-l-4 border-emerald-500 bg-muted2 shadow-none">
+        <Card className="border border-l-4 border-l-emerald-500 shadow-none">
           <CardHeader>
             <CardDescription>Active Cell Members</CardDescription>
             <p className="text-2xl font-semibold leading-none tracking-tight">
@@ -41,7 +41,7 @@ async function KPIStats() {
             </CardDescription>
           </CardHeader>
         </Card>
-        <Card className="border-l-4 border-cyan-500 bg-muted2 shadow-none">
+        <Card className="border border-l-4 border-l-cyan-500 shadow-none">
           <CardHeader>
             <CardDescription>Disciples in Process</CardDescription>
             <p className="text-2xl font-semibold leading-none tracking-tight">
@@ -52,7 +52,7 @@ async function KPIStats() {
             </CardDescription>
           </CardHeader>
         </Card>
-        <Card className="border-l-4 border-blue-500 bg-muted2 shadow-none">
+        <Card className="border border-l-4 border-l-blue-500 shadow-none">
           <CardHeader>
             <CardDescription>Newly Won Souls</CardDescription>
             <p className="text-2xl font-semibold leading-none tracking-tight">
