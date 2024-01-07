@@ -1,13 +1,15 @@
 import { redirect } from "next/navigation"
 
-import { getCurrentUser } from "@/lib/session"
+import { verifyUser } from "@/lib/session"
 import SideNav from "@/components/side-nav"
 import { SiteHeader } from "@/components/site-header"
 
 async function SiteLayout({ children }: { children: React.ReactNode }) {
-  const user = await getCurrentUser()
+  const isUserVerified = await verifyUser()
 
-  if (!user?.discipleId) redirect("/unassigned")
+  if (!isUserVerified) {
+    redirect("/unassigned")
+  }
 
   return (
     <>

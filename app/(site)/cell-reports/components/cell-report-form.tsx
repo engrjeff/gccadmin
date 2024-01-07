@@ -176,7 +176,7 @@ const CellReportForm = () => {
   }
 
   return (
-    <div className="rounded-lg border p-6 shadow-lg">
+    <div className="rounded-lg shadow-lg md:border md:p-6">
       <FormProvider {...form}>
         <form onSubmit={form.handleSubmit(onSubmit, onError)}>
           <fieldset

@@ -2,7 +2,7 @@ import Link from "next/link"
 
 import { buttonVariants } from "@/components/ui/button"
 
-function UnassignedUserPage() {
+async function UnassignedUserPage() {
   return (
     <div className="container flex min-h-screen flex-col items-center justify-center gap-3">
       <h1 className="text-2xl font-bold">Unconfirmed Account</h1>
