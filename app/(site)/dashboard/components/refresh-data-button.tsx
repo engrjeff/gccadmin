@@ -9,8 +9,13 @@ function RefreshDataButton() {
   const router = useRouter()
 
   return (
-    <Button onClick={router.refresh} size="sm">
-      <RefreshCw className="mr-2 h-4 w-4" /> Refresh
+    <Button
+      onClick={router.refresh}
+      variant="secondary"
+      size="icon"
+      className="ml-auto"
+    >
+      <RefreshCw className="h-4 w-4" /> <span className="sr-only">Refresh</span>
     </Button>
   )
 }

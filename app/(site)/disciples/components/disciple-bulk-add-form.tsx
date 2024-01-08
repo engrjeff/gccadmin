@@ -63,7 +63,7 @@ function DiscipleBulkAddForm() {
     <>
       <DropdownMenu>
         <DropdownMenuTrigger asChild>
-          <Button size="sm" className="rounded-l-none px-3">
+          <Button className="rounded-l-none px-3">
             <ChevronDown className="h-4 w-4" />
           </Button>
         </DropdownMenuTrigger>

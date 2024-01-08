@@ -99,9 +99,12 @@ function SeriesAddForm() {
   return (
     <Dialog open={dialogOpen} onOpenChange={setDialogOpen}>
       <DialogTrigger asChild>
-        <Button size="sm">
-          <Plus className="mr-3 h-4 w-4" />
-          <span>Add Series</span>
+        <Button
+          size="sm"
+          className="fixed bottom-4 right-4 z-30 flex h-14 w-14 rounded-full p-0 shadow-lg lg:static lg:h-10 lg:w-auto lg:rounded-md lg:px-4 lg:py-2"
+        >
+          <Plus className="h-6 w-6 lg:mr-3 lg:h-4 lg:w-4" />
+          <span className="sr-only lg:not-sr-only">Add Series</span>
         </Button>
       </DialogTrigger>
       <DialogContent className="mx-4 sm:max-w-md">

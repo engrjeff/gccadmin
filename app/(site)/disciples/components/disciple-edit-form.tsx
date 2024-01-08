@@ -199,7 +199,7 @@ function DiscipleEditForm({ leaderOptions, disciple }: DiscipleFormProps) {
           Church-related Information
         </p>
         {isAdmin ? (
-          <div className="flex max-w-xs flex-col space-y-2">
+          <div className="flex flex-col space-y-2 md:max-w-xs">
             <Label htmlFor="leaderId">Leader</Label>
             <Controller
               control={form.control}
@@ -227,7 +227,7 @@ function DiscipleEditForm({ leaderOptions, disciple }: DiscipleFormProps) {
           <input hidden defaultValue={userId} {...form.register("leaderId")} />
         )}
         <div className="grid gap-4 pt-1 lg:grid-cols-4">
-          <div className="flex w-full flex-col space-y-2">
+          <div className="flex w-full max-w-xs flex-col space-y-2">
             <Label htmlFor="cell_status">Cell Status</Label>
             <Controller
               control={form.control}
@@ -259,7 +259,7 @@ function DiscipleEditForm({ leaderOptions, disciple }: DiscipleFormProps) {
               )}
             />
           </div>
-          <div className="flex w-full flex-col space-y-2">
+          <div className="flex w-full max-w-xs flex-col space-y-2">
             <Label htmlFor="church_status">Church Status</Label>
             <Controller
               control={form.control}
@@ -293,7 +293,7 @@ function DiscipleEditForm({ leaderOptions, disciple }: DiscipleFormProps) {
           </div>
         </div>
         <div className="grid gap-4 pt-1 lg:grid-cols-4">
-          <div className="flex w-full flex-col space-y-2">
+          <div className="flex w-full max-w-xs flex-col space-y-2">
             <Label htmlFor="member_type">Member Type</Label>
             <Controller
               control={form.control}
@@ -331,7 +331,7 @@ function DiscipleEditForm({ leaderOptions, disciple }: DiscipleFormProps) {
               )}
             />
           </div>
-          <div className="flex w-full flex-col space-y-2">
+          <div className="flex w-full max-w-xs flex-col space-y-2">
             <Label htmlFor="process_level">Process Level</Label>
             <Controller
               control={form.control}
@@ -365,16 +365,16 @@ function DiscipleEditForm({ leaderOptions, disciple }: DiscipleFormProps) {
             />
           </div>
         </div>
-        <div className="flex items-center gap-3 pt-10">
-          <Button type="submit">
-            {isLoading ? "Saving..." : "Save Changes"}
-          </Button>
+        <div className="flex flex-col-reverse gap-4 pt-10 md:flex-row md:items-center">
           <Link
             href="/disciples"
-            className={buttonVariants({ variant: "ghost" })}
+            className={buttonVariants({ variant: "outline" })}
           >
             Cancel
           </Link>
+          <Button type="submit">
+            {isLoading ? "Saving..." : "Save Changes"}
+          </Button>
         </div>
       </form>
     </div>
