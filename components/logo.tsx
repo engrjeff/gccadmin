@@ -1,7 +1,15 @@
 import Image from "next/image"
 
-function Logo() {
-  return <Image src="/gcc-logo.svg" alt="gcc system" width={48} height={48} />
+function Logo({ size = 48 }: { size?: number }) {
+  return (
+    <Image
+      src="/gcc-logo.svg"
+      alt="gcc system"
+      className="object-cover"
+      width={size}
+      height={size}
+    />
+  )
 }
 
 export default Logo
