@@ -1,6 +1,6 @@
 "use client"
 
-import { type ReactNode } from "react"
+import { type ComponentProps } from "react"
 import Link from "next/link"
 import { useSelectedLayoutSegment } from "next/navigation"
 
@@ -8,7 +8,7 @@ import { cn } from "@/lib/utils"
 
 import { buttonVariants } from "./ui/button"
 
-function NavLink(props: { href: string; children: ReactNode }) {
+function NavLink({ className, ...props }: ComponentProps<typeof Link>) {
   const segment = useSelectedLayoutSegment()
 
   const isActive = props.href === `/${segment}`
@@ -18,7 +18,8 @@ function NavLink(props: { href: string; children: ReactNode }) {
       {...props}
       className={cn(
         buttonVariants({ variant: isActive ? "default" : "ghost" }),
-        "w-full justify-start"
+        "h-12 w-full justify-start",
+        className
       )}
     />
   )
