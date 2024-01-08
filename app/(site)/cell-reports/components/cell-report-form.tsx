@@ -458,8 +458,8 @@ const CellReportForm = () => {
                 className="block"
               />
             </div>
-            <div className="flex items-center gap-2 pt-10">
-              <Button variant="ghost" type="reset" disabled={isSubmitting}>
+            <div className="flex flex-col-reverse gap-4 pt-10 md:flex-row md:items-center">
+              <Button variant="outline" type="reset" disabled={isSubmitting}>
                 Reset
               </Button>
               <Button type="submit" disabled={isSubmitting}>

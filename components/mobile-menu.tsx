@@ -21,7 +21,10 @@ function MobileMenu() {
           <Menu className="h-5 w-5" />
         </Button>
       </SheetTrigger>
-      <SheetContent position="left" className="w-[80%]">
+      <SheetContent
+        position="left"
+        className="w-[80%] border-y-0 border-l-0 border-r"
+      >
         <nav className="h-full w-full text-muted-foreground">
           <div className="flex h-16 items-center gap-3">
             <Image
