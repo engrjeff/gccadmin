@@ -234,7 +234,7 @@ function DiscipleForm({ modalMode, leaderId }: DiscipleFormProps) {
               {...form.register("leaderId")}
             />
           )}
-          <div className="grid gap-4 pt-1 lg:grid-cols-4">
+          <div className="grid gap-4 pt-1 lg:grid-cols-2">
             <div className="flex w-full max-w-xs flex-col space-y-2">
               <Label htmlFor="cell_status">Cell Status</Label>
               <Controller
@@ -300,7 +300,7 @@ function DiscipleForm({ modalMode, leaderId }: DiscipleFormProps) {
               />
             </div>
           </div>
-          <div className="grid gap-4 pt-1 lg:grid-cols-4">
+          <div className="grid gap-4 pt-1 lg:grid-cols-2">
             <div className="flex w-full max-w-xs flex-col space-y-2">
               <Label htmlFor="member_type">Member Type</Label>
               <Controller

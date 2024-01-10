@@ -17,7 +17,7 @@ interface PageProps {
 function CellReportsPage({ searchParams }: PageProps) {
   return (
     <>
-      <div className="mb-4 flex justify-between px-4 lg:px-6">
+      <div className="flex justify-between px-4 lg:mb-4 lg:px-6">
         <PageTitle
           title="Cell Reports"
           subtitle="Manage your cell reports here"

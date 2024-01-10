@@ -113,7 +113,7 @@ export default function DateRangePicker({
                 }
               }}
             >
-              <SelectTrigger>
+              <SelectTrigger className="h-10">
                 <SelectValue placeholder="Select preset" />
               </SelectTrigger>
               <SelectContent position="popper">

@@ -85,7 +85,7 @@ function AttendeesPicker(props: AttendeesPickerProps) {
         </Button>
       </DrawerTrigger>
       <span className="text-muted-foreground">{attendees.length} selected</span>
-      <DrawerContent>
+      <DrawerContent className="max-w-full">
         <DrawerHeader className="text-left">
           <DrawerTitle>Select Cell Group Attendees</DrawerTitle>
           <DrawerDescription>
@@ -118,6 +118,8 @@ function AttendeesPickerControl({
   onDone,
 }: AttendeesPickerControl) {
   const [addDiscipleFormShown, setAddDiscipleFormShown] = useState(false)
+  const [addDiscipleFormShown2, setAddDiscipleFormShown2] = useState(false)
+
   const [attendeesSearchQuery, setAttendeesSearchQuery] = useState("")
 
   const isDesktop = useMediaQuery("(min-width: 768px)")
@@ -175,7 +177,36 @@ function AttendeesPickerControl({
         ) : null}
       </div>
 
-      <div className="my-3 h-[350px] max-h-[350px] overflow-y-auto py-3 pr-2">
+      <p className="p-2 text-sm">
+        Has a new disciple? Add{" "}
+        <Sheet
+          open={addDiscipleFormShown2}
+          onOpenChange={(state) => {
+            setAddDiscipleFormShown2(state)
+
+            if (!state) {
+              disciplesOfLeader.refetch()
+            }
+          }}
+        >
+          <SheetTrigger asChild>
+            <button className="font-semibold underline">here</button>
+          </SheetTrigger>
+          <SheetContent
+            side="right"
+            className="w-full overflow-y-auto md:w-[500px]"
+          >
+            <SheetHeader>
+              <SheetTitle>Create Disciple</SheetTitle>
+              <SheetDescription>Complete the form below</SheetDescription>
+            </SheetHeader>
+            <div className="mt-4 [&>div]:border-none [&>div]:bg-background [&>div]:px-0 [&>div]:shadow-none">
+              <DiscipleForm leaderId={leaderId} modalMode />
+            </div>
+          </SheetContent>
+        </Sheet>
+      </p>
+      <div className="h-[350px] max-h-[350px] overflow-y-auto py-3 pr-2">
         {attendeesOptions?.length === 0 ? (
           <div className="space-y-4 text-center">
             <p className="text-center text-muted-foreground">
@@ -195,15 +226,14 @@ function AttendeesPickerControl({
                 <Button type="button">Add Disciple</Button>
               </SheetTrigger>
               <SheetContent
-                position="right"
-                size="sm"
-                className="w-full overflow-y-auto lg:w-1/3"
+                side="right"
+                className="w-full overflow-y-auto md:w-[500px]"
               >
                 <SheetHeader>
                   <SheetTitle>Create Disciple</SheetTitle>
                   <SheetDescription>Complete the form below</SheetDescription>
                 </SheetHeader>
-                <div className="[&>div]:border-none [&>div]:bg-background [&>div]:px-0 [&>div]:shadow-none">
+                <div className="mt-4 [&>div]:border-none [&>div]:bg-background [&>div]:px-0 [&>div]:shadow-none">
                   <DiscipleForm leaderId={leaderId} modalMode />
                 </div>
               </SheetContent>
@@ -218,11 +248,11 @@ function AttendeesPickerControl({
           key={attendees.length}
         />
         {attendeesOptions?.map((disciple) => (
-          <div key={disciple.id} className="rounded px-2 py-3 hover:bg-muted">
+          <div key={disciple.id} className="rounded hover:bg-muted">
             <Label
               htmlFor={disciple.id}
               className={cn(
-                "flex cursor-pointer items-center gap-2",
+                "flex cursor-pointer items-center gap-2 px-2 py-3",
                 disciple.id === assistantId
                   ? "pointer-events-none opacity-60"
                   : ""
