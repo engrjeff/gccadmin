@@ -24,7 +24,7 @@ function LessonsView() {
 
   if (lessonSeries.isLoading)
     return (
-      <Card className="w-[400px]">
+      <Card className="h-[500px] w-[400px]">
         <Skeleton className="h-full w-full" />
       </Card>
     )

@@ -15,6 +15,7 @@ import {
   VisibilityState,
 } from "@tanstack/react-table"
 
+import useIsDesktop from "@/hooks/use-is-desktop"
 import { useIsAdmin } from "@/hooks/use-isadmin"
 import { DataTableViewOptions } from "@/components/ui/data-table/column-visibility-toggle"
 import DataTable from "@/components/ui/data-table/data-table"
@@ -25,6 +26,7 @@ import DiscipleBulkActions from "../old_components/disciple-bulk-actions"
 import ActivityFilter from "./activity-filter"
 import { columns, DiscipleWithLeader } from "./columns"
 import DiscipleFilters from "./disciple-filters"
+import DiscipleMobileListView from "./disciple-mobile-list-view"
 import DiscipleSearch from "./disciple-search"
 
 interface Props {
@@ -32,7 +34,7 @@ interface Props {
   leaders: Disciple[]
 }
 
-function DisciplesTable({ disciples, leaders }: Props) {
+function useDiscipleTable(disciples: DiscipleWithLeader[]) {
   const [sorting, setSorting] = useState<SortingState>([])
   const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([])
   const [columnVisibility, setColumnVisibility] = useState<VisibilityState>({})
@@ -65,6 +67,12 @@ function DisciplesTable({ disciples, leaders }: Props) {
     },
   })
 
+  return table
+}
+
+function DisciplesTable({ disciples, leaders }: Props) {
+  const isDesktop = useIsDesktop()
+  const table = useDiscipleTable(disciples)
   //   search
   const searchValue =
     (table.getColumn("name")?.getFilterValue() as string) ?? ""
@@ -74,8 +82,10 @@ function DisciplesTable({ disciples, leaders }: Props) {
   // leaders options
   const leadersOptions = leaders.map((i) => ({ label: i.name, value: i.name }))
 
+  if (!isDesktop) return <DiscipleMobileListView table={table} />
+
   return (
-    <>
+    <div className="h-full max-h-full rounded-lg border">
       <DiscipleSearch value={searchValue} onChange={handleSearch} />
       <div className="flex items-center border-b p-2">
         <DiscipleFilters table={table} leadersOptions={leadersOptions} />
@@ -86,11 +96,11 @@ function DisciplesTable({ disciples, leaders }: Props) {
           <DataTableViewOptions table={table} />
         </div>
       </div>
-      <div className="h-[calc(100%-152px)] max-h-[calc(100%-152px)] overflow-auto">
+      <div className="h-[calc(100%-170px)] max-h-[calc(100%-170px)] overflow-auto">
         <DataTable table={table} columnCount={columns.length} />
       </div>
       <DataTablePagination table={table} />
-    </>
+    </div>
   )
 }
 

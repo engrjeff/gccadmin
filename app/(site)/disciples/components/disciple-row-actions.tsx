@@ -75,7 +75,7 @@ function DiscipleRowActions({ disciple }: { disciple: Disciple }) {
             </Link>
           </DropdownMenuItem>
           <DropdownMenuItem asChild>
-            <Link href={`/disciples/${disciple.id}/lessons`}>
+            <Link href={`/disciples/${disciple.id}/cell-groups`}>
               <Users className="mr-2 h-4 w-4" />
               <span>Attended Cell Groups</span>
             </Link>

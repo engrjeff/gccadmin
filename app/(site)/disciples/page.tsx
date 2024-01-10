@@ -13,7 +13,7 @@ export const metadata: Metadata = {
 function DisciplesPage({ searchParams }: { searchParams: { active: string } }) {
   return (
     <>
-      <div className="mb-4 flex justify-end px-4 lg:justify-between lg:px-6">
+      <div className="flex justify-end px-4 lg:mb-4 lg:justify-between lg:px-6">
         <PageTitle title="Disciples" subtitle="Manage your disciples here" />
         <DiscipleAddButton />
       </div>

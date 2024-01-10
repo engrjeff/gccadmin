@@ -692,3 +692,6 @@ export async function getAnnualCellReports() {
 
   return result
 }
+
+// Types
+export type KPIData = Awaited<ReturnType<typeof getKPIData>>

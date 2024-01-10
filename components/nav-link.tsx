@@ -17,8 +17,8 @@ function NavLink({ className, ...props }: ComponentProps<typeof Link>) {
     <Link
       {...props}
       className={cn(
-        buttonVariants({ variant: isActive ? "default" : "ghost" }),
-        "h-12 w-full justify-start",
+        buttonVariants({ size: "sm", variant: isActive ? "default" : "ghost" }),
+        "w-full justify-start",
         className
       )}
     />
