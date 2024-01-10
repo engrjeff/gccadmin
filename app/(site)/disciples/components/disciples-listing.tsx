@@ -8,11 +8,7 @@ interface Props {
 async function DisciplesListing({ active }: Props) {
   const { disciples } = await getDisciples({ isActive: active })
   const leaders = await getPrimaryLeaders()
-  return (
-    <div className="h-full max-h-full rounded-lg border">
-      <DisciplesTable disciples={disciples} leaders={leaders} />
-    </div>
-  )
+  return <DisciplesTable disciples={disciples} leaders={leaders} />
 }
 
 export default DisciplesListing

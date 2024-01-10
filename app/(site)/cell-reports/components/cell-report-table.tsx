@@ -14,6 +14,7 @@ import {
   VisibilityState,
 } from "@tanstack/react-table"
 
+import useIsDesktop from "@/hooks/use-is-desktop"
 import { useIsAdmin } from "@/hooks/use-isadmin"
 import { useSelectedCellReport } from "@/hooks/use-selected-cell-report"
 import { DataTableViewOptions } from "@/components/ui/data-table/column-visibility-toggle"
@@ -23,6 +24,7 @@ import RefreshButton from "@/components/refresh-button"
 
 import { CellReportRecord } from "../types"
 import CellReportFacetFilters from "./cell-report-facet-filters"
+import CellReportMobileListView from "./cell-report-mobile-list-view"
 import { columns } from "./columns"
 import ReportDateRangeFilter from "./report-date-range-filter"
 
@@ -37,6 +39,8 @@ function CellReportTable({ data }: CellReportTableProps) {
   const [rowSelection, setRowSelection] = useState({})
 
   const { isAdmin } = useIsAdmin()
+
+  const isDesktop = useIsDesktop()
 
   const setCellReport = useSelectedCellReport((state) => state.setCellReport)
 
@@ -66,8 +70,10 @@ function CellReportTable({ data }: CellReportTableProps) {
     enableMultiRowSelection: false,
   })
 
+  if (!isDesktop) return <CellReportMobileListView table={table} />
+
   return (
-    <>
+    <div className="h-full max-h-full rounded-lg border">
       <div className="flex items-center p-3">
         <ReportDateRangeFilter />
         <div className="ml-auto flex items-center justify-end gap-2">
@@ -76,7 +82,7 @@ function CellReportTable({ data }: CellReportTableProps) {
           <DataTableViewOptions table={table} />
         </div>
       </div>
-      <div className="h-[calc(100%-109px)] max-h-[calc(100%-109px)] overflow-auto">
+      <div className="h-[calc(100%-120px)] max-h-[calc(100%-120px)] overflow-auto">
         <DataTable
           table={table}
           columnCount={columns.length}
@@ -84,7 +90,7 @@ function CellReportTable({ data }: CellReportTableProps) {
         />
       </div>
       <DataTablePagination table={table} />
-    </>
+    </div>
   )
 }
 

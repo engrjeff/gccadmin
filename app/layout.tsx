@@ -14,6 +14,7 @@ import { ThemeProvider } from "@/components/theme-provider"
 
 export const viewport: Viewport = {
   themeColor: "#0c0a09",
+  userScalable: false,
 }
 
 export const metadata: Metadata = {

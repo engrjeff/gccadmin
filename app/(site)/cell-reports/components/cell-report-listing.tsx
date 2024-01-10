@@ -11,11 +11,7 @@ async function CellReportListing({ searchParams }: PageProps) {
     to: searchParams.to,
   })
 
-  return (
-    <div className="h-full max-h-full rounded-lg border">
-      <CellReportTable data={cellReports} />
-    </div>
-  )
+  return <CellReportTable data={cellReports} />
 }
 
 export default CellReportListing

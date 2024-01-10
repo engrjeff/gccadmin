@@ -23,8 +23,8 @@ function MobileMenu() {
       </SheetTrigger>
 
       <SheetContent
-        position="left"
-        className="w-2/3 border-y-0 border-l-0 border-r p-0"
+        side="left"
+        className="w-[70%] border-y-0 border-l-0 border-r p-0"
       >
         <nav className="h-full w-full text-muted-foreground">
           <div className="flex h-16 items-center gap-3 border-b px-2">

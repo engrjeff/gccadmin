@@ -20,7 +20,13 @@ async function DiscipleDetailHeader({ discipleId }: { discipleId: string }) {
         <div className="space-y-4">
           <BackButton />
           <PageTitle title={disciple.name} />
-          <span className="flex items-center gap-2 text-muted-foreground">
+          <div className="lg:hidden">
+            <h1 className="font-semibold">{disciple.name}</h1>
+            <p className="text-sm text-muted-foreground">
+              Details of {disciple.name}
+            </p>
+          </div>
+          <span className="hidden items-center gap-2 text-muted-foreground lg:flex">
             ID:{" "}
             <Badge variant="secondary" className="inline rounded">
               {disciple.id}
@@ -37,6 +43,13 @@ async function DiscipleDetailHeader({ discipleId }: { discipleId: string }) {
           </Link>
         </div>
       </div>
+
+      <Link
+        href="/disciples"
+        className="text-sm underline underline-offset-4 hover:no-underline"
+      >
+        Back to Disciple List
+      </Link>
     </>
   )
 }
