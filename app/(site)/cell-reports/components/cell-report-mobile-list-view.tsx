@@ -9,7 +9,7 @@ interface CellReportMobileListViewProps {
 
 function CellReportMobileListView({ table }: CellReportMobileListViewProps) {
   return (
-    <div>
+    <div className="lg:hidden">
       <p className="mb-4 text-sm text-muted-foreground">
         Showing {table.getFilteredRowModel().rows.length} cell reports.
       </p>

@@ -26,6 +26,7 @@ import ActivityFilter from "./activity-filter"
 import { columns, DiscipleWithLeader } from "./columns"
 import DiscipleBulkActions from "./disciple-bulk-actions"
 import DiscipleFilters from "./disciple-filters"
+import DiscipleMobileFacetFilters from "./disciple-mobile-facet-filters"
 import DiscipleMobileListView from "./disciple-mobile-list-view"
 import DiscipleSearch from "./disciple-search"
 
@@ -82,7 +83,19 @@ function DisciplesTable({ disciples, leaders }: Props) {
   // leaders options
   const leadersOptions = leaders.map((i) => ({ label: i.name, value: i.name }))
 
-  if (!isDesktop) return <DiscipleMobileListView table={table} />
+  if (!isDesktop)
+    return (
+      <>
+        <div className="mb-4 flex items-center gap-3">
+          <DiscipleSearch value={searchValue} onChange={handleSearch} />
+          <DiscipleMobileFacetFilters
+            table={table}
+            leadersOptions={leadersOptions}
+          />
+        </div>
+        <DiscipleMobileListView table={table} />
+      </>
+    )
 
   return (
     <div className="h-full max-h-full rounded-lg border">

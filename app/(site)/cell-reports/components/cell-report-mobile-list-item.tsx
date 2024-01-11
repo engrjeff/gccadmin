@@ -51,7 +51,7 @@ function CellReportMobileListItem({
     : cellreport.lesson_name
 
   return (
-    <Drawer open={menuOpen} onOpenChange={setMenuOpen}>
+    <Drawer shouldScaleBackground open={menuOpen} onOpenChange={setMenuOpen}>
       <DrawerTrigger asChild>
         <Card>
           <CardHeader className="pb-1">
@@ -79,117 +79,123 @@ function CellReportMobileListItem({
         </Card>
       </DrawerTrigger>
       <DrawerContent>
-        <DrawerHeader className="pb-0 text-left">
-          <DrawerTitle className="flex flex-col items-start gap-2">
-            {lesson}{" "}
-            <Badge
-              className={cn("rounded capitalize", typeColor[cellreport.type])}
-            >
-              {cellreport.type.split("_").join(" ").toLowerCase()}
-            </Badge>
-          </DrawerTitle>
-          <DrawerDescription>
-            <span className="font-semibold">Led by:</span>{" "}
-            <Link
-              href={`/disciples/${
-                cellreport.assistant_id
-                  ? cellreport.assistant_id
-                  : cellreport.leader.name
-              }`}
-              className="underline hover:text-white hover:no-underline"
-            >
-              {cellreport.assistant
-                ? cellreport.assistant.disciple.name
-                : cellreport.leader.name}
-            </Link>
-            {cellreport.assistant_id ? (
-              <div>
-                <span className="font-semibold">Under:</span>{" "}
-                <Link
-                  href={`/disciples/${cellreport.leader.id}`}
-                  className="underline hover:text-white hover:no-underline"
-                >
-                  {cellreport.leader.name}
-                </Link>
-              </div>
-            ) : null}
-          </DrawerDescription>
-        </DrawerHeader>
-        <div className="px-4">
-          <div className="py-2">
-            <p className="text-sm font-semibold text-muted-foreground">Venue</p>
-            <p className="text-sm">{cellreport.venue}</p>
-          </div>
-          <div className="py-2">
-            <p className="text-sm font-semibold text-muted-foreground">
-              Date and Time
-            </p>
-            <p className="text-sm">
-              {format(cellreport.date, "MMM dd, yyyy")},{" "}
-              {formatTime(cellreport.time)}
-            </p>
-          </div>
-          <div className="py-2">
-            <p className="text-sm font-semibold text-muted-foreground">
-              Lesson
-            </p>
-            <p className="text-sm">{lesson}</p>
-          </div>
-          <div className="py-2">
-            <p className="text-sm font-semibold text-muted-foreground">
-              Scriptures
-            </p>
-            <ul className="flex flex-wrap items-center gap-1">
-              {[
-                cellreport.lesson?.scripture_references,
-                cellreport.scripture_references,
-              ]
-                .flat()
-                .filter(Boolean)
-                .map((sr, index) => (
-                  <li key={`scripture-ref-${index + 1}`}>
-                    <Badge variant="secondary" className="rounded">
-                      {sr}
-                    </Badge>
+        <div className="max-h-[50vh] overflow-y-auto">
+          <DrawerHeader className="pb-0 text-left">
+            <DrawerTitle className="flex flex-col items-start gap-2">
+              {lesson}{" "}
+              <Badge
+                className={cn("rounded capitalize", typeColor[cellreport.type])}
+              >
+                {cellreport.type.split("_").join(" ").toLowerCase()}
+              </Badge>
+            </DrawerTitle>
+            <DrawerDescription>
+              <span className="font-semibold">Led by:</span>{" "}
+              <Link
+                href={`/disciples/${
+                  cellreport.assistant_id
+                    ? cellreport.assistant_id
+                    : cellreport.leader.name
+                }`}
+                className="underline hover:text-white hover:no-underline"
+              >
+                {cellreport.assistant
+                  ? cellreport.assistant.disciple.name
+                  : cellreport.leader.name}
+              </Link>
+              {cellreport.assistant_id ? (
+                <div>
+                  <span className="font-semibold">Under:</span>{" "}
+                  <Link
+                    href={`/disciples/${cellreport.leader.id}`}
+                    className="underline hover:text-white hover:no-underline"
+                  >
+                    {cellreport.leader.name}
+                  </Link>
+                </div>
+              ) : null}
+            </DrawerDescription>
+          </DrawerHeader>
+          <div className="px-4">
+            <div className="py-2">
+              <p className="text-sm font-semibold text-muted-foreground">
+                Venue
+              </p>
+              <p className="text-sm">{cellreport.venue}</p>
+            </div>
+            <div className="py-2">
+              <p className="text-sm font-semibold text-muted-foreground">
+                Date and Time
+              </p>
+              <p className="text-sm">
+                {format(cellreport.date, "MMM dd, yyyy")},{" "}
+                {formatTime(cellreport.time)}
+              </p>
+            </div>
+            <div className="py-2">
+              <p className="text-sm font-semibold text-muted-foreground">
+                Lesson
+              </p>
+              <p className="text-sm">{lesson}</p>
+            </div>
+            <div className="py-2">
+              <p className="text-sm font-semibold text-muted-foreground">
+                Scriptures
+              </p>
+              <ul className="flex flex-wrap items-center gap-1">
+                {[
+                  cellreport.lesson?.scripture_references,
+                  cellreport.scripture_references,
+                ]
+                  .flat()
+                  .filter(Boolean)
+                  .map((sr, index) => (
+                    <li key={`scripture-ref-${index + 1}`}>
+                      <Badge variant="secondary" className="rounded">
+                        {sr}
+                      </Badge>
+                    </li>
+                  ))}
+              </ul>
+            </div>
+            <div className="py-4">
+              <p className="mb-2 text-sm font-semibold text-muted-foreground">
+                Attendees: ({cellreport.attendees.length})
+              </p>
+              <ul className="space-y-2 pb-4">
+                {cellreport.attendees.map((attendee) => (
+                  <li key={attendee.disciple_id}>
+                    {
+                      <Link
+                        href={`/disciples/${attendee.disciple_id}`}
+                        className={cn(
+                          buttonVariants({ variant: "secondary" }),
+                          "w-full justify-between"
+                        )}
+                      >
+                        <span className="text-sm">
+                          {attendee.disciple.name}
+                        </span>
+                        <Badge variant="outline" className="capitalize">
+                          <span
+                            className={cn(
+                              "mr-2 scale-150",
+                              cellStatusColorMap[attendee.disciple.cell_status]
+                            )}
+                          >
+                            &#x2022;
+                          </span>
+                          {attendee.disciple.cell_status
+                            .split("_")
+                            .join(" ")
+                            .toLowerCase()}
+                        </Badge>
+                      </Link>
+                    }
                   </li>
                 ))}
-            </ul>
-          </div>
-          <div className="py-4">
-            <p className="mb-2 text-sm font-semibold text-muted-foreground">
-              Attendees: ({cellreport.attendees.length})
-            </p>
-            <ul className="max-h-[400px] space-y-2 overflow-y-auto pb-4">
-              {cellreport.attendees.map((attendee) => (
-                <li key={attendee.disciple_id}>
-                  {
-                    <Link
-                      href={`/disciples/${attendee.disciple_id}`}
-                      className={cn(
-                        buttonVariants({ variant: "secondary" }),
-                        "w-full justify-between"
-                      )}
-                    >
-                      <span className="text-sm">{attendee.disciple.name}</span>
-                      <Badge variant="outline" className="capitalize">
-                        <span
-                          className={cn(
-                            "mr-2 scale-150",
-                            cellStatusColorMap[attendee.disciple.cell_status]
-                          )}
-                        >
-                          &#x2022;
-                        </span>
-                        {attendee.disciple.cell_status
-                          .split("_")
-                          .join(" ")
-                          .toLowerCase()}
-                      </Badge>
-                    </Link>
-                  }
-                </li>
-              ))}
-            </ul>
+              </ul>
+            </div>
           </div>
         </div>
       </DrawerContent>

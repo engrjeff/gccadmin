@@ -35,7 +35,7 @@ export default function QuickActions() {
       <DropdownMenu open={open} onOpenChange={setOpen}>
         <DropdownMenuTrigger asChild>
           <Button size="sm">
-            Quick Actions <ChevronDownIcon className="ml-3 h-4 w-4" />
+            Quick Actions <ChevronDownIcon className="ml-3 h-5 w-5" />
           </Button>
         </DropdownMenuTrigger>
         <DropdownMenuContent align="end">
@@ -61,20 +61,20 @@ export default function QuickActions() {
     <Drawer open={open} onOpenChange={setOpen}>
       <DrawerTrigger asChild>
         <Button size="sm">
-          Quick Actions <ChevronDownIcon className="ml-3 h-4 w-4" />
+          Quick Actions <ChevronDownIcon className="ml-3 h-5 w-5" />
         </Button>
       </DrawerTrigger>
       <DrawerContent>
         <DrawerHeader className="pb-0">
           <DrawerTitle>Pick an Action</DrawerTitle>
         </DrawerHeader>
-        <DrawerFooter className="px-2">
+        <DrawerFooter className="space-y-2 px-2">
           <Link
             href="/disciples/new"
             className="flex w-full items-center gap-4 rounded-full px-1.5 py-1 text-sm focus:bg-neutral-900 focus-visible:bg-neutral-900 active:bg-neutral-900"
           >
-            <span className="flex h-10 w-10 items-center justify-center rounded-full bg-muted shadow">
-              <Users className="h-4 w-4" />
+            <span className="flex h-12 w-12 items-center justify-center rounded-full bg-muted shadow">
+              <Users className="h-5 w-5" />
             </span>
             <span>Add Disciple</span>
           </Link>
@@ -82,8 +82,8 @@ export default function QuickActions() {
             href="/cell-reports/new"
             className="flex w-full items-center gap-4 rounded-full px-1.5 py-1 text-sm focus:bg-neutral-900 focus-visible:bg-neutral-900 active:bg-neutral-900"
           >
-            <span className="flex h-10 w-10 items-center justify-center rounded-full bg-muted shadow">
-              <StickyNote className="h-4 w-4" />
+            <span className="flex h-12 w-12 items-center justify-center rounded-full bg-muted shadow">
+              <StickyNote className="h-5 w-5" />
             </span>
             <span>Create Cell Report</span>
           </Link>
@@ -91,8 +91,8 @@ export default function QuickActions() {
             href="/cell-groups/new"
             className="pointer-events-none flex w-full items-center gap-4 rounded-full px-1.5 py-1 text-sm opacity-50 focus:bg-neutral-900 focus-visible:bg-neutral-900 active:bg-neutral-900"
           >
-            <span className="flex h-10 w-10 items-center justify-center rounded-full bg-muted shadow">
-              <Component className="h-4 w-4" />
+            <span className="flex h-12 w-12 items-center justify-center rounded-full bg-muted shadow">
+              <Component className="h-5 w-5" />
             </span>
             <span>Create Cell Group</span>
           </Link>
