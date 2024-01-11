@@ -24,7 +24,7 @@ function HeaderTitle() {
 
   return (
     <div className="absolute left-16 top-1/2 block -translate-y-1/2 lg:hidden">
-      <h1 className="text-lg font-semibold">{title}</h1>
+      <h1 className="font-semibold">{title}</h1>
     </div>
   )
 }

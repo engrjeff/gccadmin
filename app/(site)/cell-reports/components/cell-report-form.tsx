@@ -424,7 +424,8 @@ const CellReportForm = () => {
                       <TagsInput
                         value={field.value ?? []}
                         onChange={field.onChange}
-                        placeholder="Type a verses (ex. John 3:16), then hit 'Enter'"
+                        placeholder="Scriptures"
+                        hintText="Type a verses (ex. John 3:16), then hit 'Enter'"
                         aria-describedby="scriptureRefError"
                         aria-invalid={!!errors.scripture_references}
                       />

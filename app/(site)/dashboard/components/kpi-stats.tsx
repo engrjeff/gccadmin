@@ -14,11 +14,11 @@ async function KPIStats() {
   const kpi = await getKPIData()
 
   return (
-    <Card className="border">
-      <CardHeader>
+    <Card className="border-transparent lg:border-border">
+      <CardHeader className="px-0 lg:px-6">
         <CardTitle>Stats as of this week</CardTitle>
       </CardHeader>
-      <CardContent className="grid gap-6 md:grid-cols-2 xl:grid-cols-4">
+      <CardContent className="grid gap-6 px-0 md:grid-cols-2 lg:px-6 xl:grid-cols-4">
         <Card className="border border-l-4 border-l-amber-500 shadow-none">
           <CardHeader>
             <CardDescription>Active Church Members</CardDescription>

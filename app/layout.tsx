@@ -46,8 +46,8 @@ export default function RootLayout({ children }: RootLayoutProps) {
             "h-full bg-background font-sans antialiased"
           )}
         >
-          {/* <NextTopLoader color="#6467F2" showSpinner={false} /> */}
-          <NextTopLoader color="#FDB21C" showSpinner={false} />
+          <NextTopLoader color="#6467F2" showSpinner={false} />
+          {/* <NextTopLoader color="#FDB21C" showSpinner={false} /> */}
           <ThemeProvider
             attribute="class"
             defaultTheme="dark"
