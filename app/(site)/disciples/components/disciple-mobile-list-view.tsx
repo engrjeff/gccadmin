@@ -12,20 +12,15 @@ function DiscipleMobileListView({ table }: DiscipleMobileListViewProps) {
     <div>
       {table.getRowModel().rows?.length ? (
         <ul className="space-y-4">
-          {table
-            .getFilteredRowModel()
-            .rows.sort((a, b) =>
-              a.original.isMyPrimary > b.original.isMyPrimary ? -1 : 1
-            )
-            .map((row) => (
-              <li
-                key={`disciple-mobile-${row.id}`}
-                data-state={row.getIsSelected() && "selected"}
-                onClick={() => {}}
-              >
-                <DiscipleMobileListItem disciple={row.original} />
-              </li>
-            ))}
+          {table.getRowModel().rows.map((row) => (
+            <li
+              key={`disciple-mobile-${row.id}`}
+              data-state={row.getIsSelected() && "selected"}
+              onClick={() => {}}
+            >
+              <DiscipleMobileListItem disciple={row.original} />
+            </li>
+          ))}
         </ul>
       ) : (
         <div>

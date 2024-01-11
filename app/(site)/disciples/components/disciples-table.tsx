@@ -19,6 +19,7 @@ import useIsDesktop from "@/hooks/use-is-desktop"
 import { useIsAdmin } from "@/hooks/use-isadmin"
 import { DataTableViewOptions } from "@/components/ui/data-table/column-visibility-toggle"
 import DataTable from "@/components/ui/data-table/data-table"
+import MobileTablePagination from "@/components/ui/data-table/mobile-table-pagination"
 import { DataTablePagination } from "@/components/ui/data-table/table-pagination"
 import RefreshButton from "@/components/refresh-button"
 
@@ -26,6 +27,7 @@ import ActivityFilter from "./activity-filter"
 import { columns, DiscipleWithLeader } from "./columns"
 import DiscipleBulkActions from "./disciple-bulk-actions"
 import DiscipleFilters from "./disciple-filters"
+import DiscipleMobileFacetFilters from "./disciple-mobile-facet-filters"
 import DiscipleMobileListView from "./disciple-mobile-list-view"
 import DiscipleSearch from "./disciple-search"
 
@@ -82,7 +84,22 @@ function DisciplesTable({ disciples, leaders }: Props) {
   // leaders options
   const leadersOptions = leaders.map((i) => ({ label: i.name, value: i.name }))
 
-  if (!isDesktop) return <DiscipleMobileListView table={table} />
+  if (!isDesktop)
+    return (
+      <>
+        <div className="mb-4 flex items-center gap-3">
+          <DiscipleSearch value={searchValue} onChange={handleSearch} />
+          <DiscipleMobileFacetFilters
+            table={table}
+            leadersOptions={leadersOptions}
+          />
+        </div>
+        <DiscipleMobileListView table={table} />
+        <div className="py-4">
+          <MobileTablePagination table={table} />
+        </div>
+      </>
+    )
 
   return (
     <div className="h-full max-h-full rounded-lg border">
