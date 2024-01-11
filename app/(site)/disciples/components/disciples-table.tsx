@@ -19,6 +19,7 @@ import useIsDesktop from "@/hooks/use-is-desktop"
 import { useIsAdmin } from "@/hooks/use-isadmin"
 import { DataTableViewOptions } from "@/components/ui/data-table/column-visibility-toggle"
 import DataTable from "@/components/ui/data-table/data-table"
+import MobileTablePagination from "@/components/ui/data-table/mobile-table-pagination"
 import { DataTablePagination } from "@/components/ui/data-table/table-pagination"
 import RefreshButton from "@/components/refresh-button"
 
@@ -94,6 +95,9 @@ function DisciplesTable({ disciples, leaders }: Props) {
           />
         </div>
         <DiscipleMobileListView table={table} />
+        <div className="py-4">
+          <MobileTablePagination table={table} />
+        </div>
       </>
     )
 

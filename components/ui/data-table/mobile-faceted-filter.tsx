@@ -39,7 +39,7 @@ export function MobileFacetedFilter<TData, TValue>({
             <li key={option.value}>
               <Button
                 variant="ghost"
-                className="flex w-full rounded-none"
+                className="w-full justify-start rounded-none"
                 onClick={() => {
                   if (isSelected) {
                     selectedValues.delete(option.value)
@@ -69,7 +69,7 @@ export function MobileFacetedFilter<TData, TValue>({
                   {option.label.split("_").join(" ")}
                 </span>
                 {facets?.get(option.value) && (
-                  <span className="ml-auto flex h-4 min-w-[20px] items-center justify-center rounded bg-primary px-0.5 font-mono text-xs font-medium text-primary-foreground">
+                  <span className="ml-3 flex h-4 min-w-[20px] items-center justify-center rounded bg-primary px-0.5 font-mono text-xs font-medium text-primary-foreground">
                     {facets.get(option.value)}
                   </span>
                 )}

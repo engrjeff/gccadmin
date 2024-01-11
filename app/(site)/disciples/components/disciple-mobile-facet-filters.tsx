@@ -1,8 +1,11 @@
+"use client"
+
 import { Table } from "@tanstack/react-table"
 import { ListFilter } from "lucide-react"
 
 import { Option } from "@/types/common"
 import { cellStatuses, churchStatuses, processLevels } from "@/lib/constants"
+import { useIsAdmin } from "@/hooks/use-isadmin"
 import { Button } from "@/components/ui/button"
 import { MobileFacetedFilter } from "@/components/ui/data-table/mobile-faceted-filter"
 import {
@@ -15,6 +18,7 @@ import {
   DrawerTitle,
   DrawerTrigger,
 } from "@/components/ui/drawer"
+import RenderIf from "@/components/render-if"
 
 import { DiscipleWithLeader } from "./columns"
 
@@ -27,6 +31,8 @@ function DiscipleMobileFacetFilters({
   table,
   leadersOptions,
 }: DiscipleMobileFiltersProps) {
+  const { isAdmin } = useIsAdmin()
+
   return (
     <Drawer>
       <DrawerTrigger asChild>
@@ -36,7 +42,7 @@ function DiscipleMobileFacetFilters({
         </Button>
       </DrawerTrigger>
       <DrawerContent>
-        <div className="max-h-[60vh] overflow-y-auto ">
+        <div className="max-h-[80vh] overflow-y-auto ">
           <DrawerHeader className="text-left">
             <DrawerTitle>Filters</DrawerTitle>
             <DrawerDescription>
@@ -44,6 +50,13 @@ function DiscipleMobileFacetFilters({
             </DrawerDescription>
           </DrawerHeader>
           <div className="space-y-3 px-4">
+            <RenderIf condition={isAdmin}>
+              <MobileFacetedFilter
+                column={table.getColumn("leaderName")}
+                title="Leader"
+                options={leadersOptions}
+              />
+            </RenderIf>
             <MobileFacetedFilter
               column={table.getColumn("cell_status")}
               title="Cell Status"
@@ -61,7 +74,11 @@ function DiscipleMobileFacetFilters({
             />
           </div>
           <DrawerFooter className="flex flex-row items-center gap-3">
-            <Button variant="outline" className="flex-1">
+            <Button
+              variant="outline"
+              className="flex-1"
+              onClick={() => table.resetColumnFilters()}
+            >
               Reset
             </Button>
             <DrawerClose asChild>

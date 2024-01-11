@@ -4,6 +4,14 @@ import { useState } from "react"
 import Link from "next/link"
 import { CellReport, Disciple } from "@prisma/client"
 import { format } from "date-fns"
+import {
+  Album,
+  CalendarCheck2,
+  Check,
+  Library,
+  MapPin,
+  Users,
+} from "lucide-react"
 
 import { cn, formatTime } from "@/lib/utils"
 import { Badge } from "@/components/ui/badge"
@@ -79,7 +87,7 @@ function CellReportMobileListItem({
         </Card>
       </DrawerTrigger>
       <DrawerContent>
-        <div className="max-h-[50vh] overflow-y-auto">
+        <div className="max-h-[60vh] overflow-y-auto">
           <DrawerHeader className="pb-0 text-left">
             <DrawerTitle className="flex flex-col items-start gap-2">
               {lesson}{" "}
@@ -116,32 +124,27 @@ function CellReportMobileListItem({
               ) : null}
             </DrawerDescription>
           </DrawerHeader>
-          <div className="px-4">
-            <div className="py-2">
-              <p className="text-sm font-semibold text-muted-foreground">
-                Venue
-              </p>
-              <p className="text-sm">{cellreport.venue}</p>
+          <div className="p-4">
+            <div className="flex py-2">
+              <MapPin className="mr-2 h-4 w-4" />
+              <span className="text-sm">{cellreport.venue}</span>
             </div>
-            <div className="py-2">
-              <p className="text-sm font-semibold text-muted-foreground">
-                Date and Time
-              </p>
-              <p className="text-sm">
+            <div className="flex py-2">
+              <CalendarCheck2 className="mr-2 h-4 w-4" />
+              <span className="text-sm">
                 {format(cellreport.date, "MMM dd, yyyy")},{" "}
                 {formatTime(cellreport.time)}
-              </p>
+              </span>
             </div>
-            <div className="py-2">
-              <p className="text-sm font-semibold text-muted-foreground">
-                Lesson
-              </p>
+            <div className="flex py-2">
+              <Album className="mr-2 h-4 w-4" />
               <p className="text-sm">{lesson}</p>
             </div>
             <div className="py-2">
-              <p className="text-sm font-semibold text-muted-foreground">
-                Scriptures
-              </p>
+              <div className="mb-2 flex">
+                <Library className="mr-2 h-4 w-4" />
+                <span className="text-sm font-semibold">Scriptures</span>
+              </div>
               <ul className="flex flex-wrap items-center gap-1">
                 {[
                   cellreport.lesson?.scripture_references,
@@ -151,32 +154,39 @@ function CellReportMobileListItem({
                   .filter(Boolean)
                   .map((sr, index) => (
                     <li key={`scripture-ref-${index + 1}`}>
-                      <Badge variant="secondary" className="rounded">
-                        {sr}
-                      </Badge>
+                      <span className="text-xs text-muted-foreground">
+                        #{sr}
+                      </span>
                     </li>
                   ))}
               </ul>
             </div>
             <div className="py-4">
-              <p className="mb-2 text-sm font-semibold text-muted-foreground">
-                Attendees: ({cellreport.attendees.length})
-              </p>
-              <ul className="space-y-2 pb-4">
+              <div className="flex">
+                <Users className="mr-2 h-4 w-4" />
+                <span className="mb-2 text-sm font-semibold">
+                  Attendees: ({cellreport.attendees.length})
+                </span>
+              </div>
+              <ul className="pb-4">
                 {cellreport.attendees.map((attendee) => (
                   <li key={attendee.disciple_id}>
                     {
                       <Link
                         href={`/disciples/${attendee.disciple_id}`}
                         className={cn(
-                          buttonVariants({ variant: "secondary" }),
-                          "w-full justify-between"
+                          buttonVariants({ variant: "ghost" }),
+                          "w-full justify-start px-2"
                         )}
                       >
+                        <Check className="mr-2 h-4 w-4 text-success" />
                         <span className="text-sm">
                           {attendee.disciple.name}
                         </span>
-                        <Badge variant="outline" className="capitalize">
+                        <Badge
+                          variant="outline"
+                          className="ml-auto border-none capitalize"
+                        >
                           <span
                             className={cn(
                               "mr-2 scale-150",

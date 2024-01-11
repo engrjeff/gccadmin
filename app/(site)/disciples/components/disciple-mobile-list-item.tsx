@@ -1,7 +1,6 @@
 "use client"
 
 import { useState } from "react"
-import Link from "next/link"
 import { Book, Edit, Eye, MoreVertical, Users } from "lucide-react"
 
 import { useIsAdmin } from "@/hooks/use-isadmin"
@@ -16,6 +15,10 @@ import {
   DrawerTitle,
   DrawerTrigger,
 } from "@/components/ui/drawer"
+import {
+  BottomsheetLink,
+  BottomsheetLinkIcon,
+} from "@/components/bottomsheet-link"
 
 import { type DiscipleWithLeader } from "./columns"
 
@@ -31,26 +34,33 @@ function DiscipleMobileListItem({
     <div className="relative">
       <span className="sr-only">View {disciple.name}</span>
       <Card className="rounded px-3 py-2 ">
-        <div className="mb-2 space-y-1">
-          <p className="font-medium">{disciple.name}</p>
+        <div className="mb-2 space-y-0.5">
+          <p className="text-sm font-medium">{disciple.name}</p>
           {disciple.isMyPrimary || disciple.isPrimary ? (
             <Badge className="text-[10px]">Primary</Badge>
           ) : null}
         </div>
         <div className="flex flex-col items-start text-xs capitalize text-muted-foreground">
-          {isAdmin ? <span>Leader: {disciple.leader?.name}</span> : null}
-          <span>
-            CG: {disciple.cell_status.replace("_", " ").toLowerCase()}
-          </span>
-          <span>
-            Church:{" "}
-            {disciple.church_status === "REGULAR"
-              ? "Regular"
-              : disciple.church_status}
-          </span>
-          <span>
-            Process: {disciple.process_level.replace("_", " ").toLowerCase()}
-          </span>
+          <div className="flex gap-x-1">
+            {isAdmin ? (
+              <span>Leader: {disciple.leader?.name} &#x2022; </span>
+            ) : null}
+            <span>
+              CG: {disciple.cell_status.replace("_", " ").toLowerCase()}
+            </span>
+          </div>
+          <div className="flex gap-x-1">
+            <span>
+              Church:{" "}
+              {disciple.church_status === "REGULAR"
+                ? "Regular"
+                : disciple.church_status}{" "}
+              &#x2022;
+            </span>
+            <span>
+              Process: {disciple.process_level.replace("_", " ").toLowerCase()}
+            </span>
+          </div>
         </div>
       </Card>
 
@@ -70,43 +80,31 @@ function DiscipleMobileListItem({
             <DrawerTitle>{disciple.name}</DrawerTitle>
             <DrawerDescription>Pick an action</DrawerDescription>
           </DrawerHeader>
-          <div className="space-y-1 px-2 py-4">
-            <Link
-              href={`/disciples/${disciple.id}`}
-              className="flex w-full items-center gap-4 rounded-full px-1.5 py-1 text-sm focus:bg-neutral-900 focus-visible:bg-neutral-900 active:bg-neutral-900"
-            >
-              <span className="flex h-12 w-12 items-center justify-center rounded-full bg-muted shadow">
+          <div className="space-y-1 px-2 py-6">
+            <BottomsheetLink href={`/disciples/${disciple.id}`}>
+              <BottomsheetLinkIcon>
                 <Eye className="h-5 w-5" />
-              </span>
+              </BottomsheetLinkIcon>
               <span>View Details</span>
-            </Link>
-            <Link
-              href={`/disciples/edit/${disciple.id}`}
-              className="flex w-full items-center gap-4 rounded-full px-1.5 py-1 text-sm focus:bg-neutral-900 focus-visible:bg-neutral-900 active:bg-neutral-900"
-            >
-              <span className="flex h-12 w-12 items-center justify-center rounded-full bg-muted shadow">
+            </BottomsheetLink>
+            <BottomsheetLink href={`/disciples/edit/${disciple.id}`}>
+              <BottomsheetLinkIcon>
                 <Edit className="h-5 w-5" />
-              </span>
+              </BottomsheetLinkIcon>
               <span>Edit Details</span>
-            </Link>
-            <Link
-              href={`/disciples/${disciple.id}/lessons`}
-              className="flex w-full items-center gap-4 rounded-full px-1.5 py-1 text-sm focus:bg-neutral-900 focus-visible:bg-neutral-900 active:bg-neutral-900"
-            >
-              <span className="flex h-12 w-12 items-center justify-center rounded-full bg-muted shadow">
+            </BottomsheetLink>
+            <BottomsheetLink href={`/disciples/${disciple.id}/lessons`}>
+              <BottomsheetLinkIcon>
                 <Book className="h-5 w-5" />
-              </span>
+              </BottomsheetLinkIcon>
               <span>View Lessons Taken</span>
-            </Link>
-            <Link
-              href={`/disciples/${disciple.id}/cell-groups`}
-              className="flex w-full items-center gap-4 rounded-full px-1.5 py-1 text-sm focus:bg-neutral-900 focus-visible:bg-neutral-900 active:bg-neutral-900"
-            >
-              <span className="flex h-12 w-12 items-center justify-center rounded-full bg-muted shadow">
+            </BottomsheetLink>
+            <BottomsheetLink href={`/disciples/${disciple.id}/cell-groups`}>
+              <BottomsheetLinkIcon>
                 <Users className="h-5 w-5" />
-              </span>
+              </BottomsheetLinkIcon>
               <span>View Attended Cell Groups</span>
-            </Link>
+            </BottomsheetLink>
           </div>
         </DrawerContent>
       </Drawer>

@@ -25,6 +25,8 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu"
 
+import { BottomsheetLink, BottomsheetLinkIcon } from "./bottomsheet-link"
+
 export default function QuickActions() {
   const [open, setOpen] = useState(false)
 
@@ -68,34 +70,28 @@ export default function QuickActions() {
         <DrawerHeader className="pb-0">
           <DrawerTitle>Pick an Action</DrawerTitle>
         </DrawerHeader>
-        <DrawerFooter className="space-y-2 px-2">
-          <Link
-            href="/disciples/new"
-            className="flex w-full items-center gap-4 rounded-full px-1.5 py-1 text-sm focus:bg-neutral-900 focus-visible:bg-neutral-900 active:bg-neutral-900"
-          >
-            <span className="flex h-12 w-12 items-center justify-center rounded-full bg-muted shadow">
+        <DrawerFooter className="px-2">
+          <BottomsheetLink href="/disciples/new">
+            <BottomsheetLinkIcon>
               <Users className="h-5 w-5" />
-            </span>
+            </BottomsheetLinkIcon>
             <span>Add Disciple</span>
-          </Link>
-          <Link
-            href="/cell-reports/new"
-            className="flex w-full items-center gap-4 rounded-full px-1.5 py-1 text-sm focus:bg-neutral-900 focus-visible:bg-neutral-900 active:bg-neutral-900"
-          >
-            <span className="flex h-12 w-12 items-center justify-center rounded-full bg-muted shadow">
+          </BottomsheetLink>
+          <BottomsheetLink href="/cell-reports/new">
+            <BottomsheetLinkIcon>
               <StickyNote className="h-5 w-5" />
-            </span>
+            </BottomsheetLinkIcon>
             <span>Create Cell Report</span>
-          </Link>
-          <Link
+          </BottomsheetLink>
+          <BottomsheetLink
             href="/cell-groups/new"
-            className="pointer-events-none flex w-full items-center gap-4 rounded-full px-1.5 py-1 text-sm opacity-50 focus:bg-neutral-900 focus-visible:bg-neutral-900 active:bg-neutral-900"
+            className="pointer-events-none cursor-not-allowed opacity-50"
           >
-            <span className="flex h-12 w-12 items-center justify-center rounded-full bg-muted shadow">
+            <BottomsheetLinkIcon>
               <Component className="h-5 w-5" />
-            </span>
+            </BottomsheetLinkIcon>
             <span>Create Cell Group</span>
-          </Link>
+          </BottomsheetLink>
         </DrawerFooter>
       </DrawerContent>
     </Drawer>
