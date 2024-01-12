@@ -82,7 +82,7 @@ function DiscipleMobileFacetFilters({
               Reset
             </Button>
             <DrawerClose asChild>
-              <Button className="flex-1">Close</Button>
+              <Button className="flex-1">OK</Button>
             </DrawerClose>
           </DrawerFooter>
         </div>

@@ -3,8 +3,16 @@ import { z } from "zod"
 
 export const cellReportCreateSchema = z.object({
   type: z.nativeEnum(CellType, {
-    required_error: "Cell type is required",
-    invalid_type_error: "Invalid cell type",
+    errorMap: (issue, ctx) => {
+      switch (issue.code) {
+        case "invalid_type":
+          return { message: "Cell type is required" }
+        case "invalid_enum_value":
+          return { message: "Invalid cell type" }
+        default:
+          return { message: "Cell type is required" }
+      }
+    },
   }),
   venue: z
     .string({ required_error: "Venue is required" })

@@ -13,7 +13,7 @@ import { TailwindIndicator } from "@/components/tailwind-indicator"
 import { ThemeProvider } from "@/components/theme-provider"
 
 export const viewport: Viewport = {
-  themeColor: "#0c0a09",
+  themeColor: siteConfig.bgColor,
   userScalable: false,
 }
 
