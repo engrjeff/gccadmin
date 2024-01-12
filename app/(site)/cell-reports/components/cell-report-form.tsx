@@ -13,6 +13,7 @@ import { Button } from "@/components/ui/button"
 import FormErrorMessage from "@/components/ui/form-error-message"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
+import { NativeSelect } from "@/components/ui/native-select"
 import {
   Select,
   SelectContent,
@@ -190,28 +191,45 @@ const CellReportForm = () => {
             <div className="grid gap-4 lg:grid-cols-2">
               <div className="flex flex-col gap-2">
                 <Label htmlFor="leaderId">Cell Leader</Label>
-                <Controller
-                  control={form.control}
-                  name="leaderId"
-                  render={({ field }) => (
-                    <Autocomplete
-                      disabled={!isAdmin}
-                      searchText="Search leader"
-                      placeholderText="Choose a cell leader"
-                      value={field.value}
-                      error={!!errors?.leaderId}
-                      onChange={(value) => {
-                        field.onChange(value)
-                        form.setValue("attendees", [])
-                      }}
-                      options={maptoOptions(
-                        primaryLeaders.data ?? [],
-                        "id",
-                        "name"
-                      )}
-                    />
-                  )}
-                />
+                <NativeSelect
+                  key={form.watch("leaderId")}
+                  className="normal-case lg:hidden"
+                  id="leaderId"
+                  {...form.register("leaderId")}
+                  aria-invalid={!!errors.leaderId}
+                  aria-describedby="leaderIdError"
+                >
+                  <option value="">Select a leader</option>
+                  {primaryLeaders.data?.map((item) => (
+                    <option key={item.id} value={item.id}>
+                      {item.name}
+                    </option>
+                  ))}
+                </NativeSelect>
+                <div className="hidden lg:block">
+                  <Controller
+                    control={form.control}
+                    name="leaderId"
+                    render={({ field }) => (
+                      <Autocomplete
+                        disabled={!isAdmin}
+                        searchText="Search leader"
+                        placeholderText="Choose a cell leader"
+                        value={field.value}
+                        error={!!errors?.leaderId}
+                        onChange={(value) => {
+                          field.onChange(value)
+                          form.setValue("attendees", [])
+                        }}
+                        options={maptoOptions(
+                          primaryLeaders.data ?? [],
+                          "id",
+                          "name"
+                        )}
+                      />
+                    )}
+                  />
+                </div>
                 <FormErrorMessage
                   id="leaderIdError"
                   error={errors.leaderId?.message}
@@ -219,6 +237,19 @@ const CellReportForm = () => {
               </div>
               <div className="flex flex-col gap-2">
                 <Label htmlFor="type">Cell Type</Label>
+                <NativeSelect
+                  key={form.watch("type")}
+                  className="normal-case lg:hidden"
+                  id="type"
+                  {...form.register("type")}
+                  aria-invalid={!!errors.type}
+                  aria-describedby="cellTypeError"
+                >
+                  <option value="">Pick a cell type</option>
+                  <option value="SOULWINNING">Soul Winning</option>
+                  <option value="OPEN">Open Cell</option>
+                  <option value="DISCIPLESHIP">Discipleship Cell</option>
+                </NativeSelect>
                 <Controller
                   control={form.control}
                   name="type"
@@ -229,7 +260,7 @@ const CellReportForm = () => {
                       onValueChange={field.onChange}
                     >
                       <SelectTrigger
-                        className="w-full"
+                        className="hidden w-full lg:flex"
                         aria-invalid={!!errors.type}
                         aria-describedby="cellTypeError"
                       >
@@ -238,13 +269,13 @@ const CellReportForm = () => {
                       <SelectContent>
                         <SelectGroup>
                           <SelectLabel>Cell Type</SelectLabel>
-                          {["SOULWINNING", "OPEN", "DISCIPLESHIP"].map(
-                            (cellType) => (
-                              <SelectItem key={cellType} value={cellType}>
-                                {cellType}
-                              </SelectItem>
-                            )
-                          )}
+                          <SelectItem value="SOULWINNING">
+                            Soul Winning
+                          </SelectItem>
+                          <SelectItem value="OPEN">Open Cell</SelectItem>
+                          <SelectItem value="DISCIPLESHIP">
+                            Discipleship Cell
+                          </SelectItem>
                         </SelectGroup>
                       </SelectContent>
                     </Select>
@@ -357,31 +388,62 @@ const CellReportForm = () => {
               >
                 <div className="flex flex-col space-y-2">
                   <Label>Series</Label>
-                  <Autocomplete
-                    searchText="Search series"
-                    placeholderText="Pick a series"
+                  <NativeSelect
+                    className="normal-case lg:hidden"
                     value={selectedSeries}
-                    onChange={setSelectedSeries}
-                    options={maptoOptions(lessonsSeries.data!, "id", "title")}
-                  />
+                    onChange={(e) => setSelectedSeries(e.currentTarget.value)}
+                  >
+                    <option value="">Pick a series</option>
+                    {lessonsSeries.data?.map((item) => (
+                      <option key={item.id} value={item.id}>
+                        {item.title}
+                      </option>
+                    ))}
+                  </NativeSelect>
+                  <div className="hidden lg:block">
+                    <Autocomplete
+                      searchText="Search series"
+                      placeholderText="Pick a series"
+                      value={selectedSeries}
+                      onChange={setSelectedSeries}
+                      options={maptoOptions(lessonsSeries.data!, "id", "title")}
+                    />
+                  </div>
                 </div>
                 <div className="flex flex-col space-y-2">
                   <Label htmlFor="lessonId">Lesson</Label>
-                  <Controller
-                    control={form.control}
-                    name="lessonId"
-                    render={({ field }) => (
-                      <Autocomplete
-                        searchText="Search lesson"
-                        placeholderText="Pick a lesson"
-                        disabled={!selectedSeries}
-                        value={field.value}
-                        onChange={field.onChange}
-                        error={!!errors.lessonId}
-                        options={maptoOptions(lessons, "id", "title")}
-                      />
-                    )}
-                  />
+                  <NativeSelect
+                    id="lessonId"
+                    disabled={!selectedSeries}
+                    className="normal-case lg:hidden"
+                    {...form.register("lessonId")}
+                    aria-invalid={!!errors.lessonId}
+                    aria-describedby="lessonIdError"
+                  >
+                    <option value="">Pick a lesson</option>
+                    {lessons.map((item) => (
+                      <option key={item.id} value={item.id}>
+                        {item.title}
+                      </option>
+                    ))}
+                  </NativeSelect>
+                  <div className="hidden lg:block">
+                    <Controller
+                      control={form.control}
+                      name="lessonId"
+                      render={({ field }) => (
+                        <Autocomplete
+                          searchText="Search lesson"
+                          placeholderText="Pick a lesson"
+                          disabled={!selectedSeries}
+                          value={field.value}
+                          onChange={field.onChange}
+                          error={!!errors.lessonId}
+                          options={maptoOptions(lessons, "id", "title")}
+                        />
+                      )}
+                    />
+                  </div>
                   <FormErrorMessage
                     id="lessonIdError"
                     error={errors.lessonId?.message}
