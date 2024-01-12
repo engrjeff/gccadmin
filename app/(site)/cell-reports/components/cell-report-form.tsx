@@ -191,45 +191,53 @@ const CellReportForm = () => {
             <div className="grid gap-4 lg:grid-cols-2">
               <div className="flex flex-col gap-2">
                 <Label htmlFor="leaderId">Cell Leader</Label>
-                <NativeSelect
-                  key={form.watch("leaderId")}
-                  className="normal-case lg:hidden"
-                  id="leaderId"
-                  {...form.register("leaderId")}
-                  aria-invalid={!!errors.leaderId}
-                  aria-describedby="leaderIdError"
-                >
-                  <option value="">Select a leader</option>
-                  {primaryLeaders.data?.map((item) => (
-                    <option key={item.id} value={item.id}>
-                      {item.name}
-                    </option>
-                  ))}
-                </NativeSelect>
-                <div className="hidden lg:block">
-                  <Controller
-                    control={form.control}
-                    name="leaderId"
-                    render={({ field }) => (
-                      <Autocomplete
+
+                <Controller
+                  control={form.control}
+                  name="leaderId"
+                  render={({ field }) => (
+                    <>
+                      <NativeSelect
                         disabled={!isAdmin}
-                        searchText="Search leader"
-                        placeholderText="Choose a cell leader"
+                        key={form.watch("leaderId")}
+                        className="normal-case lg:hidden"
+                        id="leaderId"
                         value={field.value}
-                        error={!!errors?.leaderId}
-                        onChange={(value) => {
-                          field.onChange(value)
+                        onChange={(e) => {
+                          field.onChange(e.currentTarget.value)
                           form.setValue("attendees", [])
                         }}
-                        options={maptoOptions(
-                          primaryLeaders.data ?? [],
-                          "id",
-                          "name"
-                        )}
-                      />
-                    )}
-                  />
-                </div>
+                        aria-invalid={!!errors.leaderId}
+                        aria-describedby="leaderIdError"
+                      >
+                        <option value="">Select a leader</option>
+                        {primaryLeaders.data?.map((item) => (
+                          <option key={item.id} value={item.id}>
+                            {item.name}
+                          </option>
+                        ))}
+                      </NativeSelect>
+                      <div className="hidden lg:block">
+                        <Autocomplete
+                          disabled={!isAdmin}
+                          searchText="Search leader"
+                          placeholderText="Choose a cell leader"
+                          value={field.value}
+                          error={!!errors?.leaderId}
+                          onChange={(value) => {
+                            field.onChange(value)
+                            form.setValue("attendees", [])
+                          }}
+                          options={maptoOptions(
+                            primaryLeaders.data ?? [],
+                            "id",
+                            "name"
+                          )}
+                        />
+                      </div>
+                    </>
+                  )}
+                />
                 <FormErrorMessage
                   id="leaderIdError"
                   error={errors.leaderId?.message}
@@ -345,18 +353,41 @@ const CellReportForm = () => {
                   control={form.control}
                   name="assistant_id"
                   render={({ field }) => (
-                    <Autocomplete
-                      searchText="Search disciple"
-                      placeholderText="Select assistant leader"
-                      value={field.value}
-                      onChange={field.onChange}
-                      error={!!errors.assistant_id}
-                      options={maptoOptions(
-                        disciplesOfLeader.data ?? [],
-                        "id",
-                        "name"
-                      )}
-                    />
+                    <>
+                      <NativeSelect
+                        key={form.watch("assistant_id")}
+                        className="normal-case lg:hidden"
+                        id="assistant_id"
+                        value={field.value}
+                        onChange={(e) => {
+                          field.onChange(e.currentTarget.value)
+                        }}
+                        aria-invalid={!!errors.assistant_id}
+                        aria-describedby="assistantIdError"
+                      >
+                        <option value="">Select assistant leader</option>
+                        {disciplesOfLeader.data?.map((item) => (
+                          <option key={item.id} value={item.id}>
+                            {item.name}
+                          </option>
+                        ))}
+                      </NativeSelect>
+
+                      <div className="hidden lg:block">
+                        <Autocomplete
+                          searchText="Search disciple"
+                          placeholderText="Select assistant leader"
+                          value={field.value}
+                          onChange={field.onChange}
+                          error={!!errors.assistant_id}
+                          options={maptoOptions(
+                            disciplesOfLeader.data ?? [],
+                            "id",
+                            "name"
+                          )}
+                        />
+                      </div>
+                    </>
                   )}
                 />
                 <FormErrorMessage
