@@ -88,7 +88,11 @@ function DisciplesTable({ disciples, leaders }: Props) {
     return (
       <>
         <div className="mb-4 flex items-center gap-3">
-          <DiscipleSearch value={searchValue} onChange={handleSearch} />
+          <DiscipleSearch
+            placeholder={`Search ${disciples.length} disciples`}
+            value={searchValue}
+            onChange={handleSearch}
+          />
           <DiscipleMobileFacetFilters
             table={table}
             leadersOptions={leadersOptions}

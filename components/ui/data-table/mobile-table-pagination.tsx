@@ -24,7 +24,7 @@ function MobileTablePagination<TData>({
       <div className="flex items-center justify-center space-x-2">
         <Button
           variant="outline"
-          className="flex h-8 w-8 p-0"
+          size="icon"
           onClick={() => table.setPageIndex(0)}
           disabled={!table.getCanPreviousPage()}
         >
@@ -33,7 +33,7 @@ function MobileTablePagination<TData>({
         </Button>
         <Button
           variant="outline"
-          className="h-8 w-8 p-0"
+          size="icon"
           onClick={() => table.previousPage()}
           disabled={!table.getCanPreviousPage()}
         >
@@ -42,7 +42,7 @@ function MobileTablePagination<TData>({
         </Button>
         <Button
           variant="outline"
-          className="h-8 w-8 p-0"
+          size="icon"
           onClick={() => table.nextPage()}
           disabled={!table.getCanNextPage()}
         >
@@ -51,7 +51,7 @@ function MobileTablePagination<TData>({
         </Button>
         <Button
           variant="outline"
-          className="flex h-8 w-8 p-0"
+          size="icon"
           onClick={() => table.setPageIndex(table.getPageCount() - 1)}
           disabled={!table.getCanNextPage()}
         >

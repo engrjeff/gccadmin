@@ -5,11 +5,13 @@ import { zodResolver } from "@hookform/resolvers/zod"
 import { useSession } from "next-auth/react"
 import { Controller, useForm } from "react-hook-form"
 
+import { cn } from "@/lib/utils"
 import { usePrimaryLeaders } from "@/hooks/use-primary-leaders"
 import { Button } from "@/components/ui/button"
 import FormErrorMessage from "@/components/ui/form-error-message"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
+import { NativeSelect } from "@/components/ui/native-select"
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group"
 import {
   Select,
@@ -202,26 +204,43 @@ function DiscipleForm({ modalMode, leaderId }: DiscipleFormProps) {
           {isAdmin ? (
             <div className="flex flex-col space-y-2 md:max-w-xs">
               <Label htmlFor="leaderId">Leader</Label>
-              <Controller
-                control={form.control}
-                name="leaderId"
-                render={({ field }) => (
-                  <Autocomplete
-                    searchText="Search leader"
-                    placeholderText="Select a leader"
-                    value={field.value}
-                    onChange={field.onChange}
-                    disabled={modalMode}
-                    options={
-                      primaryLeaders.data?.map((i) => ({
-                        value: i.id,
-                        label: i.name,
-                      })) ?? []
-                    }
-                    error={!!formErrors.leaderId}
-                  />
-                )}
-              />
+              <NativeSelect
+                key={form.watch("leaderId")}
+                className="normal-case lg:hidden"
+                id="leaderId"
+                {...form.register("leaderId")}
+                aria-invalid={!!formErrors.leaderId}
+                aria-describedby="leaderIdError"
+              >
+                <option value="">Select a leader</option>
+                {primaryLeaders.data?.map((item) => (
+                  <option key={item.id} value={item.id}>
+                    {item.name}
+                  </option>
+                ))}
+              </NativeSelect>
+              <div className="hidden lg:block">
+                <Controller
+                  control={form.control}
+                  name="leaderId"
+                  render={({ field }) => (
+                    <Autocomplete
+                      searchText="Search leader"
+                      placeholderText="Select a leader"
+                      value={field.value}
+                      onChange={field.onChange}
+                      disabled={modalMode}
+                      options={
+                        primaryLeaders.data?.map((i) => ({
+                          value: i.id,
+                          label: i.name,
+                        })) ?? []
+                      }
+                      error={!!formErrors.leaderId}
+                    />
+                  )}
+                />
+              </div>
               <FormErrorMessage
                 id="leaderIdError"
                 error={formErrors.leaderId?.message}
@@ -234,9 +253,26 @@ function DiscipleForm({ modalMode, leaderId }: DiscipleFormProps) {
               {...form.register("leaderId")}
             />
           )}
-          <div className="grid gap-4 pt-1 lg:grid-cols-2">
+          <div
+            className={cn(
+              "grid gap-4 pt-1 lg:grid-cols-4",
+              modalMode ? "lg:grid-cols-2" : "lg:grid-cols-4"
+            )}
+          >
             <div className="flex w-full max-w-xs flex-col space-y-2">
               <Label htmlFor="cell_status">Cell Status</Label>
+              <NativeSelect
+                key={form.watch("cell_status")}
+                className="lg:hidden"
+                id="cell_status"
+                {...form.register("cell_status")}
+              >
+                {cellStatuses.map((item) => (
+                  <option key={item.value} value={item.value}>
+                    {item.label}
+                  </option>
+                ))}
+              </NativeSelect>
               <Controller
                 control={form.control}
                 name="cell_status"
@@ -246,7 +282,7 @@ function DiscipleForm({ modalMode, leaderId }: DiscipleFormProps) {
                     value={field.value === undefined ? "" : field.value}
                     onValueChange={field.onChange}
                   >
-                    <SelectTrigger className="w-full capitalize">
+                    <SelectTrigger className="hidden w-full capitalize lg:flex">
                       <SelectValue placeholder="Cell Status" />
                     </SelectTrigger>
                     <SelectContent>
@@ -269,6 +305,18 @@ function DiscipleForm({ modalMode, leaderId }: DiscipleFormProps) {
             </div>
             <div className="flex w-full max-w-xs flex-col space-y-2">
               <Label htmlFor="church_status">Church Status</Label>
+              <NativeSelect
+                key={form.watch("church_status")}
+                className="lg:hidden"
+                id="church_status"
+                {...form.register("church_status")}
+              >
+                {churchStatuses.map((item) => (
+                  <option key={item.value} value={item.value}>
+                    {item.label}
+                  </option>
+                ))}
+              </NativeSelect>
               <Controller
                 control={form.control}
                 name="church_status"
@@ -278,7 +326,7 @@ function DiscipleForm({ modalMode, leaderId }: DiscipleFormProps) {
                     value={field.value === undefined ? "" : field.value}
                     onValueChange={field.onChange}
                   >
-                    <SelectTrigger className="w-full">
+                    <SelectTrigger className="hidden w-full lg:flex">
                       <SelectValue placeholder="Church Status" />
                     </SelectTrigger>
                     <SelectContent>
@@ -300,9 +348,36 @@ function DiscipleForm({ modalMode, leaderId }: DiscipleFormProps) {
               />
             </div>
           </div>
-          <div className="grid gap-4 pt-1 lg:grid-cols-2">
+          <div
+            className={cn(
+              "grid gap-4 pt-1 lg:grid-cols-4",
+              modalMode ? "lg:grid-cols-2" : "lg:grid-cols-4"
+            )}
+          >
             <div className="flex w-full max-w-xs flex-col space-y-2">
               <Label htmlFor="member_type">Member Type</Label>
+              <NativeSelect
+                key={form.watch("member_type")}
+                className="lg:hidden"
+                id="member_type"
+                {...form.register("member_type")}
+              >
+                <option value="KIDS">Kids</option>
+                <option value="YOUTH">Youth</option>
+                <option value="YOUNGPRO">Young Pro</option>
+                <option
+                  disabled={form.watch("gender") === "FEMALE"}
+                  value="MEN"
+                >
+                  Men
+                </option>
+                <option
+                  disabled={form.watch("gender") === "MALE"}
+                  value="WOMEN"
+                >
+                  Women
+                </option>
+              </NativeSelect>
               <Controller
                 control={form.control}
                 name="member_type"
@@ -312,7 +387,7 @@ function DiscipleForm({ modalMode, leaderId }: DiscipleFormProps) {
                     value={field.value === undefined ? "" : field.value}
                     onValueChange={field.onChange}
                   >
-                    <SelectTrigger className="w-full capitalize">
+                    <SelectTrigger className="hidden w-full capitalize lg:flex">
                       <SelectValue placeholder="Member Type" />
                     </SelectTrigger>
                     <SelectContent>
@@ -341,6 +416,18 @@ function DiscipleForm({ modalMode, leaderId }: DiscipleFormProps) {
             </div>
             <div className="flex w-full max-w-xs flex-col space-y-2">
               <Label htmlFor="process_level">Process Level</Label>
+              <NativeSelect
+                key={form.watch("process_level")}
+                className="lg:hidden"
+                id="process_level"
+                {...form.register("process_level")}
+              >
+                {processLevels.map((item) => (
+                  <option key={item.value} value={item.value}>
+                    {item.label}
+                  </option>
+                ))}
+              </NativeSelect>
               <Controller
                 control={form.control}
                 name="process_level"
@@ -351,7 +438,7 @@ function DiscipleForm({ modalMode, leaderId }: DiscipleFormProps) {
                     onValueChange={field.onChange}
                     disabled={form.watch("cell_status") === "FIRST_TIMER"}
                   >
-                    <SelectTrigger className="w-full capitalize">
+                    <SelectTrigger className="hidden w-full capitalize lg:flex">
                       <SelectValue placeholder="Process Level" />
                     </SelectTrigger>
                     <SelectContent>
