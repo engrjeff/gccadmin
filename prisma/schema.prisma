@@ -1,10 +1,182 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
 datasource db {
   provider = "postgresql"
   url      = env("DATABASE_URL")
 }
 
-generator client {
-  provider = "prisma-client-js"
+model Account {
+  id                String  @id @default(cuid())
+  userId            String
+  type              String
+  provider          String
+  providerAccountId String
+  refresh_token     String?
+  access_token      String?
+  expires_at        Int?
+  token_type        String?
+  scope             String?
+  id_token          String?
+  session_state     String?
+  user              User    @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([provider, providerAccountId])
+}
+
+model Session {
+  id           String   @id @default(cuid())
+  sessionToken String   @unique
+  userId       String
+  expires      DateTime
+  user         User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+}
+
+model VerificationToken {
+  identifier String
+  token      String   @unique
+  expires    DateTime
+
+  @@unique([identifier, token])
+}
+
+model User {
+  id              String    @id @default(cuid())
+  name            String?
+  email           String?   @unique
+  emailVerified   DateTime?
+  image           String?
+  role            Role      @default(USER)
+  isAlreadyLinked Boolean?  @default(false)
+  accounts        Account[]
+  sessions        Session[]
+}
+
+model Disciple {
+  id                    String                   @id @default(cuid())
+  name                  String
+  address               String
+  birthdate             DateTime
+  gender                Gender
+  member_type           MemberType
+  process_level         ProcessLevel             @default(NONE)
+  cell_status           CellStatus               @default(FIRST_TIMER)
+  church_status         ChurchStatus             @default(NACS)
+  isPrimary             Boolean                  @default(false)
+  isActive              Boolean                  @default(true)
+  isDeleted             Boolean                  @default(false)
+  isMyPrimary           Boolean                  @default(false)
+  leaderId              String?
+  createdAt             DateTime                 @default(now())
+  updatedAt             DateTime                 @updatedAt
+  userAccountId         String?
+  CellGroup             CellGroup[]
+  cell_reports          CellReport[]
+  assisted_cell_reports CellReportAssistant[]
+  attended_cell_reports CellReportAttendees[]
+  leader                Disciple?                @relation("LeaderDisciples", fields: [leaderId], references: [id])
+  disciples             Disciple[]               @relation("LeaderDisciples")
+  lessons_taken         LessonsTakenByDisciple[]
+
+  @@index([id, leaderId])
+  @@index([leaderId])
+  @@index([userAccountId])
+}
+
+model LessonSeries {
+  id          String   @id @default(cuid())
+  title       String
+  description String?
+  tags        String[]
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+  lessons     Lesson[]
+}
+
+model Lesson {
+  id                   String                   @id @default(cuid())
+  title                String
+  description          String?
+  file_url             String?
+  scripture_references String[]
+  createdAt            DateTime                 @default(now())
+  updatedAt            DateTime                 @updatedAt
+  lesson_series_id     String?
+  cell_reports         CellReport[]
+  lesson_series        LessonSeries?            @relation(fields: [lesson_series_id], references: [id])
+  disciples            LessonsTakenByDisciple[]
+
+  @@index([lesson_series_id])
+}
+
+model LessonsTakenByDisciple {
+  lesson_id                String
+  disciple_id              String
+  lesson_taken_disciple_id String   @id
+  assignedAt               DateTime @default(now())
+  disciple                 Disciple @relation(fields: [disciple_id], references: [id])
+  lesson                   Lesson   @relation(fields: [lesson_id], references: [id])
+
+  @@index([disciple_id])
+}
+
+model CellReport {
+  id                   String                @id @default(cuid())
+  type                 CellType
+  venue                String
+  date                 DateTime
+  time                 String
+  has_custom_lesson    Boolean               @default(false)
+  lessonId             String?
+  lesson_name          String?
+  scripture_references String[]
+  leaderId             String
+  createdAt            DateTime              @default(now())
+  updatedAt            DateTime              @updatedAt
+  assistant_id         String?
+  assistant            CellReportAssistant?  @relation(fields: [assistant_id], references: [disciple_report_id], onDelete: Cascade)
+  leader               Disciple              @relation(fields: [leaderId], references: [id])
+  lesson               Lesson?               @relation(fields: [lessonId], references: [id])
+  attendees            CellReportAttendees[]
+
+  @@index([leaderId])
+  @@index([assistant_id])
+  @@index([lessonId])
+}
+
+model CellReportAttendees {
+  cell_report_id          String
+  disciple_id             String
+  assignedAt              DateTime   @default(now())
+  assignedBy              String
+  cell_report_attendee_id String     @id
+  cell_report             CellReport @relation(fields: [cell_report_id], references: [id], onDelete: Cascade)
+  disciple                Disciple   @relation(fields: [disciple_id], references: [id])
+
+  @@index([cell_report_id])
+  @@index([disciple_id])
+}
+
+model CellReportAssistant {
+  disciple_id        String
+  disciple_report_id String       @id
+  CellReport         CellReport[]
+  disciple           Disciple     @relation(fields: [disciple_id], references: [id])
+
+  @@index([disciple_id])
+}
+
+model CellGroup {
+  id        String   @id
+  name      String
+  leaderId  String
+  members   String[]
+  createdAt DateTime @default(now())
+  updatedAt DateTime
+  Disciple  Disciple @relation(fields: [leaderId], references: [id])
+
+  @@index([leaderId])
 }
 
 enum Role {
@@ -51,175 +223,4 @@ enum CellType {
   SOULWINNING
   OPEN
   DISCIPLESHIP
-}
-
-model Account {
-  id                String  @id @default(cuid())
-  userId            String
-  type              String
-  provider          String
-  providerAccountId String
-  refresh_token     String? @db.Text
-  access_token      String? @db.Text
-  expires_at        Int?
-  token_type        String?
-  scope             String?
-  id_token          String? @db.Text
-  session_state     String?
-
-  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
-
-  @@unique([provider, providerAccountId])
-}
-
-model Session {
-  id           String   @id @default(cuid())
-  sessionToken String   @unique
-  userId       String
-  expires      DateTime
-  user         User     @relation(fields: [userId], references: [id], onDelete: Cascade)
-}
-
-model VerificationToken {
-  identifier String
-  token      String   @unique
-  expires    DateTime
-
-  @@unique([identifier, token])
-}
-
-model User {
-  id            String    @id @default(cuid())
-  name          String?
-  email         String?   @unique
-  emailVerified DateTime?
-  image         String?
-  role          Role      @default(USER)
-  accounts      Account[]
-  sessions      Session[]
-
-  isAlreadyLinked Boolean? @default(false)
-}
-
-model Disciple {
-  id            String       @id @default(cuid())
-  name          String
-  address       String
-  birthdate     DateTime
-  gender        Gender
-  member_type   MemberType
-  process_level ProcessLevel @default(NONE)
-  cell_status   CellStatus   @default(FIRST_TIMER)
-  church_status ChurchStatus @default(NACS)
-  isPrimary     Boolean      @default(false)
-  isActive      Boolean      @default(true)
-  isDeleted     Boolean      @default(false)
-  isMyPrimary   Boolean      @default(false)
-
-  leaderId String?
-  leader   Disciple? @relation("LeaderDisciples", fields: [leaderId], references: [id])
-
-  disciples Disciple[] @relation("LeaderDisciples")
-
-  lessons_taken LessonsTakenByDisciple[]
-
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-
-  userAccountId         String?
-  attended_cell_reports CellReportAttendees[]
-  cell_reports          CellReport[]
-  assisted_cell_reports CellReportAssistant[]
-}
-
-model LessonSeries {
-  id          String   @id @default(cuid())
-  title       String
-  description String?
-  tags        String[]
-
-  lessons Lesson[]
-
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-}
-
-model Lesson {
-  id                   String   @id @default(cuid())
-  title                String
-  description          String?
-  file_url             String?
-  scripture_references String[]
-
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-
-  cell_reports     CellReport[]
-  disciples        LessonsTakenByDisciple[]
-  lesson_series    LessonSeries?            @relation(fields: [lesson_series_id], references: [id])
-  lesson_series_id String?
-}
-
-model LessonsTakenByDisciple {
-  lesson    Lesson @relation(fields: [lesson_id], references: [id])
-  lesson_id String
-
-  disciple    Disciple @relation(fields: [disciple_id], references: [id])
-  disciple_id String
-
-  lesson_taken_disciple_id String
-
-  assignedAt DateTime @default(now())
-
-  @@id([lesson_taken_disciple_id])
-}
-
-model CellReport {
-  id    String   @id @default(cuid())
-  type  CellType
-  venue String
-  date  DateTime
-  time  String
-
-  has_custom_lesson Boolean @default(false)
-
-  lessonId             String?
-  lesson               Lesson?  @relation(fields: [lessonId], references: [id])
-  lesson_name          String?
-  scripture_references String[]
-
-  leaderId String
-  leader   Disciple @relation(fields: [leaderId], references: [id])
-
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-
-  attendees CellReportAttendees[]
-
-  assistant    CellReportAssistant? @relation(fields: [assistant_id], references: [disciple_report_id], onDelete: Cascade)
-  assistant_id String?
-}
-
-model CellReportAttendees {
-  cell_report    CellReport @relation(fields: [cell_report_id], references: [id], onDelete: Cascade)
-  cell_report_id String
-
-  disciple    Disciple @relation(fields: [disciple_id], references: [id])
-  disciple_id String
-
-  assignedAt DateTime @default(now())
-  assignedBy String
-
-  cell_report_attendee_id String
-
-  @@id([cell_report_attendee_id])
-}
-
-model CellReportAssistant {
-  disciple           Disciple     @relation(fields: [disciple_id], references: [id])
-  disciple_id        String
-  disciple_report_id String
-  CellReport         CellReport[]
-
-  @@id([disciple_report_id])
 }
