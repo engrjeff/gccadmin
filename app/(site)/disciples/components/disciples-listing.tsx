@@ -7,6 +7,7 @@ interface Props {
 
 async function DisciplesListing({ active }: Props) {
   const { disciples } = await getDisciples({ isActive: active })
+
   const leaders = await getPrimaryLeaders()
   return <DisciplesTable disciples={disciples} leaders={leaders} />
 }

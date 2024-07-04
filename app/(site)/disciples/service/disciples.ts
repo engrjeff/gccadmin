@@ -5,6 +5,7 @@ import { getCurrentUser } from "@/lib/session"
 
 interface GetDisciplesArgs {
   isActive?: string
+  inProcess?: boolean
   page?: number
   pageSize?: number
 }
@@ -26,6 +27,11 @@ export const getDisciples = async (args: GetDisciplesArgs | undefined) => {
       ...{
         isDeleted: false,
         isActive: args?.isActive === "false" ? false : true,
+        process_level: args?.inProcess
+          ? {
+              not: "NONE",
+            }
+          : undefined,
       },
       name: {
         not: "GCC Admin",

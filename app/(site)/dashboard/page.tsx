@@ -3,10 +3,8 @@ import { Metadata } from "next"
 import PageTitle from "@/components/page-title"
 import QuickActions from "@/components/quick-actions"
 
-import AnnualCellReports from "./components/annual-cell-reports"
 import GroupStatusData from "./components/group-status-data"
 import KPIStats from "./components/kpi-stats"
-import LeadersData from "./components/leaders-data"
 import RefreshDataButton from "./components/refresh-data-button"
 import WeeklyCellReports from "./components/weekly-cell-reports"
 
@@ -32,8 +30,8 @@ async function DashboardPage({ searchParams }: PageProps) {
         <KPIStats />
         <WeeklyCellReports searchParams={searchParams} />
         <GroupStatusData />
-        <AnnualCellReports />
-        <LeadersData />
+        {/* <AnnualCellReports /> */}
+        {/* <LeadersData />  */}
       </div>
     </>
   )

@@ -1,4 +1,10 @@
-import { LayoutDashboard, Library, StickyNote, Users } from "lucide-react"
+import {
+  LayoutDashboard,
+  Library,
+  StickyNote,
+  TableProperties,
+  Users,
+} from "lucide-react"
 
 export const menuItems = [
   {
@@ -20,5 +26,10 @@ export const menuItems = [
     title: "Resources",
     href: "/resources",
     icon: <Library className="h-4 w-4" />,
+  },
+  {
+    title: "Process",
+    href: "/process",
+    icon: <TableProperties className="h-4 w-4" />,
   },
 ]

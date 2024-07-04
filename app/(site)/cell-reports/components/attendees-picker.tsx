@@ -16,14 +16,6 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "@/components/ui/dialog"
-import {
-  Drawer,
-  DrawerContent,
-  DrawerDescription,
-  DrawerHeader,
-  DrawerTitle,
-  DrawerTrigger,
-} from "@/components/ui/drawer"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import {
@@ -78,20 +70,20 @@ function AttendeesPicker(props: AttendeesPickerProps) {
     )
 
   return (
-    <Drawer open={open} onOpenChange={setOpen} shouldScaleBackground={false}>
-      <DrawerTrigger asChild>
+    <Sheet open={open} onOpenChange={setOpen}>
+      <SheetTrigger asChild>
         <Button variant="secondary" type="button" disabled={disabled}>
           Select Attendees
         </Button>
-      </DrawerTrigger>
+      </SheetTrigger>
       <span className="text-muted-foreground">{attendees.length} selected</span>
-      <DrawerContent className="max-w-full">
-        <DrawerHeader className="text-left">
-          <DrawerTitle>Select Cell Group Attendees</DrawerTitle>
-          <DrawerDescription>
+      <SheetContent className="max-w-full">
+        <SheetHeader className="text-left">
+          <SheetTitle>Select Cell Group Attendees</SheetTitle>
+          <SheetDescription>
             Choose the disciples who attended this cell group
-          </DrawerDescription>
-        </DrawerHeader>
+          </SheetDescription>
+        </SheetHeader>
         <div className="p-4">
           <AttendeesPickerControl
             attendees={attendees}
@@ -99,8 +91,8 @@ function AttendeesPicker(props: AttendeesPickerProps) {
             onDone={() => setOpen(false)}
           />
         </div>
-      </DrawerContent>
-    </Drawer>
+      </SheetContent>
+    </Sheet>
   )
 }
 
@@ -156,7 +148,7 @@ function AttendeesPickerControl({
   }
 
   return (
-    <div>
+    <div className="flex flex-col">
       <div className="relative flex-1">
         <Input
           placeholder="Search here"
@@ -206,7 +198,7 @@ function AttendeesPickerControl({
           </SheetContent>
         </Sheet>
       </p>
-      <div className="h-[350px] max-h-[350px] overflow-y-auto py-3 pr-2">
+      <div className="h-[60vh] max-h-[60vh] overflow-y-auto py-3 pr-2">
         {attendeesOptions?.length === 0 ? (
           <div className="space-y-4 text-center">
             <p className="text-center text-muted-foreground">
@@ -272,7 +264,7 @@ function AttendeesPickerControl({
           </div>
         ))}
       </div>
-      <div className="flex flex-col-reverse gap-3 sm:flex-row sm:justify-end">
+      <div className="mt-auto flex flex-col-reverse gap-3 sm:flex-row sm:justify-end">
         <Button
           type="button"
           variant="ghost"
