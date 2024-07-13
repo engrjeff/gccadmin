@@ -54,7 +54,16 @@ export default function RootLayout({ children }: RootLayoutProps) {
             enableSystem={false}
           >
             <AuthProvider>
-              <ReactQueryProvider>{children}</ReactQueryProvider>
+              <ReactQueryProvider>
+                <div className="absolute inset-0 mx-auto flex max-w-xs flex-col items-center justify-center">
+                  <h1>
+                    I already decided to kill this app since it is no longer
+                    being used.
+                  </h1>
+
+                  <p>-jeff</p>
+                </div>
+              </ReactQueryProvider>
             </AuthProvider>
             <Toaster />
             <TailwindIndicator />
