@@ -55,15 +55,14 @@ export default function RootLayout({ children }: RootLayoutProps) {
           >
             <AuthProvider>
               <ReactQueryProvider>
-                {/* <div className="absolute inset-0 mx-auto flex max-w-xs flex-col items-center justify-center">
+                <div className="absolute inset-0 mx-auto flex max-w-xs flex-col items-center justify-center">
                   <h1>
-                    I already decided to kill this app since it is no longer
+                    I already decided to kill this app since it is not really
                     being used.
                   </h1>
 
                   <p>-jeff</p>
-                </div> */}
-                {children}
+                </div>
               </ReactQueryProvider>
             </AuthProvider>
             <Toaster />
