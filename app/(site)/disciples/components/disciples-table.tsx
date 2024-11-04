@@ -1,7 +1,6 @@
 "use client"
 
 import { useState } from "react"
-import { Disciple } from "@prisma/client"
 import {
   ColumnFiltersState,
   getCoreRowModel,
@@ -17,6 +16,7 @@ import {
 
 import useIsDesktop from "@/hooks/use-is-desktop"
 import { useIsAdmin } from "@/hooks/use-isadmin"
+import { usePrimaryLeaders } from "@/hooks/use-primary-leaders"
 import { DataTableViewOptions } from "@/components/ui/data-table/column-visibility-toggle"
 import DataTable from "@/components/ui/data-table/data-table"
 import MobileTablePagination from "@/components/ui/data-table/mobile-table-pagination"
@@ -33,7 +33,6 @@ import DiscipleSearch from "./disciple-search"
 
 interface Props {
   disciples: DiscipleWithLeader[]
-  leaders: Disciple[]
 }
 
 function useDiscipleTable(disciples: DiscipleWithLeader[]) {
@@ -72,7 +71,7 @@ function useDiscipleTable(disciples: DiscipleWithLeader[]) {
   return table
 }
 
-function DisciplesTable({ disciples, leaders }: Props) {
+function DisciplesTable({ disciples }: Props) {
   const isDesktop = useIsDesktop()
   const table = useDiscipleTable(disciples)
   //   search
@@ -81,8 +80,11 @@ function DisciplesTable({ disciples, leaders }: Props) {
   const handleSearch = (searchValue: string) =>
     table.getColumn("name")?.setFilterValue(searchValue)
 
+  const { data: leaders } = usePrimaryLeaders()
+
   // leaders options
-  const leadersOptions = leaders.map((i) => ({ label: i.name, value: i.name }))
+  const leadersOptions =
+    leaders?.map((i) => ({ label: i.name, value: i.name })) ?? []
 
   if (!isDesktop)
     return (
