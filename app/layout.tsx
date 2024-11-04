@@ -47,23 +47,13 @@ export default function RootLayout({ children }: RootLayoutProps) {
           )}
         >
           <NextTopLoader color="#6467F2" showSpinner={false} />
-          {/* <NextTopLoader color="#FDB21C" showSpinner={false} /> */}
           <ThemeProvider
             attribute="class"
             defaultTheme="dark"
             enableSystem={false}
           >
             <AuthProvider>
-              <ReactQueryProvider>
-                <div className="absolute inset-0 mx-auto flex max-w-xs flex-col items-center justify-center">
-                  <h1>
-                    I already decided to kill this app since it is not really
-                    being used.
-                  </h1>
-
-                  <p>-jeff</p>
-                </div>
-              </ReactQueryProvider>
+              <ReactQueryProvider>{children}</ReactQueryProvider>
             </AuthProvider>
             <Toaster />
             <TailwindIndicator />
