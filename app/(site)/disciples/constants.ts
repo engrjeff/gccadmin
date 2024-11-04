@@ -34,3 +34,15 @@ export const churchStatuses: Option[] = ["NACS", "ACS", "REGULAR"].map((m) => ({
   value: m,
   label: m === "REGULAR" ? "Regular" : m,
 }))
+
+export const processLevelStatuses: Option[] = [
+  "NOT_STARTED",
+  "ON_GOING",
+  "PENDING_REQUIREMENTS",
+  "FINISHED",
+  "UNFINISHED",
+  "DROPPED",
+].map((m) => ({
+  value: m,
+  label: m.replace("_", " ").toLowerCase(),
+}))

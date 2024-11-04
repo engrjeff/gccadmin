@@ -30,7 +30,12 @@ import {
   discipleCreateSchema,
 } from "@/app/api/disciples/schema"
 
-import { cellStatuses, churchStatuses, processLevels } from "../constants"
+import {
+  cellStatuses,
+  churchStatuses,
+  processLevels,
+  processLevelStatuses,
+} from "../constants"
 
 const initialValues: Partial<DiscipleCreateInputs> = {
   name: "",
@@ -41,6 +46,7 @@ const initialValues: Partial<DiscipleCreateInputs> = {
   church_status: "NACS",
   member_type: "KIDS",
   process_level: "NONE",
+  process_level_status: "NOT_STARTED",
 }
 
 interface DiscipleFormProps {
@@ -88,6 +94,7 @@ function DiscipleForm({ modalMode, leaderId, initialName }: DiscipleFormProps) {
     })
 
     if (!response?.ok) {
+      console.log(response)
       return toast({
         title: "Something went wrong.",
         description: "The disciple record was not created. Please try again.",
@@ -423,6 +430,7 @@ function DiscipleForm({ modalMode, leaderId, initialName }: DiscipleFormProps) {
                 className="lg:hidden"
                 id="process_level"
                 {...form.register("process_level")}
+                disabled={form.watch("cell_status") === "FIRST_TIMER"}
               >
                 {processLevels.map((item) => (
                   <option key={item.value} value={item.value}>
@@ -447,6 +455,52 @@ function DiscipleForm({ modalMode, leaderId, initialName }: DiscipleFormProps) {
                       <SelectGroup>
                         <SelectLabel>Process Level</SelectLabel>
                         {processLevels.map((item) => (
+                          <SelectItem
+                            key={item.value}
+                            value={item.value}
+                            className="capitalize"
+                          >
+                            {item.label}
+                          </SelectItem>
+                        ))}
+                      </SelectGroup>
+                    </SelectContent>
+                  </Select>
+                )}
+              />
+            </div>
+            <div className="flex w-full max-w-xs flex-col space-y-2">
+              <Label htmlFor="process_level_status">Process Status</Label>
+              <NativeSelect
+                key={form.watch("process_level_status")}
+                className="lg:hidden"
+                id="process_level_status"
+                {...form.register("process_level_status")}
+                disabled={form.watch("process_level") === "NONE"}
+              >
+                {processLevelStatuses.map((item) => (
+                  <option key={item.value} value={item.value}>
+                    {item.label}
+                  </option>
+                ))}
+              </NativeSelect>
+              <Controller
+                control={form.control}
+                name="process_level_status"
+                render={({ field }) => (
+                  <Select
+                    name="process_level_status"
+                    value={field.value === undefined ? "" : field.value}
+                    onValueChange={field.onChange}
+                    disabled={form.watch("process_level") === "NONE"}
+                  >
+                    <SelectTrigger className="hidden w-full capitalize lg:flex">
+                      <SelectValue placeholder="Process Status" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectGroup>
+                        <SelectLabel>Process Status</SelectLabel>
+                        {processLevelStatuses.map((item) => (
                           <SelectItem
                             key={item.value}
                             value={item.value}

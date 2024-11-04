@@ -8,7 +8,7 @@ import { Button } from "@/components/ui/button"
 import { DataTableFacetedFilter } from "@/components/ui/data-table/faceted-filter"
 import { Separator } from "@/components/ui/separator"
 
-import { processLevels } from "../constants"
+import { processLevels, processLevelStatuses } from "../constants"
 import { DiscipleWithLeader } from "./columns"
 
 interface DiscipleFiltersProps {
@@ -48,6 +48,11 @@ function DiscipleFilters({ table, leadersOptions }: DiscipleFiltersProps) {
         column={table.getColumn("process_level")}
         title="Process"
         options={processLevels}
+      />
+      <DataTableFacetedFilter
+        column={table.getColumn("process_level_status")}
+        title="Process Status"
+        options={processLevelStatuses}
       />
       {isFiltered && (
         <>

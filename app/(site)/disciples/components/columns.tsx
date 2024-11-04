@@ -41,6 +41,16 @@ const processColorMap: Record<Disciple["process_level"], string> = {
   LEADERSHIP_3: "text-primary",
 }
 
+const processStatusColorMap: Record<Disciple["process_level_status"], string> =
+  {
+    NOT_STARTED: "text-red-500",
+    ON_GOING: "text-amber-500",
+    PENDING_REQUIREMENTS: "text-orange-500",
+    FINISHED: "text-green-500",
+    UNFINISHED: "text-rose-500",
+    DROPPED: "text-gray-500",
+  }
+
 export type DiscipleWithLeader = Disciple & { leader: { name: string } | null }
 
 export const columns: ColumnDef<DiscipleWithLeader>[] = [
@@ -195,6 +205,32 @@ export const columns: ColumnDef<DiscipleWithLeader>[] = [
           &#x2022;
         </span>
         {props.row.original.process_level.split("_").join(" ").toLowerCase()}
+      </Badge>
+    ),
+    filterFn: (row, id, value) => {
+      return value.includes(row.getValue(id))
+    },
+  },
+  {
+    accessorKey: "process_level_status",
+    id: "process_level_status",
+    header: ({ column }) => (
+      <DataTableColumnHeader column={column} title="Process Status" />
+    ),
+    cell: (props) => (
+      <Badge variant="outline" className={cn("capitalize")}>
+        <span
+          className={cn(
+            "mr-2 scale-150",
+            processStatusColorMap[props.row.original.process_level_status]
+          )}
+        >
+          &#x2022;
+        </span>
+        {props.row.original.process_level_status
+          .split("_")
+          .join(" ")
+          .toLowerCase()}
       </Badge>
     ),
     filterFn: (row, id, value) => {
