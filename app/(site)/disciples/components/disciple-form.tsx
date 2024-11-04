@@ -46,9 +46,10 @@ const initialValues: Partial<DiscipleCreateInputs> = {
 interface DiscipleFormProps {
   modalMode?: boolean
   leaderId?: string
+  initialName?: string
 }
 
-function DiscipleForm({ modalMode, leaderId }: DiscipleFormProps) {
+function DiscipleForm({ modalMode, leaderId, initialName }: DiscipleFormProps) {
   const session = useSession()
 
   const isAdmin = session.data?.user?.role === "ADMIN"
@@ -63,6 +64,7 @@ function DiscipleForm({ modalMode, leaderId }: DiscipleFormProps) {
   const form = useForm<DiscipleCreateInputs>({
     defaultValues: {
       ...initialValues,
+      name: initialName ? initialName : "",
       leaderId: leaderIdQueryParam ? leaderIdQueryParam : leaderId,
     },
     mode: "onChange",
