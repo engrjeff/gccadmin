@@ -7,8 +7,7 @@ interface PageProps {
 
 async function CellReportListing({ searchParams }: PageProps) {
   const cellReports = await getCellReports({
-    from: searchParams.from,
-    to: searchParams.to,
+    isAll: true,
   })
 
   return <CellReportTable data={cellReports} />
