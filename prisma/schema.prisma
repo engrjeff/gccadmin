@@ -78,6 +78,7 @@ model Disciple {
   leader                Disciple?                @relation("LeaderDisciples", fields: [leaderId], references: [id])
   disciples             Disciple[]               @relation("LeaderDisciples")
   lessons_taken         LessonsTakenByDisciple[]
+  process_level_status  ProcessLevelStatus       @default(NOT_STARTED)
 
   @@index([id, leaderId])
   @@index([leaderId])
@@ -223,4 +224,13 @@ enum CellType {
   SOULWINNING
   OPEN
   DISCIPLESHIP
+}
+
+enum ProcessLevelStatus {
+  NOT_STARTED
+  ON_GOING
+  PENDING_REQUIREMENTS
+  FINISHED
+  UNFINISHED
+  DROPPED
 }
