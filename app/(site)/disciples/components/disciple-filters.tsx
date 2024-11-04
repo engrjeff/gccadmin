@@ -7,7 +7,6 @@ import { useIsAdmin } from "@/hooks/use-isadmin"
 import { Button } from "@/components/ui/button"
 import { DataTableFacetedFilter } from "@/components/ui/data-table/faceted-filter"
 import { Separator } from "@/components/ui/separator"
-import RenderIf from "@/components/render-if"
 
 import { processLevels } from "../constants"
 import { DiscipleWithLeader } from "./columns"
@@ -28,13 +27,13 @@ function DiscipleFilters({ table, leadersOptions }: DiscipleFiltersProps) {
 
   return (
     <>
-      <RenderIf condition={leadersOptions.length > 0 && isAdmin}>
+      {isAdmin ? (
         <DataTableFacetedFilter
           column={table.getColumn("leaderName")}
           title="Leader"
           options={leadersOptions}
         />
-      </RenderIf>
+      ) : null}
       <DataTableFacetedFilter
         column={table.getColumn("cell_status")}
         title="Cell Status"

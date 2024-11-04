@@ -18,7 +18,6 @@ import {
   DrawerTitle,
   DrawerTrigger,
 } from "@/components/ui/drawer"
-import RenderIf from "@/components/render-if"
 
 import { DiscipleWithLeader } from "./columns"
 
@@ -50,13 +49,13 @@ function DiscipleMobileFacetFilters({
             </DrawerDescription>
           </DrawerHeader>
           <div className="space-y-3 px-4">
-            <RenderIf condition={isAdmin}>
+            {isAdmin ? (
               <MobileFacetedFilter
                 column={table.getColumn("leaderName")}
                 title="Leader"
                 options={leadersOptions}
               />
-            </RenderIf>
+            ) : null}
             <MobileFacetedFilter
               column={table.getColumn("cell_status")}
               title="Cell Status"

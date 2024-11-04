@@ -38,6 +38,8 @@ export const getDisciples = async (args: GetDisciplesArgs | undefined) => {
         },
       },
     },
+
+    // take: 10,
     orderBy: {
       createdAt: "desc",
     },
