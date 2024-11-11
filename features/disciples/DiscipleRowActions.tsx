@@ -33,7 +33,11 @@ import { LessonsTakenByDisciple } from "./LessonsTakenByDisciple"
 
 type RowAction = "edit" | "view" | "make-inactive" | "make-active" | "delete"
 
-function DiscipleRowActions({ disciple }: { disciple: DiscipleWithLeader }) {
+export function DiscipleRowActions({
+  disciple,
+}: {
+  disciple: DiscipleWithLeader
+}) {
   const [action, setAction] = useState<RowAction>()
 
   return (
@@ -206,5 +210,3 @@ function DiscipleRowActions({ disciple }: { disciple: DiscipleWithLeader }) {
     </>
   )
 }
-
-export default DiscipleRowActions

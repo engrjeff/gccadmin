@@ -9,7 +9,7 @@ import { Checkbox } from "@/components/ui/checkbox"
 import { SortLink } from "@/components/ui/data-table/sort-link"
 import { Separator } from "@/components/ui/separator"
 
-import DiscipleRowActions from "./DiscipleRowActions"
+import { DiscipleRowActions } from "./DiscipleRowActions"
 
 export type DiscipleWithLeader = Disciple & { leader: { name: string } | null }
 
