@@ -1,8 +1,8 @@
 import { redirect } from "next/navigation"
 
 import { verifyUser } from "@/lib/session"
+import { AppHeader } from "@/components/app-header"
 import SideNav from "@/components/side-nav"
-import { SiteHeader } from "@/components/site-header"
 
 async function SiteLayout({ children }: { children: React.ReactNode }) {
   const isUserVerified = await verifyUser()
@@ -16,10 +16,10 @@ async function SiteLayout({ children }: { children: React.ReactNode }) {
       <SideNav />
       <div
         vaul-drawer-wrapper=""
-        className="h-full overflow-hidden bg-background lg:pl-[220px]"
+        className="h-full lg:overflow-hidden lg:p-4 lg:pl-[220px]"
       >
-        <SiteHeader />
-        <main className="container relative flex h-[calc(100%-64px)] max-h-[calc(100%-64px)] flex-col px-0 py-4 lg:py-6">
+        <AppHeader />
+        <main className="h-full border-gray-900 lg:grid lg:grid-rows-1 lg:rounded-xl lg:border lg:px-0">
           {children}
         </main>
       </div>

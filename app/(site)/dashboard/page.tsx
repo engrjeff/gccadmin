@@ -28,13 +28,13 @@ async function DashboardPage({ searchParams }: PageProps) {
         </div>
         <RefreshDataButton />
       </div>
-      <div className="flex-1 space-y-6 overflow-auto px-4 lg:px-6">
+      {/* <div className="flex-1 space-y-6 overflow-auto px-4 lg:px-6">
         <KPIStats />
         <WeeklyCellReports searchParams={searchParams} />
         <GroupStatusData />
         <AnnualCellReports />
         <LeadersData />
-      </div>
+      </div> */}
     </>
   )
 }

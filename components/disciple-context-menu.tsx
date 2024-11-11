@@ -23,7 +23,7 @@ function DiscipleContextMenu({ disciple }: DiscipleContextMenuProps) {
       <ContextMenuTrigger asChild>
         <Link
           href={`/disciples/${disciple.id}`}
-          className="inline-flex cursor-pointer items-center gap-2 whitespace-nowrap hover:underline"
+          className="inline-flex cursor-pointer items-center gap-2 whitespace-nowrap text-sm hover:underline"
           onClick={(e) => e.stopPropagation()}
         >
           {disciple.isPrimary ? (

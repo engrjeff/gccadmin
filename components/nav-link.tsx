@@ -8,7 +8,11 @@ import { cn } from "@/lib/utils"
 
 import { buttonVariants } from "./ui/button"
 
-function NavLink({ className, ...props }: ComponentProps<typeof Link>) {
+interface NavLinkProps extends ComponentProps<typeof Link> {
+  forMobile?: boolean
+}
+
+function NavLink({ className, forMobile, ...props }: NavLinkProps) {
   const segment = useSelectedLayoutSegment()
 
   const isActive = props.href === `/${segment}`
@@ -17,8 +21,12 @@ function NavLink({ className, ...props }: ComponentProps<typeof Link>) {
     <Link
       {...props}
       className={cn(
-        buttonVariants({ size: "sm", variant: isActive ? "default" : "ghost" }),
+        buttonVariants({
+          size: forMobile ? "default" : "sm",
+          variant: isActive && !forMobile ? "default" : "ghost",
+        }),
         "w-full justify-start",
+        forMobile && isActive ? "text-primary hover:text-primary" : "",
         className
       )}
     />

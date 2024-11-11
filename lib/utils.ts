@@ -6,6 +6,16 @@ export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs))
 }
 
+export function removeUnderscores(inputStr: string) {
+  if (inputStr && ["NACS", "ACS"].includes(inputStr)) return inputStr
+
+  if (!inputStr?.includes("_")) {
+    return inputStr.toLowerCase()
+  }
+
+  return inputStr.replaceAll("_", " ").toLowerCase()
+}
+
 export const formatTime = (timeStr: string) => {
   const parts = timeStr.split(":")
   let hours = parseInt(parts[0])
@@ -29,4 +39,11 @@ export const getNextCellStatus = (cellStatus: CellStatus): CellStatus => {
     default:
       return "REGULAR"
   }
+}
+
+export function getSkip({ limit, page }: { limit?: number; page?: number }) {
+  const _limit = limit ?? 12
+  const _page = page ?? 1
+
+  return _limit * (_page - 1)
 }
