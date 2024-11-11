@@ -9,7 +9,7 @@ function SideNav() {
     <nav className="fixed hidden h-full w-[220px] flex-col bg-background text-muted-foreground lg:flex">
       <div className="flex h-16 items-center gap-3 px-4 pt-4">
         <Logo size={36} />
-        <span className="text-xl font-semibold text-white">GCC System</span>
+        <span className="text-xl font-semibold text-white">GCC Admin</span>
       </div>
       <div className="space-y-2 p-4">
         <p className="py-3 text-xs font-semibold uppercase tracking-wider text-muted-foreground">

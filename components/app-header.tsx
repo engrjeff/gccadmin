@@ -1,5 +1,6 @@
 import Logo from "./logo"
 import { MobileNav } from "./mobile-nav"
+import { UserMobileMenuDropdown } from "./user-menu-dropdown"
 
 export function AppHeader() {
   return (
@@ -8,7 +9,10 @@ export function AppHeader() {
         <Logo size={32} />
         <span className="mt-0.5 inline-block font-semibold">GCC Admin</span>
       </div>
-      <MobileNav />
+      <div className="ml-auto flex items-center gap-3">
+        <UserMobileMenuDropdown />
+        <MobileNav />
+      </div>
     </header>
   )
 }

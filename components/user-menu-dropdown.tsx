@@ -78,3 +78,53 @@ export function UserMenuDropdown() {
     </DropdownMenu>
   )
 }
+
+export function UserMobileMenuDropdown() {
+  const session = useSession()
+
+  if (session.status === "loading")
+    return (
+      <Skeleton className="size-6 animate-pulse rounded-full border bg-muted" />
+    )
+
+  if (!session.data?.user) {
+    return null
+  }
+
+  const user = session.data.user
+
+  return (
+    <DropdownMenu>
+      <DropdownMenuTrigger asChild>
+        <Button variant="outline" size="icon" className="size-6 rounded-full">
+          <Avatar key={user.image} className="size-full">
+            <AvatarImage
+              src={user.image || undefined}
+              className="object-cover"
+            />
+          </Avatar>
+        </Button>
+      </DropdownMenuTrigger>
+      <DropdownMenuContent align="end" forceMount>
+        <DropdownMenuLabel>{user.email}</DropdownMenuLabel>
+        <DropdownMenuSeparator />
+        <DropdownMenuItem asChild>
+          <button className="flex w-full">
+            <UserIcon className="mr-2 size-4" />
+            <span>Profile</span>
+          </button>
+        </DropdownMenuItem>
+        <DropdownMenuItem asChild>
+          <button
+            type="button"
+            className="flex w-full"
+            onClick={() => signOut()}
+          >
+            <LogOutIcon className="mr-2 size-4" />
+            <span>Log out</span>
+          </button>
+        </DropdownMenuItem>
+      </DropdownMenuContent>
+    </DropdownMenu>
+  )
+}
