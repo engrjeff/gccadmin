@@ -48,7 +48,7 @@ function TagsInput({
 
   return (
     <div>
-      <div className="relative flex min-h-[80px] flex-wrap items-start gap-2 rounded-md border border-input p-2 ring-offset-background lg:pr-20 [&:has(input:focus-visible)]:ring-2 [&:has(input:focus-visible)]:ring-ring [&:has(input:focus-visible)]:ring-offset-2 [&:has(input[aria-invalid=true])]:border-danger [&:has(input[aria-invalid=true])]:ring-danger">
+      <div className="relative flex min-h-[80px] flex-wrap items-start gap-2 rounded-md border border-input bg-muted/30 p-2 lg:pr-20 [&:has(input:focus-visible)]:ring-2 [&:has(input:focus-visible)]:ring-ring [&:has(input[aria-invalid=true])]:border-danger [&:has(input[aria-invalid=true])]:ring-danger">
         {value.map((tag, index) => (
           <Badge
             key={`${tag}-${index}`}

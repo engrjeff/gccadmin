@@ -28,7 +28,7 @@ function DisciplesPage({ searchParams }: { searchParams: DisciplesQueryArgs }) {
       <Suspense
         key={JSON.stringify(searchParams)}
         fallback={
-          <div className="relative flex-1">
+          <div className="relative min-h-[300px] flex-1">
             <PageLoadingSpinner />
           </div>
         }

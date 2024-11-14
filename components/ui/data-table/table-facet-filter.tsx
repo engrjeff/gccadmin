@@ -24,6 +24,7 @@ interface TableFacetFilterProps {
     label: string
     value: string
   }[]
+  singleSelection?: boolean
 }
 
 export function TableFacetFilter({
@@ -31,6 +32,7 @@ export function TableFacetFilter({
   title,
   selectedLabelKey = "value",
   options,
+  singleSelection,
 }: TableFacetFilterProps) {
   const [queryParam, setQueryParam] = useQueryState(
     filterKey,
@@ -47,6 +49,7 @@ export function TableFacetFilter({
       options={options}
       queryParam={queryParam}
       onApply={setQueryParam}
+      singleSelection={singleSelection}
     />
   )
 }
@@ -56,6 +59,7 @@ function FilterComponent({
   title,
   options,
   selectedLabelKey,
+  singleSelection,
   onApply,
 }: Omit<TableFacetFilterProps, "filterKey"> & {
   queryParam: string[]
@@ -123,22 +127,27 @@ function FilterComponent({
         {options.map((option) => (
           <div
             key={title + "-option-" + option.value}
-            className="-ml-1 mb-0.5 flex items-center space-x-2 rounded-md px-1 py-1.5 hover:bg-muted"
+            className="-ml-1 mb-0.5 flex items-center space-x-2 rounded-md px-1 hover:bg-muted"
           >
             <Checkbox
               id={option.value}
               checked={selected.includes(option.value)}
-              onCheckedChange={(checked) =>
+              onCheckedChange={(checked) => {
+                if (singleSelection) {
+                  setSelected([option.value])
+                  return
+                }
+
                 setSelected((old) =>
                   checked
                     ? [...old, option.value]
                     : old.filter((i) => i !== option.value)
                 )
-              }
+              }}
             />
             <label
               htmlFor={option.value}
-              className="flex-1 text-sm font-medium capitalize leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
+              className="flex-1 py-1.5 text-sm font-medium capitalize leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
             >
               {option.label}
             </label>

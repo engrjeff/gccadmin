@@ -61,14 +61,14 @@ function SortLinkComponent({ title, sortValue, className }: SortLinkProps) {
         <span>{title}</span>
         {currentSort === sortValue ? (
           currentOrder === "desc" ? (
-            <ArrowDownIcon className="ml-2 size-4" />
+            <ArrowDownIcon className="ml-1.5 size-4" />
           ) : currentOrder === "asc" ? (
-            <ArrowUpIcon className="ml-2 size-4" />
+            <ArrowUpIcon className="ml-1.5 size-4" />
           ) : (
-            <ChevronsUpDownIcon className="ml-2 size-4" />
+            <ChevronsUpDownIcon className="ml-1.5 size-4" />
           )
         ) : (
-          <ChevronsUpDownIcon className="ml-2 size-4" />
+          <ChevronsUpDownIcon className="ml-1.5 size-4" />
         )}
       </Link>
     </div>

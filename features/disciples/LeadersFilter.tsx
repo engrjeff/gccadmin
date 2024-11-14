@@ -6,6 +6,8 @@ import { TableFacetFilter } from "@/components/ui/data-table/table-facet-filter"
 export function LeadersFacetFilter() {
   const leaders = usePrimaryLeaders()
 
+  if (leaders.isLoading) return null
+
   return (
     <TableFacetFilter
       filterKey="leaderId"

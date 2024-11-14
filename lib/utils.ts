@@ -10,7 +10,7 @@ export function removeUnderscores(inputStr: string) {
   if (inputStr && ["NACS", "ACS"].includes(inputStr)) return inputStr
 
   if (!inputStr?.includes("_")) {
-    return inputStr.toLowerCase()
+    return inputStr?.toLowerCase()
   }
 
   return inputStr.replaceAll("_", " ").toLowerCase()
