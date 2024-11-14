@@ -1,10 +1,10 @@
+import { Suspense } from "react"
 import { Metadata } from "next"
+import { CellReportAddModal } from "@/features/cell-reports/CellReportAddModal"
+import { CellReportFilters } from "@/features/cell-reports/CellReportFilters"
+import { CellReportListing } from "@/features/cell-reports/CellReportListing"
 
-import PageTitle from "@/components/page-title"
-
-import CellReportAddButton from "./components/cell-report-add-button"
-import CellReportListing from "./components/cell-report-listing"
-import CellReportView from "./components/cell-report-view"
+import PageLoadingSpinner from "@/components/page-loading-spinner"
 
 export const metadata: Metadata = {
   title: "Cell Reports",
@@ -16,19 +16,30 @@ interface PageProps {
 
 function CellReportsPage({ searchParams }: PageProps) {
   return (
-    <>
-      <div className="flex justify-between px-4 lg:mb-4 lg:px-6">
-        <PageTitle
-          title="Cell Reports"
-          subtitle="Manage your cell reports here"
-        />
-        <CellReportAddButton />
+    <div className="relative flex flex-col gap-4 overflow-hidden p-4">
+      <div className="flex items-start justify-between gap-4">
+        <div>
+          <h2 className="mb-1 text-lg font-bold tracking-tight">Cell Report</h2>
+          <p className="hidden text-sm text-muted-foreground lg:block">
+            View and manage cell reports.
+          </p>
+        </div>
+        <CellReportAddModal />
       </div>
-      <div className="flex-1 overflow-auto px-4 lg:px-6">
+
+      <CellReportFilters />
+
+      <Suspense
+        key={JSON.stringify(searchParams)}
+        fallback={
+          <div className="relative min-h-[300px] flex-1">
+            <PageLoadingSpinner />
+          </div>
+        }
+      >
         <CellReportListing searchParams={searchParams} />
-      </div>
-      <CellReportView />
-    </>
+      </Suspense>
+    </div>
   )
 }
 

@@ -1,15 +1,5 @@
 import { Metadata } from "next"
 
-import PageTitle from "@/components/page-title"
-import QuickActions from "@/components/quick-actions"
-
-import AnnualCellReports from "./components/annual-cell-reports"
-import GroupStatusData from "./components/group-status-data"
-import KPIStats from "./components/kpi-stats"
-import LeadersData from "./components/leaders-data"
-import RefreshDataButton from "./components/refresh-data-button"
-import WeeklyCellReports from "./components/weekly-cell-reports"
-
 export const metadata: Metadata = {
   title: "Dashboard",
 }
@@ -21,20 +11,23 @@ interface PageProps {
 async function DashboardPage({ searchParams }: PageProps) {
   return (
     <>
-      <div className="mb-4 flex items-center justify-between px-4 lg:mb-6 lg:px-6">
-        <PageTitle title="Dashboard" />
-        <div className="lg:hidden">
-          <QuickActions />
+      <div className="relative flex flex-col gap-4 overflow-hidden p-4">
+        <div className="flex items-start justify-between gap-4">
+          <div>
+            <h2 className="mb-1 text-lg font-bold tracking-tight">Dashboard</h2>
+            <p className="hidden text-sm text-muted-foreground lg:block">
+              Quick insights for GCC statistics.
+            </p>
+          </div>
         </div>
-        <RefreshDataButton />
       </div>
-      <div className="flex-1 space-y-6 overflow-auto px-4 lg:px-6">
+      {/* <div className="flex-1 space-y-6 overflow-auto px-4 lg:px-6">
         <KPIStats />
         <WeeklyCellReports searchParams={searchParams} />
         <GroupStatusData />
         <AnnualCellReports />
         <LeadersData />
-      </div>
+      </div> */}
     </>
   )
 }
