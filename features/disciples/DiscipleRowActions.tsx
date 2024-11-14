@@ -95,7 +95,7 @@ export function DiscipleRowActions({
           className="inset-y-2 right-2 flex h-auto w-[95%] flex-col gap-0 overflow-y-hidden rounded-lg border bg-background p-0 focus-visible:outline-none sm:max-w-lg"
           onInteractOutside={(e) => e.preventDefault()}
         >
-          <SheetHeader className="border-b p-4 text-left">
+          <SheetHeader className="space-y-1 border-b p-4 text-left">
             <SheetTitle>Update Disciple</SheetTitle>
             <SheetDescription>Fill in the details below.</SheetDescription>
           </SheetHeader>
@@ -119,7 +119,7 @@ export function DiscipleRowActions({
           className="inset-y-2 right-2 flex h-auto w-[95%] flex-col gap-0 overflow-y-hidden rounded-lg border bg-background p-0 focus-visible:outline-none sm:max-w-lg"
           onInteractOutside={(e) => e.preventDefault()}
         >
-          <SheetHeader className="border-b p-4 text-left">
+          <SheetHeader className="space-y-1 border-b p-4 text-left">
             <SheetTitle>Disciple Details</SheetTitle>
             <div className="flex items-center justify-between">
               <SheetDescription>
@@ -155,7 +155,7 @@ export function DiscipleRowActions({
               </TabsList>
               <TabsContent
                 value="details"
-                className="mt-0 max-h-[80vh] overflow-y-auto pb-8"
+                className="mt-0 max-h-[80vh] overflow-y-auto pb-2"
               >
                 <DiscipleDetails disciple={disciple}>
                   <DiscipleAccountActions
@@ -166,13 +166,13 @@ export function DiscipleRowActions({
               </TabsContent>
               <TabsContent
                 value="lessons-taken"
-                className="mt-0 max-h-[80vh] overflow-y-auto pb-8"
+                className="mt-0 max-h-[80vh] overflow-y-auto pb-2"
               >
                 <LessonsTakenByDisciple discipleId={disciple.id} />
               </TabsContent>
               <TabsContent
                 value="cell-groups"
-                className="mt-0 max-h-[80vh] overflow-y-auto pb-8"
+                className="mt-0 max-h-[80vh] overflow-y-auto pb-2"
               >
                 <AttendedCellGroups discipleId={disciple.id} />
               </TabsContent>

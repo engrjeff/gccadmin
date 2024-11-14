@@ -23,7 +23,6 @@ export function AttendeesPicker(props: AttendeesPickerProps) {
   const isAdmin = session.data?.user?.role === "ADMIN"
 
   const leaderId = cellReportForm.watch("leaderId")
-  const assistantId = cellReportForm.watch("assistant_id")
   const attendees = cellReportForm.watch("attendees")
 
   const [attendeesSearchQuery, setAttendeesSearchQuery] = useState("")
@@ -134,7 +133,7 @@ export function AttendeesPicker(props: AttendeesPickerProps) {
       {unSelectedAttendees?.length ? (
         <section className="border-t">
           <div className="flex items-center justify-between border-b bg-muted/20 px-2.5 py-1">
-            <h3 className="text-xs font-medium">All</h3>
+            <h3 className="text-xs font-medium">Disciples</h3>
             <Button
               type="button"
               size="sm"

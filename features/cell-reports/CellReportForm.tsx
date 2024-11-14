@@ -474,8 +474,8 @@ export function CellReportForm({ onAfterSave }: { onAfterSave: () => void }) {
           </fieldset>
         </div>
 
-        <div className="mt-auto flex items-center gap-3 border-t p-4 text-right">
-          <div className="flex select-none items-center space-x-2">
+        <div className="mt-auto flex flex-col gap-3 border-t p-4 text-right md:flex-row md:items-center">
+          <div className="mb-2 flex select-none items-center space-x-2 md:mb-0">
             <Checkbox
               id="create-more-flag"
               className="rounded"
@@ -495,7 +495,7 @@ export function CellReportForm({ onAfterSave }: { onAfterSave: () => void }) {
             variant="outline"
             type="reset"
             disabled={false}
-            className="ml-auto bg-muted/30"
+            className="bg-muted/30 md:ml-auto"
             onClick={() => {
               form.reset(initialValues)
               setSelectedSeries(undefined)

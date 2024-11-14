@@ -15,7 +15,7 @@ export function DiscipleDetails({
   children,
 }: PropsWithChildren<DiscipleDetailsProps>) {
   return (
-    <div>
+    <>
       <div className="divide-y">
         <div className="px-4 py-2 text-sm">
           <p>Name</p>
@@ -68,6 +68,6 @@ export function DiscipleDetails({
       </div>
 
       <div className="mt-6">{children}</div>
-    </div>
+    </>
   )
 }

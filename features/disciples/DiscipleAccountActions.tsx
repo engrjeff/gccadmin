@@ -55,7 +55,7 @@ export function DiscipleAccountActions({
     <form onSubmit={handleAccountActions}>
       <fieldset
         disabled={updateAction.isPending}
-        className="space-y-4 p-4 shadow-lg border-y"
+        className="space-y-4 border-t p-4 shadow-lg"
       >
         <h3 className="font-semibold">Account Actions</h3>
         <div className="flex items-center justify-between">
