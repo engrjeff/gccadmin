@@ -59,7 +59,7 @@ export function DiscipleForm({ initialName, onAfterSave }: DiscipleFormProps) {
   const primaryLeaders = usePrimaryLeaders()
   const session = useSession()
 
-  const [addMore, setAddMore] = useState(true)
+  const [addMore, setAddMore] = useState(false)
 
   const { toast } = useToast()
 

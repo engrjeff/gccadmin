@@ -15,6 +15,8 @@ import { PageInfo } from "./schema"
 export function DisciplePagination({ pageInfo }: { pageInfo: PageInfo }) {
   const [page, setPage] = usePageState(pageInfo.page)
 
+  if (pageInfo.total === 0) return null
+
   const start = (pageInfo.page - 1) * pageInfo.pageSize + 1
   const end = start + pageInfo.itemCount - 1
 
