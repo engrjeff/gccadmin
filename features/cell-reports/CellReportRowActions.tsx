@@ -28,7 +28,7 @@ export function CellReportRowActions({
 
   return (
     <>
-      <div className="flex justify-end lg:justify-center">
+      <div className="-ml-4 flex justify-start lg:ml-0 lg:justify-center">
         <Button
           variant="link"
           className="text-blue-500"
