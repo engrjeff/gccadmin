@@ -3,7 +3,7 @@
 import { useState } from "react"
 import { MenuIcon } from "lucide-react"
 
-import { menuItems } from "@/config/menuItems"
+import { menuItems, processMenuItems } from "@/config/menuItems"
 import { Button } from "@/components/ui/button"
 import {
   Sheet,
@@ -51,6 +51,19 @@ export function MobileNav() {
             {menuItems.map((navItem) => (
               <li key={navItem.title}>
                 <NavLink href={navItem.href} forMobile>
+                  <span className="mr-3">{navItem.icon}</span>
+                  <span>{navItem.title}</span>
+                </NavLink>
+              </li>
+            ))}
+          </ul>
+          <p className="my-3 px-4 text-xs font-medium text-muted-foreground">
+            Process
+          </p>
+          <ul className="space-y-1">
+            {processMenuItems.map((navItem) => (
+              <li key={navItem.title}>
+                <NavLink href={navItem.href}>
                   <span className="mr-3">{navItem.icon}</span>
                   <span>{navItem.title}</span>
                 </NavLink>
