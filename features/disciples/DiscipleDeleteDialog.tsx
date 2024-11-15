@@ -3,15 +3,16 @@
 import React from "react"
 import { useAction } from "next-safe-action/hooks"
 
+import { Button } from "@/components/ui/button"
 import {
-  AlertDialog,
-  AlertDialogCancel,
-  AlertDialogContent,
-  AlertDialogDescription,
-  AlertDialogFooter,
-  AlertDialogHeader,
-  AlertDialogTitle,
-} from "@/components/ui/alert-dialog"
+  Dialog,
+  DialogClose,
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+} from "@/components/ui/dialog"
 import { SubmitButton } from "@/components/ui/submit-button"
 import { toast } from "@/components/ui/use-toast"
 
@@ -21,7 +22,7 @@ export function DiscipleDeleteDialog({
   discipleName,
   discipleId,
   ...dialogProps
-}: React.ComponentProps<typeof AlertDialog> & {
+}: React.ComponentProps<typeof Dialog> & {
   discipleName: string
   discipleId: string
 }) {
@@ -51,22 +52,23 @@ export function DiscipleDeleteDialog({
     }
   }
   return (
-    <AlertDialog {...dialogProps}>
-      <AlertDialogContent>
-        <AlertDialogHeader>
-          <AlertDialogTitle>
+    <Dialog {...dialogProps}>
+      <DialogContent className="rounded-lg">
+        <DialogHeader className="text-left">
+          <DialogTitle>Delete</DialogTitle>
+          <DialogDescription>
             Do you really want to delete{" "}
-            <span className="font-semibold">{discipleName}</span>?
-          </AlertDialogTitle>
-          <AlertDialogDescription>
+            <span className="font-semibold text-red-500">{discipleName}</span>?
             This action cannot be undone. This will permanently delete this
             record.
-          </AlertDialogDescription>
-        </AlertDialogHeader>
-        <AlertDialogFooter>
-          <AlertDialogCancel disabled={action.isPending}>
-            Cancel
-          </AlertDialogCancel>
+          </DialogDescription>
+        </DialogHeader>
+        <DialogFooter className="flex-row justify-end space-x-2">
+          <DialogClose disabled={action.isPending} asChild>
+            <Button type="button" variant="outline">
+              Cancel
+            </Button>
+          </DialogClose>
           <SubmitButton
             type="button"
             variant="destructive"
@@ -75,8 +77,8 @@ export function DiscipleDeleteDialog({
           >
             Confirm
           </SubmitButton>
-        </AlertDialogFooter>
-      </AlertDialogContent>
-    </AlertDialog>
+        </DialogFooter>
+      </DialogContent>
+    </Dialog>
   )
 }
