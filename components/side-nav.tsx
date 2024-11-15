@@ -1,4 +1,4 @@
-import { menuItems } from "@/config/menuItems"
+import { menuItems, processMenuItems } from "@/config/menuItems"
 
 import Logo from "./logo"
 import NavLink from "./nav-link"
@@ -17,6 +17,19 @@ function SideNav() {
         </p>
         <ul className="space-y-1">
           {menuItems.map((navItem) => (
+            <li key={navItem.title}>
+              <NavLink href={navItem.href}>
+                <span className="mr-3">{navItem.icon}</span>
+                <span>{navItem.title}</span>
+              </NavLink>
+            </li>
+          ))}
+        </ul>
+        <p className="py-3 text-xs font-semibold uppercase tracking-wider text-muted-foreground">
+          Process
+        </p>
+        <ul className="space-y-1">
+          {processMenuItems.map((navItem) => (
             <li key={navItem.title}>
               <NavLink href={navItem.href}>
                 <span className="mr-3">{navItem.icon}</span>

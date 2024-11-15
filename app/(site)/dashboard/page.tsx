@@ -1,5 +1,7 @@
 import { Metadata } from "next"
 
+import PageTitle from "@/components/page-title"
+
 export const metadata: Metadata = {
   title: "Dashboard",
 }
@@ -13,12 +15,10 @@ async function DashboardPage({ searchParams }: PageProps) {
     <>
       <div className="relative flex flex-col gap-4 overflow-hidden p-4">
         <div className="flex items-start justify-between gap-4">
-          <div>
-            <h2 className="mb-1 text-lg font-bold tracking-tight">Dashboard</h2>
-            <p className="hidden text-sm text-muted-foreground lg:block">
-              Quick insights for GCC statistics.
-            </p>
-          </div>
+          <PageTitle
+            title="Dashboard"
+            subtitle="Quick insights for GCC statistics."
+          />
         </div>
       </div>
       {/* <div className="flex-1 space-y-6 overflow-auto px-4 lg:px-6">

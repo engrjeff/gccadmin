@@ -54,6 +54,7 @@ export function CellReportMobileFilters() {
         side="bottom"
         className="inset-x-3 bottom-3 flex flex-col rounded-lg border bg-background p-4"
         onOpenAutoFocus={(e) => e.preventDefault()}
+        onInteractOutside={(e) => e.preventDefault()}
       >
         <SheetHeader className="text-left">
           <SheetTitle>Filters</SheetTitle>
