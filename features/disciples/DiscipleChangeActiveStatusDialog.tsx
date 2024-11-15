@@ -3,15 +3,16 @@
 import React from "react"
 import { useAction } from "next-safe-action/hooks"
 
+import { Button } from "@/components/ui/button"
 import {
-  AlertDialog,
-  AlertDialogCancel,
-  AlertDialogContent,
-  AlertDialogDescription,
-  AlertDialogFooter,
-  AlertDialogHeader,
-  AlertDialogTitle,
-} from "@/components/ui/alert-dialog"
+  Dialog,
+  DialogClose,
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+} from "@/components/ui/dialog"
 import { SubmitButton } from "@/components/ui/submit-button"
 import { toast } from "@/components/ui/use-toast"
 
@@ -22,7 +23,7 @@ export function DiscipleChangeActiveStatusDialog({
   discipleId,
   isActive,
   ...dialogProps
-}: React.ComponentProps<typeof AlertDialog> & {
+}: React.ComponentProps<typeof Dialog> & {
   discipleName: string
   discipleId: string
   isActive: boolean
@@ -56,20 +57,22 @@ export function DiscipleChangeActiveStatusDialog({
     }
   }
   return (
-    <AlertDialog {...dialogProps}>
-      <AlertDialogContent>
-        <AlertDialogHeader>
-          <AlertDialogTitle>Update Status</AlertDialogTitle>
-          <AlertDialogDescription>
+    <Dialog {...dialogProps}>
+      <DialogContent className="rounded-lg">
+        <DialogHeader className="text-left">
+          <DialogTitle>Update Status</DialogTitle>
+          <DialogDescription>
             Are you sure you want to make{" "}
             <span className="font-semibold text-blue-500">{discipleName}</span>{" "}
             {isActive ? "inactive" : "active"}?
-          </AlertDialogDescription>
-        </AlertDialogHeader>
-        <AlertDialogFooter>
-          <AlertDialogCancel disabled={action.isPending}>
-            Cancel
-          </AlertDialogCancel>
+          </DialogDescription>
+        </DialogHeader>
+        <DialogFooter className="flex-row justify-end space-x-2">
+          <DialogClose disabled={action.isPending} asChild>
+            <Button type="button" variant="outline">
+              Cancel
+            </Button>
+          </DialogClose>
           <SubmitButton
             type="button"
             loading={action.isPending}
@@ -77,8 +80,8 @@ export function DiscipleChangeActiveStatusDialog({
           >
             Confirm
           </SubmitButton>
-        </AlertDialogFooter>
-      </AlertDialogContent>
-    </AlertDialog>
+        </DialogFooter>
+      </DialogContent>
+    </Dialog>
   )
 }
