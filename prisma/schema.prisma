@@ -80,6 +80,16 @@ model Disciple {
   lessons_taken         LessonsTakenByDisciple[]
   process_level_status  ProcessLevelStatus       @default(NOT_STARTED)
 
+  handled_by_id     String?
+  handled_by        Disciple?  @relation("handledBy", fields: [handled_by_id], references: [id])
+  handled_disciples Disciple[] @relation("handledBy")
+
+  encounter_batch    EncounterBatch? @relation(fields: [encounter_batch_id], references: [id])
+  encounter_batch_id String?
+
+  teaching_sessions         ProcessTeacher[]
+  attended_process_sessions ProcessAttendee[]
+
   @@index([id, leaderId])
   @@index([leaderId])
   @@index([userAccountId])
@@ -178,6 +188,77 @@ model CellGroup {
   Disciple  Disciple @relation(fields: [leaderId], references: [id])
 
   @@index([leaderId])
+}
+
+model EncounterBatch {
+  id        String     @id @default(cuid())
+  batchName String     @unique
+  startDate DateTime
+  endDate   DateTime
+  members   Disciple[]
+  createdAt DateTime   @default(now())
+  updatedAt DateTime   @updatedAt
+}
+
+model ProcessLessonSeries {
+  id          String          @id @default(cuid())
+  title       String
+  description String?
+  tags        String[]
+  createdAt   DateTime        @default(now())
+  updatedAt   DateTime        @updatedAt
+  lessons     ProcessLesson[]
+}
+
+model ProcessLesson {
+  id                       String               @id @default(cuid())
+  title                    String
+  description              String?
+  file_url                 String?
+  scripture_references     String[]
+  createdAt                DateTime             @default(now())
+  updatedAt                DateTime             @updatedAt
+  process_lesson_series_id String?
+  process_lesson_series    ProcessLessonSeries? @relation(fields: [process_lesson_series_id], references: [id])
+
+  process_attendance_records ProcessAttendance[]
+
+  @@index([process_lesson_series_id])
+}
+
+model ProcessTeacher {
+  teacher_id                    String
+  teacher_process_attendance_id String              @id
+  process_attendance            ProcessAttendance[]
+  teacher                       Disciple            @relation(fields: [teacher_id], references: [id])
+
+  @@index([teacher_id])
+}
+
+model ProcessAttendee {
+  disciple_id                    String
+  disciple_process_attendance_id String              @id
+  process_attendance_records     ProcessAttendance[]
+  disciple                       Disciple            @relation(fields: [disciple_id], references: [id])
+
+  @@index([disciple_id])
+}
+
+model ProcessAttendance {
+  id String @id @default(cuid())
+
+  date DateTime
+
+  process_lesson    ProcessLesson @relation(fields: [process_lesson_id], references: [id])
+  process_lesson_id String
+
+  process_teacher                       ProcessTeacher? @relation(fields: [process_teacher_process_attendance_id], references: [teacher_process_attendance_id])
+  process_teacher_process_attendance_id String?
+
+  process_attendees ProcessAttendee[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 }
 
 enum Role {
