@@ -240,6 +240,7 @@ model ProcessAttendee {
   disciple_process_attendance_id String              @id
   process_attendance_records     ProcessAttendance[]
   disciple                       Disciple            @relation(fields: [disciple_id], references: [id])
+  remarks                        String?
 
   @@index([disciple_id])
 }
