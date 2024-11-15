@@ -142,6 +142,7 @@ export function DiscipleMoreFilters() {
         side="right"
         className="inset-y-2 right-2 flex h-auto flex-col rounded-lg border bg-background p-4"
         onOpenAutoFocus={(e) => e.preventDefault()}
+        onInteractOutside={(e) => e.preventDefault()}
       >
         <SheetHeader className="text-left">
           <SheetTitle>Filters</SheetTitle>
