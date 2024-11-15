@@ -180,6 +180,7 @@ export function DiscipleRowActions({
         onOpenChange={(isOpen) => {
           if (!isOpen) {
             setAction(undefined)
+            setDrawerOpen(false)
           }
         }}
       >
@@ -204,6 +205,7 @@ export function DiscipleRowActions({
         onOpenChange={(isOpen) => {
           if (!isOpen) {
             setAction(undefined)
+            setDrawerOpen(false)
           }
         }}
       >
@@ -281,6 +283,7 @@ export function DiscipleRowActions({
         onOpenChange={(isOpen) => {
           if (!isOpen) {
             setAction(undefined)
+            setDrawerOpen(false)
           }
         }}
       />
@@ -297,6 +300,7 @@ export function DiscipleRowActions({
         onOpenChange={(isOpen) => {
           if (!isOpen) {
             setAction(undefined)
+            setDrawerOpen(false)
           }
         }}
       />
