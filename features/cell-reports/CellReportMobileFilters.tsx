@@ -42,9 +42,9 @@ export function CellReportMobileFilters() {
           size="sm"
           variant="outline"
           aria-label="open filters"
-          className="h-10 shrink-0 lg:hidden"
+          className="h-8 shrink-0 lg:hidden"
         >
-          <ListFilterIcon size={16} /> Filter
+          <ListFilterIcon size={16} /> Filters
           {filterCount?.length ? (
             <Badge variant="FILTER">{filterCount.length}</Badge>
           ) : null}

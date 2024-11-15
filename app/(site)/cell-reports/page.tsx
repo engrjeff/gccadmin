@@ -20,14 +20,16 @@ function CellReportsPage({ searchParams }: PageProps) {
       <div className="flex items-start justify-between gap-4">
         <div>
           <h2 className="mb-1 text-lg font-bold tracking-tight">Cell Report</h2>
-          <p className="hidden text-sm text-muted-foreground lg:block">
+          <p className="block text-sm text-muted-foreground">
             View and manage cell reports.
           </p>
         </div>
-        <CellReportAddModal />
       </div>
 
-      <CellReportFilters />
+      <div className="flex items-center justify-between">
+        <CellReportFilters />
+        <CellReportAddModal />
+      </div>
 
       <Suspense
         key={JSON.stringify(searchParams)}

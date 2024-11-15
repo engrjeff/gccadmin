@@ -1,10 +1,26 @@
 "use client"
 
 import { useState } from "react"
-import { MoreHorizontalIcon } from "lucide-react"
+import {
+  EyeIcon,
+  MoreHorizontalIcon,
+  PencilIcon,
+  RotateCcwIcon,
+  RotateCwIcon,
+  TrashIcon,
+} from "lucide-react"
 
+import { useIsMobile } from "@/hooks/use-mobile"
 import { Badge } from "@/components/ui/badge"
 import { Button } from "@/components/ui/button"
+import {
+  Drawer,
+  DrawerContent,
+  DrawerDescription,
+  DrawerHeader,
+  DrawerTitle,
+  DrawerTrigger,
+} from "@/components/ui/drawer"
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -40,47 +56,124 @@ export function DiscipleRowActions({
 }) {
   const [action, setAction] = useState<RowAction>()
 
+  const [drawerOpen, setDrawerOpen] = useState(false)
+
+  const isMobile = useIsMobile()
+
+  function handleDrawerItemClick(actionName: RowAction) {
+    setAction(actionName)
+    setDrawerOpen(false)
+  }
+
   return (
     <>
-      <DropdownMenu modal={false}>
-        <DropdownMenuTrigger asChild>
-          <Button
-            variant="ghost"
-            size="icon"
-            className="size-8 hover:border hover:bg-muted/30"
-          >
-            <span className="sr-only">Actions</span>
-            <MoreHorizontalIcon className="size-4" />
-          </Button>
-        </DropdownMenuTrigger>
-        <DropdownMenuContent align="end">
-          <DropdownMenuLabel>Actions</DropdownMenuLabel>
-          <DropdownMenuSeparator />
-          <DropdownMenuItem onClick={() => setAction("view")}>
-            View
-          </DropdownMenuItem>
-          <DropdownMenuItem onClick={() => setAction("edit")}>
-            Edit
-          </DropdownMenuItem>
-          {!disciple.isActive ? (
-            <DropdownMenuItem onClick={() => setAction("make-active")}>
-              Make Active
+      {isMobile ? (
+        <Drawer
+          open={drawerOpen}
+          onOpenChange={setDrawerOpen}
+          shouldScaleBackground={false}
+        >
+          <DrawerTrigger asChild>
+            <Button
+              variant="ghost"
+              size="icon"
+              className="size-8 hover:border hover:bg-muted/30"
+            >
+              <span className="sr-only">Actions</span>
+              <MoreHorizontalIcon className="size-4" />
+            </Button>
+          </DrawerTrigger>
+          <DrawerContent className="inset-x-2">
+            <DrawerHeader className="mb-2 gap-1 border-b text-left">
+              <DrawerTitle className="text-sm font-semibold">
+                Actions
+              </DrawerTitle>
+              <DrawerDescription>{disciple.name}</DrawerDescription>
+            </DrawerHeader>
+            <div className="flex flex-col gap-2 px-2 pb-4">
+              <Button
+                className="justify-start px-2 text-left"
+                variant="ghost"
+                onClick={() => handleDrawerItemClick("view")}
+              >
+                <EyeIcon size={16} /> View
+              </Button>
+              <Button
+                className="justify-start px-2 text-left"
+                variant="ghost"
+                onClick={() => handleDrawerItemClick("edit")}
+              >
+                <PencilIcon size={16} /> Edit
+              </Button>
+              {!disciple.isActive ? (
+                <Button
+                  className="justify-start px-2 text-left"
+                  variant="ghost"
+                  onClick={() => handleDrawerItemClick("make-active")}
+                >
+                  <RotateCwIcon size={16} /> Make Active
+                </Button>
+              ) : null}
+              {disciple.isActive ? (
+                <Button
+                  className="justify-start px-2 text-left"
+                  variant="ghost"
+                  onClick={() => handleDrawerItemClick("make-inactive")}
+                >
+                  <RotateCcwIcon size={16} /> Make Inactive
+                </Button>
+              ) : null}
+              <Button
+                className="justify-start px-2 text-left text-red-500 hover:text-red-500"
+                variant="ghost"
+                onClick={() => handleDrawerItemClick("delete")}
+              >
+                <TrashIcon size={16} /> Delete
+              </Button>
+            </div>
+          </DrawerContent>
+        </Drawer>
+      ) : (
+        <DropdownMenu modal={false}>
+          <DropdownMenuTrigger asChild>
+            <Button
+              variant="ghost"
+              size="icon"
+              className="size-8 hover:border hover:bg-muted/30"
+            >
+              <span className="sr-only">Actions</span>
+              <MoreHorizontalIcon className="size-4" />
+            </Button>
+          </DropdownMenuTrigger>
+          <DropdownMenuContent align="end">
+            <DropdownMenuLabel>Actions</DropdownMenuLabel>
+            <DropdownMenuSeparator />
+            <DropdownMenuItem onClick={() => setAction("view")}>
+              View
             </DropdownMenuItem>
-          ) : null}
-          <DropdownMenuSeparator />
-          {disciple.isActive ? (
-            <DropdownMenuItem onClick={() => setAction("make-inactive")}>
-              Make Inactive
+            <DropdownMenuItem onClick={() => setAction("edit")}>
+              Edit
             </DropdownMenuItem>
-          ) : null}
-          <DropdownMenuItem
-            onClick={() => setAction("delete")}
-            className="text-red-500 focus:text-red-500"
-          >
-            Delete
-          </DropdownMenuItem>
-        </DropdownMenuContent>
-      </DropdownMenu>
+            {!disciple.isActive ? (
+              <DropdownMenuItem onClick={() => setAction("make-active")}>
+                Make Active
+              </DropdownMenuItem>
+            ) : null}
+            <DropdownMenuSeparator />
+            {disciple.isActive ? (
+              <DropdownMenuItem onClick={() => setAction("make-inactive")}>
+                Make Inactive
+              </DropdownMenuItem>
+            ) : null}
+            <DropdownMenuItem
+              onClick={() => setAction("delete")}
+              className="text-red-500 focus:text-red-500"
+            >
+              Delete
+            </DropdownMenuItem>
+          </DropdownMenuContent>
+        </DropdownMenu>
+      )}
 
       <Sheet
         open={action === "edit"}
