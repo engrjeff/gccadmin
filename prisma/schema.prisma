@@ -288,6 +288,8 @@ model ProcessAttendancePeriodStudent {
 model ProcessAttendancePeriod {
   id String @id @default(cuid())
 
+  description String @unique
+
   startDate DateTime
   endDate   DateTime? // can be populated in a later time
 
