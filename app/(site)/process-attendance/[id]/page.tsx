@@ -60,7 +60,7 @@ async function ProcessAttendanceDetailPage({
         </BreadcrumbList>
       </Breadcrumb>
 
-      <Table className="relative w-full overflow-auto rounded-lg border border-r-0">
+      <Table className="relative w-full overflow-auto rounded-lg border">
         <TableHeader>
           <TableRow className="hover:bg-transparent">
             <TableHead colSpan={3} className="h-auto border-r py-2">
@@ -86,7 +86,7 @@ async function ProcessAttendanceDetailPage({
             {record.attendanceRecords.map((attendance) => (
               <TableHead
                 key={`attendance-record-${attendance.id}`}
-                className="min-w-[140px] border-r p-2"
+                className="min-w-[140px] border-r p-2 last:border-r-0"
               >
                 <div className="space-y-0.5">
                   <p className="text-xs">
@@ -109,7 +109,7 @@ async function ProcessAttendanceDetailPage({
             {record.processLessonSeries.lessons.map((lesson) => (
               <TableHead
                 key={`process-lesson-${lesson.id}`}
-                className="h-[34px] min-w-[140px] border-r p-0.5"
+                className="h-[34px] min-w-[140px] border-r p-0.5 last:border-r-0"
               >
                 {presentByLesson.has(lesson.id) ? (
                   <span className="inline-flex items-center gap-2 px-2">
@@ -132,7 +132,7 @@ async function ProcessAttendanceDetailPage({
           {record.students.map((student, index) => (
             <TableRow
               key={`student-${student.disciple_id}`}
-              className="py-0  hover:bg-background"
+              className="py-0  hover:bg-background [&_td]:last:border-r-0"
             >
               <TableCell className="whitespace-nowrap border-r px-3 py-1.5 text-center text-muted-foreground lg:py-2">
                 {index + 1}
@@ -152,7 +152,7 @@ async function ProcessAttendanceDetailPage({
                 <TableCell
                   key={`process-lesson-cell-${lesson.id}`}
                   className={cn(
-                    "whitespace-nowrap border-r px-3 py-1.5 text-center lg:py-2",
+                    "whitespace-nowrap border-r px-3 py-1.5 text-center last:border-r-0 lg:py-2",
                     presentByLesson.has(lesson.id)
                       ? presentByLesson
                           .get(lesson.id)

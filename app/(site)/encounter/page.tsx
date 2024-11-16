@@ -21,19 +21,19 @@ interface EncounterPageProps {
 
 function EncounterPage({ searchParams }: EncounterPageProps) {
   return (
-    <div className="relative flex flex-col gap-4 overflow-hidden p-4">
-      <div className="flex items-start justify-between gap-4">
+    <div className="relative flex flex-col gap-3 overflow-hidden p-4">
+      <div className="flex flex-col items-start justify-between gap-4 md:flex-row">
         <PageTitle
           title="Encounter"
           subtitle="List of Encounter God Retreat Batches."
         />
-        <EncounterAddBatchModal />
+        <div className="grid w-full grid-cols-1 gap-3 sm:flex sm:flex-row sm:items-start md:w-auto">
+          <EncounterBatchActiveFilter />
+          <EncounterBatchSelect />
+          <EncounterAddBatchModal />
+        </div>
       </div>
 
-      <div className="flex items-end gap-3">
-        <EncounterBatchActiveFilter />
-        <EncounterBatchSelect />
-      </div>
       <Suspense
         key={JSON.stringify(searchParams)}
         fallback={

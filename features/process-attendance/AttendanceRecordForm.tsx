@@ -2,6 +2,7 @@
 
 import { zodResolver } from "@hookform/resolvers/zod"
 import { Disciple } from "@prisma/client"
+import { format } from "date-fns"
 import { CheckIcon, XIcon } from "lucide-react"
 import { useAction } from "next-safe-action/hooks"
 import { useForm } from "react-hook-form"
@@ -46,7 +47,7 @@ export function AttendanceRecordForm({
   const form = useForm<CreateAttendanceRecordInputs>({
     defaultValues: {
       teacher_id: "",
-      date: "",
+      date: format(new Date(), "yyyy-MM-dd"),
       process_lesson_id: processLessonId,
       processAttendancePeriodId: processAttendancePeriodId,
       process_attendees: students.map((s) => s.id),

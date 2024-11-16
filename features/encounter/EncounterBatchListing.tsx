@@ -42,7 +42,7 @@ export async function EncounterBatchListing(props: GetEncounterBatchArgs) {
           - <span>{format(encounterBatch.endDate, "MMM dd, yyyy")}</span>
         </p>
       </div>
-      <Table className="relative w-full overflow-auto rounded-lg border lg:rounded-none lg:border-none">
+      <Table className="relative w-full overflow-auto rounded-lg border">
         <TableCaption>
           {!encounterBatch.members.length &&
           props.memberStatus === "inactive" ? (

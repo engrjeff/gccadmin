@@ -26,7 +26,7 @@ export function EncounterAddBatchModal() {
   return (
     <Sheet open={open} onOpenChange={setOpen}>
       <SheetTrigger asChild>
-        <Button size="sm">
+        <Button size="sm" className="h-9">
           <PlusCircleIcon className="h-4 w-4" /> Add Batch
         </Button>
       </SheetTrigger>

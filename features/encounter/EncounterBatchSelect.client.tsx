@@ -26,14 +26,14 @@ export function EncounterBatchSelectClient({
 
   return (
     <>
-      <div className="ml-auto w-[160px] space-y-2">
+      <div className="ml-auto w-full min-w-[160px] sm:ml-auto sm:w-auto">
         <Label htmlFor="encounter-batch" className="sr-only">
           Encounter Batch
         </Label>
         <Select value={batchIdQuery} onValueChange={setBatchIdQuery}>
           <SelectTrigger
             id="encounter-batch"
-            className="h-auto gap-3 ps-2 text-left"
+            className="h-9 gap-3 ps-2 text-left"
           >
             <SelectValue placeholder="Select a batch" />
           </SelectTrigger>

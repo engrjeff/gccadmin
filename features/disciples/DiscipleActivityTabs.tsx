@@ -17,7 +17,6 @@ export function DiscipleActivityTabs() {
 
   return (
     <Tabs
-      className="w-[400px]"
       onValueChange={(value) => {
         setStatusQuery(value)
 
