@@ -10,11 +10,11 @@ const getPrimaryLeaders = async () => {
   return primaryLeaders
 }
 
-export function usePrimaryLeaders() {
+export function usePrimaryLeaders(allowNonAdmin: boolean = false) {
   const { isAdmin } = useIsAdmin()
   return useQuery<Disciple[]>({
-    queryKey: ["primary-leaders"],
+    queryKey: ["primary-leaders", allowNonAdmin],
     queryFn: getPrimaryLeaders,
-    enabled: isAdmin,
+    enabled: isAdmin || allowNonAdmin,
   })
 }

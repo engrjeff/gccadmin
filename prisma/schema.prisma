@@ -87,8 +87,10 @@ model Disciple {
   encounter_batch    EncounterBatch? @relation(fields: [encounter_batch_id], references: [id])
   encounter_batch_id String?
 
-  teaching_sessions         ProcessTeacher[]
   attended_process_sessions ProcessAttendee[]
+
+  attended_process_periods ProcessAttendancePeriodStudent[]
+  teaching_sessions        ProcessAttendance[]
 
   @@index([id, leaderId])
   @@index([leaderId])
@@ -201,13 +203,16 @@ model EncounterBatch {
 }
 
 model ProcessLessonSeries {
-  id          String          @id @default(cuid())
-  title       String
-  description String?
-  tags        String[]
-  createdAt   DateTime        @default(now())
-  updatedAt   DateTime        @updatedAt
-  lessons     ProcessLesson[]
+  id           String          @id @default(cuid())
+  title        String
+  description  String?
+  tags         String[]
+  processLevel ProcessLevel
+  createdAt    DateTime        @default(now())
+  updatedAt    DateTime        @updatedAt
+  lessons      ProcessLesson[]
+
+  processAttendancePeriods ProcessAttendancePeriod[]
 }
 
 model ProcessLesson {
@@ -219,29 +224,22 @@ model ProcessLesson {
   createdAt                DateTime             @default(now())
   updatedAt                DateTime             @updatedAt
   process_lesson_series_id String?
-  process_lesson_series    ProcessLessonSeries? @relation(fields: [process_lesson_series_id], references: [id])
+  process_lesson_series    ProcessLessonSeries? @relation(fields: [process_lesson_series_id], references: [id], onDelete: Cascade)
 
   process_attendance_records ProcessAttendance[]
 
   @@index([process_lesson_series_id])
 }
 
-model ProcessTeacher {
-  teacher_id                    String
-  teacher_process_attendance_id String              @id
-  process_attendance            ProcessAttendance[]
-  teacher                       Disciple            @relation(fields: [teacher_id], references: [id])
-
-  @@index([teacher_id])
-}
-
 model ProcessAttendee {
+  process_attendance_id          String
   disciple_id                    String
-  disciple_process_attendance_id String              @id
-  process_attendance_records     ProcessAttendance[]
-  disciple                       Disciple            @relation(fields: [disciple_id], references: [id])
+  process_attendance_attendee_id String            @id // process attendance + student (disciple) id
+  process_attendance             ProcessAttendance @relation(fields: [process_attendance_id], references: [id], onDelete: Cascade)
+  disciple                       Disciple          @relation(fields: [disciple_id], references: [id])
   remarks                        String?
 
+  @@index([process_attendance_id])
   @@index([disciple_id])
 }
 
@@ -253,10 +251,48 @@ model ProcessAttendance {
   process_lesson    ProcessLesson @relation(fields: [process_lesson_id], references: [id])
   process_lesson_id String
 
-  process_teacher                       ProcessTeacher? @relation(fields: [process_teacher_process_attendance_id], references: [teacher_process_attendance_id])
-  process_teacher_process_attendance_id String?
+  teacher    Disciple? @relation(fields: [teacher_id], references: [id])
+  teacher_id String?
 
   process_attendees ProcessAttendee[]
+
+  processAttendancePeriod   ProcessAttendancePeriod? @relation(fields: [processAttendancePeriodId], references: [id], onDelete: Cascade)
+  processAttendancePeriodId String?
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model ProcessAttendancePeriodStudent {
+  process_attendance_period_id         String
+  disciple_id                          String
+  assignedAt                           DateTime @default(now())
+  assignedBy                           String
+  process_attendance_period_student_id String   @id // process_attendance_period_id + disciple id
+
+  process_attendance_period ProcessAttendancePeriod @relation(fields: [process_attendance_period_id], references: [id], onDelete: Cascade)
+  disciple                  Disciple                @relation(fields: [disciple_id], references: [id])
+
+  @@index([process_attendance_period_id])
+  @@index([process_attendance_period_student_id])
+  @@index([disciple_id])
+}
+
+model ProcessAttendancePeriod {
+  id String @id @default(cuid())
+
+  description String @unique
+
+  startDate DateTime
+  endDate   DateTime? // can be populated in a later time
+
+  processLevel ProcessLevel
+
+  processLessonSeriesId String
+  processLessonSeries   ProcessLessonSeries @relation(fields: [processLessonSeriesId], references: [id], onDelete: Cascade)
+
+  students          ProcessAttendancePeriodStudent[]
+  attendanceRecords ProcessAttendance[]
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt

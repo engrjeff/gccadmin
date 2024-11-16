@@ -1,4 +1,7 @@
+import { Suspense } from "react"
 import { Metadata } from "next"
+import { AttendancePeriodListing } from "@/features/process-attendance/AttendancePeriodListing"
+import { ProcessAttendancePeriodAddModal } from "@/features/process-attendance/ProcessAttendancePeriodAddModal"
 
 import PageTitle from "@/components/page-title"
 
@@ -14,7 +17,12 @@ function ProcessAttendancePage() {
           title="Process Attendance"
           subtitle="View and manage process attendance."
         />
+        <ProcessAttendancePeriodAddModal />
       </div>
+
+      <Suspense>
+        <AttendancePeriodListing />
+      </Suspense>
     </div>
   )
 }

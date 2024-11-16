@@ -9,6 +9,7 @@ async function main() {
       title: "Leadership 1",
       description: "Collection of lessons for Leadership Level 1",
       tags: ["GPS", "Training", "Leadership"],
+      processLevel: "LEADERSHIP_1",
       lessons: {
         createMany: {
           data: [
@@ -74,6 +75,7 @@ async function main() {
       title: "Leadership 2",
       description: "Collection of lessons for Leadership Level 2",
       tags: ["GPS", "Training", "Leadership"],
+      processLevel: "LEADERSHIP_2",
       lessons: {
         createMany: {
           data: [
@@ -154,6 +156,7 @@ async function main() {
       title: "Leadership 3",
       description: "Collection of lessons for Leadership Level 3",
       tags: ["GPS", "Training", "Leadership"],
+      processLevel: "LEADERSHIP_3",
       lessons: {
         createMany: {
           data: [

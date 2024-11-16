@@ -1,35 +1,38 @@
 import { useState } from "react"
+import { Disciple } from "@prisma/client"
 import { CheckIcon, Loader2Icon, SearchIcon, XIcon } from "lucide-react"
-import { useSession } from "next-auth/react"
 import { useFormContext } from "react-hook-form"
 
 import { cn } from "@/lib/utils"
-import { useDisciplesOfLeader } from "@/hooks/use-disciples-by-leader"
+import { useDisciples } from "@/hooks/use-disciples"
+import { Badge } from "@/components/ui/badge"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
-import { CreateCellReportInputs } from "@/app/api/cell-reports/schema"
 
-export function AttendeesPicker() {
-  const cellReportForm = useFormContext<CreateCellReportInputs>()
+import { CreateEncounterBatchInputs } from "./schema"
 
-  const session = useSession()
+export function EncounterParticipantsPicker({
+  initialAttendees,
+}: {
+  initialAttendees?: Disciple[]
+}) {
+  const encounterBatchForm = useFormContext<CreateEncounterBatchInputs>()
 
-  const isAdmin = session.data?.user?.role === "ADMIN"
-
-  const leaderId = cellReportForm.watch("leaderId")
-  const attendees = cellReportForm.watch("attendees")
+  const attendees = encounterBatchForm.watch("members")
 
   const [attendeesSearchQuery, setAttendeesSearchQuery] = useState("")
 
-  const disciplesOfLeader = useDisciplesOfLeader(
-    isAdmin ? leaderId : session.data?.user.discipleId
-  )
+  const disciples = useDisciples({
+    withBatch: false,
+  })
 
-  const selectedAttendees = disciplesOfLeader.data?.filter((d) =>
-    attendees.includes(d.id)
-  )
+  const dataSource = initialAttendees
+    ? disciples.data?.concat(initialAttendees)
+    : disciples.data
 
-  const unSelectedAttendees = disciplesOfLeader.data?.filter(
+  const selectedAttendees = dataSource?.filter((d) => attendees.includes(d.id))
+
+  const unSelectedAttendees = dataSource?.filter(
     (d) =>
       !attendees.includes(d.id) &&
       d.name.toLowerCase().includes(attendeesSearchQuery.toLowerCase())
@@ -40,21 +43,21 @@ export function AttendeesPicker() {
       ? attendees.filter((i) => i !== attendeeId)
       : [...attendees, attendeeId]
 
-    cellReportForm.setValue("attendees", updatedAttendees)
+    encounterBatchForm.setValue("members", updatedAttendees)
   }
 
   const handleSelectAll = () => {
-    cellReportForm.setValue(
-      "attendees",
-      disciplesOfLeader.data?.map((d) => d.id) ?? []
+    encounterBatchForm.setValue(
+      "members",
+      disciples.data?.map((d) => d.id) ?? []
     )
   }
 
   const handleDeselectAll = () => {
-    cellReportForm.setValue("attendees", [])
+    encounterBatchForm.setValue("members", [])
   }
 
-  if (disciplesOfLeader?.isLoading)
+  if (disciples?.isLoading)
     return (
       <div className="relative min-h-[300px]">
         <div className="absolute inset-0 flex flex-col items-center justify-center">
@@ -91,7 +94,7 @@ export function AttendeesPicker() {
         </div>
       </div>
 
-      {attendees.length ? (
+      {attendees?.length ? (
         <section className="mb-6 border-y">
           <div className="flex items-center justify-between border-b bg-muted/20 px-2.5 py-1">
             <h3 className="text-xs font-medium text-blue-500">
@@ -115,12 +118,18 @@ export function AttendeesPicker() {
                   type="button"
                   onClick={() => handleAttendeesSelection(d.id)}
                   className={cn(
-                    "inline-flex w-full items-center justify-between p-2.5 transition-colors hover:bg-muted",
+                    "inline-flex w-full items-center gap-3 p-2.5 transition-colors hover:bg-muted",
                     attendees.includes(d.id) ? "bg-muted/30" : ""
                   )}
                 >
-                  <span className="text-sm text-foreground">{d.name}</span>
                   <CheckIcon size={16} className="text-green-500" />
+                  <span className="text-sm text-foreground">{d.name}</span>
+                  <Badge
+                    variant={d.isActive ? "ACTIVE" : "INACTIVE"}
+                    className="ml-auto px-1"
+                  >
+                    {d.isActive ? "Active" : "Inactive"}
+                  </Badge>
                 </button>
               </li>
             ))}
@@ -163,6 +172,12 @@ export function AttendeesPicker() {
                   <span className="text-sm text-muted-foreground">
                     {d.name}
                   </span>
+                  <Badge
+                    variant={d.isActive ? "ACTIVE" : "INACTIVE"}
+                    className="px-1"
+                  >
+                    {d.isActive ? "Active" : "Inactive"}
+                  </Badge>
                 </button>
               </li>
             ))}

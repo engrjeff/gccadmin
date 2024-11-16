@@ -63,7 +63,7 @@ export function MobileNav() {
           <ul className="space-y-1">
             {processMenuItems.map((navItem) => (
               <li key={navItem.title}>
-                <NavLink href={navItem.href}>
+                <NavLink href={navItem.href} forMobile>
                   <span className="mr-3">{navItem.icon}</span>
                   <span>{navItem.title}</span>
                 </NavLink>

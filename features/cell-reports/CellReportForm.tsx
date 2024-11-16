@@ -453,7 +453,6 @@ export function CellReportForm({ onAfterSave }: { onAfterSave: () => void }) {
                 </div>
               </TabsContent>
             </Tabs>
-
             <FormField
               control={form.control}
               name="attendees"
@@ -462,11 +461,7 @@ export function CellReportForm({ onAfterSave }: { onAfterSave: () => void }) {
                   <FormLabel>Attendees</FormLabel>
                   <FormMessage />
                   <FormControl>
-                    <AttendeesPicker
-                      attendees={field.value}
-                      onAttendeesValueChange={field.onChange}
-                      disabled={!leaderId && isAdmin}
-                    />
+                    <AttendeesPicker />
                   </FormControl>
                 </FormItem>
               )}

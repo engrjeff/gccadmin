@@ -3,10 +3,9 @@ import { CellType } from "@prisma/client"
 import {
   endOfMonth,
   endOfWeek,
-  previousSaturday,
-  previousSunday,
   startOfMonth,
   startOfWeek,
+  subDays,
   subMonths,
 } from "date-fns"
 
@@ -131,8 +130,8 @@ function getDateRange(
 
   if (preset === "last_week") {
     return {
-      start: previousSunday(now),
-      end: previousSaturday(now),
+      start: subDays(startOfWeek(now), 7),
+      end: subDays(endOfWeek(now), 7),
     }
   }
 
