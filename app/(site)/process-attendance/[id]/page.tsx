@@ -1,3 +1,4 @@
+import Link from "next/link"
 import { notFound } from "next/navigation"
 import { ProcessAttendanceAddButton } from "@/features/process-attendance/ProcessAttendanceAddButton"
 import { getProcessAttendanceDetail } from "@/features/process-attendance/queries"
@@ -5,6 +6,7 @@ import { format } from "date-fns"
 import { CheckIcon } from "lucide-react"
 
 import { cn } from "@/lib/utils"
+import { Badge } from "@/components/ui/badge"
 import {
   Breadcrumb,
   BreadcrumbItem,
@@ -45,8 +47,10 @@ async function ProcessAttendanceDetailPage({
       <Breadcrumb>
         <BreadcrumbList>
           <BreadcrumbItem>
-            <BreadcrumbLink href="/process-attendance">
-              Process Attendance
+            <BreadcrumbLink>
+              <BreadcrumbLink>
+                <Link href="/process-attendance">Process Attendance</Link>
+              </BreadcrumbLink>
             </BreadcrumbLink>
           </BreadcrumbItem>
           <BreadcrumbSeparator />
@@ -59,15 +63,26 @@ async function ProcessAttendanceDetailPage({
       <Table className="relative w-full overflow-auto rounded-lg border border-r-0">
         <TableHeader>
           <TableRow className="hover:bg-transparent">
-            <TableHead colSpan={2} className="h-9 border-r">
-              <div className="space-y-0.5">
-                <p className="text-xs">{record.description}</p>
+            <TableHead colSpan={3} className="h-auto border-r py-2">
+              <div className="space-y-1">
+                <div className="flex items-center justify-between">
+                  <p className="text-xs">{record.description} </p>
+                  <Badge variant="ACTIVE">
+                    {record.students.length} students
+                  </Badge>
+                </div>
+
                 <p className="text-xs text-muted-foreground">
                   {`Attendance sheet for ${record.description}`}
                 </p>
               </div>
             </TableHead>
-            <TableHead className="h-9 border-r text-right">Teacher</TableHead>
+            <TableHead className="h-9 border-r text-right">
+              <div className="space-y-0.5">
+                <p className="text-xs">Teacher</p>
+                <p className="text-xs text-muted-foreground">Date</p>
+              </div>
+            </TableHead>
             {record.attendanceRecords.map((attendance) => (
               <TableHead
                 key={`attendance-record-${attendance.id}`}
@@ -87,6 +102,7 @@ async function ProcessAttendanceDetailPage({
             ))}
           </TableRow>
           <TableRow className="text-xs hover:bg-transparent">
+            <TableHead className="h-9 border-r text-center">#</TableHead>
             <TableHead className="h-9 border-r">Name</TableHead>
             <TableHead className="h-9 border-r">Batch</TableHead>
             <TableHead className="h-9 border-r">Leader</TableHead>
@@ -113,18 +129,21 @@ async function ProcessAttendanceDetailPage({
           </TableRow>
         </TableHeader>
         <TableBody className="[&_tr:last-child]:border-b">
-          {record.students.map((student) => (
+          {record.students.map((student, index) => (
             <TableRow
               key={`student-${student.disciple_id}`}
               className="py-0  hover:bg-background"
             >
-              <TableCell className="whitespace-nowrap border-r px-3 py-1 lg:py-2">
+              <TableCell className="whitespace-nowrap border-r px-3 py-1.5 text-center text-muted-foreground lg:py-2">
+                {index + 1}
+              </TableCell>
+              <TableCell className="whitespace-nowrap border-r px-3 py-1.5 lg:py-2">
                 {student.disciple.name}
               </TableCell>
-              <TableCell className="whitespace-nowrap border-r px-3 py-1 lg:py-2">
+              <TableCell className="whitespace-nowrap border-r px-3 py-1.5 lg:py-2">
                 {student.disciple.encounter_batch?.batchName}
               </TableCell>
-              <TableCell className="whitespace-nowrap border-r px-3 py-1 lg:py-2">
+              <TableCell className="whitespace-nowrap border-r px-3 py-1.5 lg:py-2">
                 {student.disciple.leader?.name.includes("De Guzman")
                   ? "Ptr. " + student.disciple.leader.name
                   : student.disciple.leader?.name}
@@ -133,7 +152,7 @@ async function ProcessAttendanceDetailPage({
                 <TableCell
                   key={`process-lesson-cell-${lesson.id}`}
                   className={cn(
-                    "whitespace-nowrap border-r px-3 py-1 text-center lg:py-2",
+                    "whitespace-nowrap border-r px-3 py-1.5 text-center lg:py-2",
                     presentByLesson.has(lesson.id)
                       ? presentByLesson
                           .get(lesson.id)

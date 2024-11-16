@@ -3,6 +3,7 @@ import { Metadata } from "next"
 import { AttendancePeriodListing } from "@/features/process-attendance/AttendancePeriodListing"
 import { ProcessAttendancePeriodAddModal } from "@/features/process-attendance/ProcessAttendancePeriodAddModal"
 
+import PageLoadingSpinner from "@/components/page-loading-spinner"
 import PageTitle from "@/components/page-title"
 
 export const metadata: Metadata = {
@@ -20,7 +21,13 @@ function ProcessAttendancePage() {
         <ProcessAttendancePeriodAddModal />
       </div>
 
-      <Suspense>
+      <Suspense
+        fallback={
+          <div className="relative min-h-[300px] flex-1">
+            <PageLoadingSpinner />
+          </div>
+        }
+      >
         <AttendancePeriodListing />
       </Suspense>
     </div>
