@@ -201,7 +201,11 @@ function AttendeesPickerControl({
               <SheetDescription>Complete the form below</SheetDescription>
             </SheetHeader>
             <div className="mt-4 [&>div]:border-none [&>div]:bg-background [&>div]:px-0 [&>div]:shadow-none">
-              <DiscipleForm leaderId={leaderId} modalMode />
+              <DiscipleForm
+                leaderId={leaderId}
+                initialName={attendeesSearchQuery}
+                modalMode
+              />
             </div>
           </SheetContent>
         </Sheet>
@@ -234,7 +238,11 @@ function AttendeesPickerControl({
                   <SheetDescription>Complete the form below</SheetDescription>
                 </SheetHeader>
                 <div className="mt-4 [&>div]:border-none [&>div]:bg-background [&>div]:px-0 [&>div]:shadow-none">
-                  <DiscipleForm leaderId={leaderId} modalMode />
+                  <DiscipleForm
+                    leaderId={leaderId}
+                    initialName={attendeesSearchQuery}
+                    modalMode
+                  />
                 </div>
               </SheetContent>
             </Sheet>

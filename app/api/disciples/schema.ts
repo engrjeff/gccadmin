@@ -4,6 +4,7 @@ import {
   Gender,
   MemberType,
   ProcessLevel,
+  ProcessLevelStatus,
 } from "@prisma/client"
 import { z } from "zod"
 
@@ -18,6 +19,7 @@ export const discipleCreateSchema = z.object({
   church_status: z.nativeEnum(ChurchStatus),
   member_type: z.nativeEnum(MemberType),
   process_level: z.nativeEnum(ProcessLevel),
+  process_level_status: z.nativeEnum(ProcessLevelStatus),
   leaderId: z.string().min(1, { message: "Leader is required" }),
 })
 

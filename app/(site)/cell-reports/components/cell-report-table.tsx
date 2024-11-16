@@ -26,7 +26,6 @@ import { CellReportRecord } from "../types"
 import CellReportFacetFilters from "./cell-report-facet-filters"
 import CellReportMobileListView from "./cell-report-mobile-list-view"
 import { columns } from "./columns"
-import ReportDateRangeFilter from "./report-date-range-filter"
 
 interface CellReportTableProps {
   data: CellReportRecord[]
@@ -75,7 +74,7 @@ function CellReportTable({ data }: CellReportTableProps) {
   return (
     <div className="h-full max-h-full rounded-lg border">
       <div className="flex items-center p-3">
-        <ReportDateRangeFilter />
+        {/* <ReportDateRangeFilter /> */}
         <div className="ml-auto flex items-center justify-end gap-2">
           <CellReportFacetFilters table={table} />
           <RefreshButton />

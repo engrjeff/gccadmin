@@ -24,6 +24,8 @@ interface AutocompleteProps {
   options: { label: string; value: string }[]
   disabled?: boolean
   error?: boolean
+  fullWidth?: boolean
+  modal?: boolean
 }
 
 function Autocomplete({
@@ -34,6 +36,8 @@ function Autocomplete({
   options,
   disabled,
   error,
+  fullWidth,
+  modal = false,
 }: AutocompleteProps) {
   const [open, setOpen] = React.useState(false)
 
@@ -42,7 +46,7 @@ function Autocomplete({
   )
 
   return (
-    <Popover open={open} onOpenChange={setOpen}>
+    <Popover open={open} onOpenChange={setOpen} modal={modal}>
       <PopoverTrigger asChild>
         <Button
           variant="outline"
@@ -63,8 +67,11 @@ function Autocomplete({
         </Button>
       </PopoverTrigger>
       <PopoverContent
-        className="max-h-[400px] w-[300px] overflow-y-auto p-0"
+        className="max-h-[400px] w-full overflow-y-auto p-0"
         align="start"
+        style={{
+          width: fullWidth ? "var(--radix-popover-trigger-width)" : "100%",
+        }}
       >
         <Command
           filter={(value, search) => {

@@ -56,6 +56,8 @@ import {
   bulkDiscipleCreateSchema,
 } from "@/app/api/disciples/schema"
 
+import { processLevelStatuses } from "../constants"
+
 function DiscipleBulkAddForm() {
   const [open, setOpen] = useState(false)
 
@@ -116,6 +118,7 @@ const initialRowValue: BulkDiscipleCreateInputs["disciples"][number] = {
   church_status: "NACS",
   member_type: "KIDS",
   process_level: "NONE",
+  process_level_status: "NOT_STARTED",
 }
 
 function BulkForm({ onDone }: BulkFormProps) {
@@ -256,6 +259,7 @@ function BulkForm({ onDone }: BulkFormProps) {
             <TableHead className="pl-2">Cell Status</TableHead>
             <TableHead className="pl-2">Church Status</TableHead>
             <TableHead className="pl-2">Process Level</TableHead>
+            <TableHead className="pl-2">Process Status</TableHead>
           </TableRow>
         </TableHeader>
         <TableBody>
@@ -525,6 +529,41 @@ function BulkForm({ onDone }: BulkFormProps) {
                           {processLevels.map((option) => (
                             <SelectItem
                               key={`process-level-${option.value}`}
+                              value={option.value}
+                              className="capitalize"
+                            >
+                              {option.label.replace(/_/, " ").toLowerCase()}
+                            </SelectItem>
+                          ))}
+                        </SelectGroup>
+                      </SelectContent>
+                    </Select>
+                  )}
+                />
+              </TableCell>
+
+              <TableCell className="border-r p-0">
+                <Controller
+                  control={form.control}
+                  name={`disciples.${index}.process_level_status`}
+                  render={({ field }) => (
+                    <Select
+                      value={field.value}
+                      onValueChange={field.onChange}
+                      disabled={
+                        form.watch(`disciples.${index}.process_level`) ===
+                        "NONE"
+                      }
+                    >
+                      <SelectTrigger className="h-full w-full gap-3 rounded-none border-transparent capitalize focus:border-primary focus:ring-0 focus:ring-offset-0">
+                        <SelectValue placeholder="Process Status" />
+                      </SelectTrigger>
+                      <SelectContent>
+                        <SelectGroup>
+                          <SelectLabel>Process Status</SelectLabel>
+                          {processLevelStatuses.map((option) => (
+                            <SelectItem
+                              key={`process-status-${option.value}`}
                               value={option.value}
                               className="capitalize"
                             >

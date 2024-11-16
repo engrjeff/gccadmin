@@ -12,7 +12,7 @@ function DiscipleAddButton({ leaderId }: { leaderId?: string }) {
   return (
     <>
       <Link
-        href={{ pathname: "/disciples/new", query: { leaderId } }}
+        href={{ pathname: "/disciples/new" }}
         className={cn(
           buttonVariants({ size: "sm" }),
           "hidden lg:flex xl:hidden"
@@ -23,7 +23,7 @@ function DiscipleAddButton({ leaderId }: { leaderId?: string }) {
       </Link>
 
       <Link
-        href={{ pathname: "/disciples/new", query: { leaderId } }}
+        href={{ pathname: "/disciples/new" }}
         className={cn(
           buttonVariants({ size: "icon" }),
           "fixed bottom-4 right-4 z-30 flex h-12 w-12  shrink-0 rounded-full shadow-md lg:hidden"
@@ -35,7 +35,7 @@ function DiscipleAddButton({ leaderId }: { leaderId?: string }) {
 
       <div className="hidden grow-0 divide-x divide-white/10 self-start rounded-md xl:block">
         <Link
-          href={{ pathname: "/disciples/new", query: { leaderId } }}
+          href={{ pathname: "/disciples/new" }}
           className={cn(buttonVariants(), "rounded-r-none")}
         >
           <Plus className="mr-3 h-4 w-4" />

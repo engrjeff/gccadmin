@@ -1,26 +1,21 @@
 import { Metadata } from "next"
 
-import { getCurrentUser } from "@/lib/session"
-import PageTitle from "@/components/page-title"
-
-import SeriesAddForm from "./components/series-add-form"
-import SeriesList from "./components/series-list"
-
 export const metadata: Metadata = {
   title: "Resources",
 }
 
 async function ResourcesPage() {
-  const user = await getCurrentUser()
-
   return (
     <>
-      <div className="mb-4 flex justify-between px-4 lg:px-6">
-        <PageTitle title="Resources" subtitle="GCC Lessons" />
-        {user?.role === "ADMIN" ? <SeriesAddForm /> : null}
-      </div>
-      <div className="flex-1 space-y-6 overflow-auto px-4 lg:px-6">
-        <SeriesList />
+      <div className="relative flex flex-col gap-4 overflow-hidden p-4">
+        <div className="flex items-start justify-between gap-4">
+          <div>
+            <h2 className="mb-1 text-lg font-bold tracking-tight">Resources</h2>
+            <p className="hidden text-sm text-muted-foreground lg:block">
+              View and manage GCC Lessons.
+            </p>
+          </div>
+        </div>
       </div>
     </>
   )

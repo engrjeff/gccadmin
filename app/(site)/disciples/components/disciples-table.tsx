@@ -1,7 +1,6 @@
 "use client"
 
 import { useState } from "react"
-import { Disciple } from "@prisma/client"
 import {
   ColumnFiltersState,
   getCoreRowModel,
@@ -15,8 +14,8 @@ import {
   VisibilityState,
 } from "@tanstack/react-table"
 
-import useIsDesktop from "@/hooks/use-is-desktop"
 import { useIsAdmin } from "@/hooks/use-isadmin"
+import { usePrimaryLeaders } from "@/hooks/use-primary-leaders"
 import { DataTableViewOptions } from "@/components/ui/data-table/column-visibility-toggle"
 import DataTable from "@/components/ui/data-table/data-table"
 import MobileTablePagination from "@/components/ui/data-table/mobile-table-pagination"
@@ -33,7 +32,6 @@ import DiscipleSearch from "./disciple-search"
 
 interface Props {
   disciples: DiscipleWithLeader[]
-  leaders: Disciple[]
 }
 
 function useDiscipleTable(disciples: DiscipleWithLeader[]) {
@@ -66,14 +64,18 @@ function useDiscipleTable(disciples: DiscipleWithLeader[]) {
       columnFilters,
       columnVisibility,
       rowSelection,
+      pagination: {
+        pageSize: 100,
+        pageIndex: 0,
+      },
     },
+    manualPagination: true,
   })
 
   return table
 }
 
-function DisciplesTable({ disciples, leaders }: Props) {
-  const isDesktop = useIsDesktop()
+function DisciplesTable({ disciples }: Props) {
   const table = useDiscipleTable(disciples)
   //   search
   const searchValue =
@@ -81,12 +83,15 @@ function DisciplesTable({ disciples, leaders }: Props) {
   const handleSearch = (searchValue: string) =>
     table.getColumn("name")?.setFilterValue(searchValue)
 
-  // leaders options
-  const leadersOptions = leaders.map((i) => ({ label: i.name, value: i.name }))
+  const { data: leaders } = usePrimaryLeaders()
 
-  if (!isDesktop)
-    return (
-      <>
+  // leaders options
+  const leadersOptions =
+    leaders?.map((i) => ({ label: i.name, value: i.name })) ?? []
+
+  return (
+    <>
+      <div className="lg:hidden">
         <div className="mb-4 flex items-center gap-3">
           <DiscipleSearch
             placeholder={`Search ${disciples.length} disciples`}
@@ -102,26 +107,25 @@ function DisciplesTable({ disciples, leaders }: Props) {
         <div className="py-4">
           <MobileTablePagination table={table} />
         </div>
-      </>
-    )
+      </div>
 
-  return (
-    <div className="h-full max-h-full rounded-lg border">
-      <DiscipleSearch value={searchValue} onChange={handleSearch} />
-      <div className="flex items-center border-b p-2">
-        <DiscipleFilters table={table} leadersOptions={leadersOptions} />
-        <DiscipleBulkActions table={table} />
-        <div className="ml-auto flex items-center gap-3">
-          <RefreshButton />
-          <ActivityFilter />
-          <DataTableViewOptions table={table} />
+      <div className="hidden h-full max-h-full rounded-lg border lg:block">
+        <DiscipleSearch value={searchValue} onChange={handleSearch} />
+        <div className="flex items-center border-b p-2">
+          <DiscipleFilters table={table} leadersOptions={leadersOptions} />
+          <DiscipleBulkActions table={table} />
+          <div className="ml-auto flex items-center gap-3">
+            <RefreshButton />
+            <ActivityFilter />
+            <DataTableViewOptions table={table} />
+          </div>
         </div>
+        <div className="h-[calc(100%-170px)] max-h-[calc(100%-170px)] overflow-auto">
+          <DataTable table={table} columnCount={columns.length} />
+        </div>
+        <DataTablePagination table={table} />
       </div>
-      <div className="h-[calc(100%-170px)] max-h-[calc(100%-170px)] overflow-auto">
-        <DataTable table={table} columnCount={columns.length} />
-      </div>
-      <DataTablePagination table={table} />
-    </div>
+    </>
   )
 }
 

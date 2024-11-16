@@ -4,6 +4,7 @@ import { Metadata, Viewport } from "next"
 import AuthProvider from "@/providers/auth-provider"
 import ReactQueryProvider from "@/providers/react-query-provider"
 import NextTopLoader from "nextjs-toploader"
+import { NuqsAdapter } from "nuqs/adapters/next/app"
 
 import { siteConfig } from "@/config/site"
 import { fontSans } from "@/lib/fonts"
@@ -37,30 +38,24 @@ interface RootLayoutProps {
 
 export default function RootLayout({ children }: RootLayoutProps) {
   return (
-    <>
-      <html lang="en" className="dark h-full" suppressHydrationWarning>
-        <head />
-        <body
-          className={cn(
-            fontSans.variable,
-            "h-full bg-background font-sans antialiased"
-          )}
+    <html lang="en" className="dark h-full" suppressHydrationWarning>
+      <body className={cn(fontSans.variable, "h-full font-sans antialiased")}>
+        <NextTopLoader color="#6D28D9" showSpinner={false} />
+        <ThemeProvider
+          attribute="class"
+          defaultTheme="dark"
+          forcedTheme="dark"
+          enableSystem={false}
         >
-          <NextTopLoader color="#6467F2" showSpinner={false} />
-          {/* <NextTopLoader color="#FDB21C" showSpinner={false} /> */}
-          <ThemeProvider
-            attribute="class"
-            defaultTheme="dark"
-            enableSystem={false}
-          >
-            <AuthProvider>
+          <AuthProvider>
+            <NuqsAdapter>
               <ReactQueryProvider>{children}</ReactQueryProvider>
-            </AuthProvider>
-            <Toaster />
-            <TailwindIndicator />
-          </ThemeProvider>
-        </body>
-      </html>
-    </>
+            </NuqsAdapter>
+          </AuthProvider>
+          <Toaster />
+          <TailwindIndicator />
+        </ThemeProvider>
+      </body>
+    </html>
   )
 }

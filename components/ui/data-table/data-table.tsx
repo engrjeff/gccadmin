@@ -25,13 +25,13 @@ function DataTable<TData>({
   onRowClick,
 }: DataTableProps<TData>) {
   return (
-    <Table className="relative w-full overflow-auto">
+    <Table className="relative w-full overflow-auto px-4">
       <TableHeader>
         {table.getHeaderGroups().map((headerGroup) => (
-          <TableRow key={headerGroup.id}>
+          <TableRow key={headerGroup.id} className="border-t">
             {headerGroup.headers.map((header) => {
               return (
-                <TableHead key={header.id} className="sticky top-0 z-[3]">
+                <TableHead key={header.id}>
                   {header.isPlaceholder
                     ? null
                     : flexRender(
