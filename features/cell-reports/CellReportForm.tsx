@@ -173,6 +173,8 @@ export function CellReportForm({ onAfterSave }: { onAfterSave: () => void }) {
       }
 
       onAfterSave()
+
+      window.location.reload()
     }
   }
 
@@ -470,7 +472,7 @@ export function CellReportForm({ onAfterSave }: { onAfterSave: () => void }) {
         </div>
 
         <div className="mt-auto flex flex-col gap-3 border-t p-4 text-right md:flex-row md:items-center">
-          <div className="mb-2 flex select-none items-center space-x-2 md:mb-0">
+          <div className="mb-2 hidden select-none items-center space-x-2 md:mb-0">
             <Checkbox
               id="create-more-flag"
               className="rounded"
