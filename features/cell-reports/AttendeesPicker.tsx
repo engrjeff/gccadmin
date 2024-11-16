@@ -1,5 +1,5 @@
 import { useState } from "react"
-import { CheckIcon, Loader2Icon, SearchIcon } from "lucide-react"
+import { CheckIcon, Loader2Icon, SearchIcon, XIcon } from "lucide-react"
 import { useSession } from "next-auth/react"
 import { useFormContext } from "react-hook-form"
 
@@ -9,13 +9,7 @@ import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { CreateCellReportInputs } from "@/app/api/cell-reports/schema"
 
-interface AttendeesPickerProps {
-  disabled?: boolean
-  attendees: string[]
-  onAttendeesValueChange: (val: string[]) => void
-}
-
-export function AttendeesPicker(props: AttendeesPickerProps) {
+export function AttendeesPicker() {
   const cellReportForm = useFormContext<CreateCellReportInputs>()
 
   const session = useSession()
@@ -84,6 +78,16 @@ export function AttendeesPicker(props: AttendeesPickerProps) {
           <div className="pointer-events-none absolute inset-y-0 start-0 flex items-center justify-center ps-3 text-muted-foreground/80 peer-disabled:opacity-50">
             <SearchIcon size={16} strokeWidth={2} />
           </div>
+
+          {attendeesSearchQuery ? (
+            <button
+              type="button"
+              className="absolute right-1 top-1/2 inline-flex size-7 -translate-y-1/2 items-center justify-center text-muted-foreground hover:text-foreground"
+              onClick={() => setAttendeesSearchQuery("")}
+            >
+              <XIcon size={16} />
+            </button>
+          ) : null}
         </div>
       </div>
 
