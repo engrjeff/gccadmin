@@ -38,7 +38,7 @@ export async function AttendancePeriodListing() {
                   {item.description}
                 </CardTitle>
                 <CardDescription className="flex items-center text-xs">
-                  <CalendarIcon className="mr-2 size-4" />{" "}
+                  <CalendarIcon className="mr-2 size-3" />{" "}
                   {format(item.startDate, "MMM dd, yyyy")} -{" "}
                   {item.endDate
                     ? format(item.endDate, "MMM dd, yyyy")

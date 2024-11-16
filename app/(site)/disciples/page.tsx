@@ -15,15 +15,17 @@ export const metadata: Metadata = {
 
 function DisciplesPage({ searchParams }: { searchParams: DisciplesQueryArgs }) {
   return (
-    <div className="relative flex flex-col gap-4 overflow-hidden p-4">
-      <div className="flex items-center justify-between">
-        <DiscipleActivityTabs />
-        <DiscipleCreateFormModal />
+    <div className="relative flex flex-col gap-3 overflow-hidden p-4">
+      <div className="flex flex-col items-start gap-3 md:flex-row md:justify-between">
+        <PageTitle
+          title="Disciples"
+          subtitle="View and manage your disciples here."
+        />
+        <div className="flex w-full items-center justify-between gap-3 md:w-auto md:justify-start">
+          <DiscipleActivityTabs />
+          <DiscipleCreateFormModal />
+        </div>
       </div>
-      <PageTitle
-        title="Disciples"
-        subtitle="View and manage your disciples here."
-      />
       <DiscipleFilters />
       <Suspense
         key={JSON.stringify(searchParams)}

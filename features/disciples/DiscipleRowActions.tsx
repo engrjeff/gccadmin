@@ -250,7 +250,7 @@ export function DiscipleRowActions({
               </TabsList>
               <TabsContent
                 value="details"
-                className="mt-0 max-h-[80vh] overflow-y-auto pb-2"
+                className="mt-0 max-h-[calc(100dvh-140px)] flex-1 overflow-y-auto pb-2"
               >
                 <DiscipleDetails disciple={disciple}>
                   <DiscipleAccountActions
@@ -261,13 +261,13 @@ export function DiscipleRowActions({
               </TabsContent>
               <TabsContent
                 value="lessons-taken"
-                className="mt-0 max-h-[80vh] overflow-y-auto pb-2"
+                className="mt-0 max-h-[calc(100dvh-140px)] flex-1 overflow-y-auto pb-2"
               >
                 <LessonsTakenByDisciple discipleId={disciple.id} />
               </TabsContent>
               <TabsContent
                 value="cell-groups"
-                className="mt-0 max-h-[80vh] overflow-y-auto pb-2"
+                className="mt-0 max-h-[calc(100dvh-140px)] flex-1 overflow-y-auto pb-2"
               >
                 <AttendedCellGroups discipleId={disciple.id} />
               </TabsContent>
