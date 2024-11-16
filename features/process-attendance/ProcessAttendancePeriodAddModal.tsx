@@ -1,7 +1,7 @@
 "use client"
 
 import { useState } from "react"
-import { PencilIcon } from "lucide-react"
+import { PlusCircleIcon } from "lucide-react"
 
 import { useIsAdmin } from "@/hooks/use-isadmin"
 import { Button } from "@/components/ui/button"
@@ -14,14 +14,9 @@ import {
   SheetTrigger,
 } from "@/components/ui/sheet"
 
-import { EncounterBatchEditForm } from "./EncounterBatchEditForm"
-import { EncounterBatchRecord } from "./types"
+import { AttendancePeriodForm } from "./AttendancePeriodForm"
 
-export function EncounterBatchEditModal({
-  batch,
-}: {
-  batch: EncounterBatchRecord
-}) {
+export function ProcessAttendancePeriodAddModal() {
   const [open, setOpen] = useState(false)
 
   const { isAdmin } = useIsAdmin()
@@ -31,13 +26,8 @@ export function EncounterBatchEditModal({
   return (
     <Sheet open={open} onOpenChange={setOpen}>
       <SheetTrigger asChild>
-        <Button
-          size="icon"
-          variant="ghost"
-          className="size-7"
-          aria-label="Update batch"
-        >
-          <PencilIcon />
+        <Button size="sm">
+          <PlusCircleIcon className="h-4 w-4" /> Add Period
         </Button>
       </SheetTrigger>
       <SheetContent
@@ -46,13 +36,10 @@ export function EncounterBatchEditModal({
         onInteractOutside={(e) => e.preventDefault()}
       >
         <SheetHeader className="space-y-1 border-b p-4 text-left">
-          <SheetTitle>Update Encounter Batch</SheetTitle>
+          <SheetTitle>Add Process Attendance Period</SheetTitle>
           <SheetDescription>Fill in the details below.</SheetDescription>
         </SheetHeader>
-        <EncounterBatchEditForm
-          batch={batch}
-          onAfterSave={() => setOpen(false)}
-        />
+        <AttendancePeriodForm onAfterSave={() => setOpen(false)} />
       </SheetContent>
     </Sheet>
   )

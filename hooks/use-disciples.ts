@@ -1,18 +1,28 @@
 "use client"
 
-import { Disciple } from "@prisma/client"
+import { Disciple, ProcessLevel } from "@prisma/client"
 import { useQuery } from "@tanstack/react-query"
 
-const getDisciples = async () => {
-  const response = await fetch(`/api/disciples/all`)
-  if (!response.ok) return []
-  const disciples = await response.json()
-  return disciples as Disciple[]
+import { apiClient } from "@/lib/apiClient"
+
+interface GetDisciplesArgs {
+  processLevel?: ProcessLevel
+  withBatch?: boolean
 }
 
-export function useDisciples() {
+const getDisciples = async (args: GetDisciplesArgs) => {
+  const response = await apiClient.get<Disciple[]>(`/disciples/all`, {
+    params: args,
+  })
+
+  if (response.status !== 200) return []
+
+  return response.data
+}
+
+export function useDisciples(args: GetDisciplesArgs) {
   return useQuery({
-    queryKey: ["active-disciples"],
-    queryFn: getDisciples,
+    queryKey: ["active-disciples", args],
+    queryFn: () => getDisciples(args),
   })
 }

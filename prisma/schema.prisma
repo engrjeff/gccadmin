@@ -87,10 +87,10 @@ model Disciple {
   encounter_batch    EncounterBatch? @relation(fields: [encounter_batch_id], references: [id])
   encounter_batch_id String?
 
-  teaching_sessions         ProcessTeacher[]
   attended_process_sessions ProcessAttendee[]
 
   attended_process_periods ProcessAttendancePeriodStudent[]
+  teaching_sessions        ProcessAttendance[]
 
   @@index([id, leaderId])
   @@index([leaderId])
@@ -231,22 +231,15 @@ model ProcessLesson {
   @@index([process_lesson_series_id])
 }
 
-model ProcessTeacher {
-  teacher_id                    String
-  teacher_process_attendance_id String              @id
-  process_attendance            ProcessAttendance[]
-  teacher                       Disciple            @relation(fields: [teacher_id], references: [id])
-
-  @@index([teacher_id])
-}
-
 model ProcessAttendee {
+  process_attendance_id          String
   disciple_id                    String
-  disciple_process_attendance_id String              @id
-  process_attendance_records     ProcessAttendance[]
-  disciple                       Disciple            @relation(fields: [disciple_id], references: [id])
+  process_attendance_attendee_id String            @id // process attendance + student (disciple) id
+  process_attendance             ProcessAttendance @relation(fields: [process_attendance_id], references: [id], onDelete: Cascade)
+  disciple                       Disciple          @relation(fields: [disciple_id], references: [id])
   remarks                        String?
 
+  @@index([process_attendance_id])
   @@index([disciple_id])
 }
 
@@ -258,12 +251,12 @@ model ProcessAttendance {
   process_lesson    ProcessLesson @relation(fields: [process_lesson_id], references: [id])
   process_lesson_id String
 
-  process_teacher                       ProcessTeacher? @relation(fields: [process_teacher_process_attendance_id], references: [teacher_process_attendance_id])
-  process_teacher_process_attendance_id String?
+  teacher    Disciple? @relation(fields: [teacher_id], references: [id])
+  teacher_id String?
 
   process_attendees ProcessAttendee[]
 
-  processAttendancePeriod   ProcessAttendancePeriod? @relation(fields: [processAttendancePeriodId], references: [id])
+  processAttendancePeriod   ProcessAttendancePeriod? @relation(fields: [processAttendancePeriodId], references: [id], onDelete: Cascade)
   processAttendancePeriodId String?
 
   createdAt DateTime @default(now())
@@ -296,7 +289,7 @@ model ProcessAttendancePeriod {
   processLevel ProcessLevel
 
   processLessonSeriesId String
-  processLessonSeries   ProcessLessonSeries @relation(fields: [processLessonSeriesId], references: [id])
+  processLessonSeries   ProcessLessonSeries @relation(fields: [processLessonSeriesId], references: [id], onDelete: Cascade)
 
   students          ProcessAttendancePeriodStudent[]
   attendanceRecords ProcessAttendance[]

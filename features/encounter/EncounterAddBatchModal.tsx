@@ -3,6 +3,7 @@
 import { useState } from "react"
 import { PlusCircleIcon } from "lucide-react"
 
+import { useIsAdmin } from "@/hooks/use-isadmin"
 import { Button } from "@/components/ui/button"
 import {
   Sheet,
@@ -17,6 +18,10 @@ import { EncounterBatchForm } from "./EncounterBatchForm"
 
 export function EncounterAddBatchModal() {
   const [open, setOpen] = useState(false)
+
+  const { isAdmin } = useIsAdmin()
+
+  if (!isAdmin) return null
 
   return (
     <Sheet open={open} onOpenChange={setOpen}>

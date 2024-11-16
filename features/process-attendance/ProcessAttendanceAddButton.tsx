@@ -1,9 +1,9 @@
 "use client"
 
 import { useState } from "react"
-import { PencilIcon } from "lucide-react"
+import { Disciple } from "@prisma/client"
+import { PlusCircleIcon } from "lucide-react"
 
-import { useIsAdmin } from "@/hooks/use-isadmin"
 import { Button } from "@/components/ui/button"
 import {
   Sheet,
@@ -14,30 +14,30 @@ import {
   SheetTrigger,
 } from "@/components/ui/sheet"
 
-import { EncounterBatchEditForm } from "./EncounterBatchEditForm"
-import { EncounterBatchRecord } from "./types"
+import { AttendanceRecordForm } from "./AttendanceRecordForm"
 
-export function EncounterBatchEditModal({
-  batch,
+export function ProcessAttendanceAddButton({
+  label,
+  processLessonId,
+  processAttendancePeriodId,
+  students,
 }: {
-  batch: EncounterBatchRecord
+  label?: string
+  processLessonId: string
+  processAttendancePeriodId: string
+  students: Disciple[]
 }) {
   const [open, setOpen] = useState(false)
-
-  const { isAdmin } = useIsAdmin()
-
-  if (!isAdmin) return null
 
   return (
     <Sheet open={open} onOpenChange={setOpen}>
       <SheetTrigger asChild>
         <Button
-          size="icon"
-          variant="ghost"
-          className="size-7"
-          aria-label="Update batch"
+          size="sm"
+          variant="outline"
+          className="h-full w-full rounded bg-muted/20 px-1.5"
         >
-          <PencilIcon />
+          {label} <PlusCircleIcon className="size-3" />
         </Button>
       </SheetTrigger>
       <SheetContent
@@ -46,11 +46,13 @@ export function EncounterBatchEditModal({
         onInteractOutside={(e) => e.preventDefault()}
       >
         <SheetHeader className="space-y-1 border-b p-4 text-left">
-          <SheetTitle>Update Encounter Batch</SheetTitle>
-          <SheetDescription>Fill in the details below.</SheetDescription>
+          <SheetTitle>{label}</SheetTitle>
+          <SheetDescription>Attendance record for {label}</SheetDescription>
         </SheetHeader>
-        <EncounterBatchEditForm
-          batch={batch}
+        <AttendanceRecordForm
+          processLessonId={processLessonId}
+          processAttendancePeriodId={processAttendancePeriodId}
+          students={students}
           onAfterSave={() => setOpen(false)}
         />
       </SheetContent>
