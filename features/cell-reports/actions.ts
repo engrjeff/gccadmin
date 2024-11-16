@@ -1,6 +1,5 @@
 "use server"
 
-import { revalidatePath } from "next/cache"
 import { isToday } from "date-fns"
 
 import { prisma } from "@/lib/db"
@@ -95,7 +94,7 @@ export const createCellReport = authActionClient
       })
     ).then((values) => values)
 
-    revalidatePath("/cell-reports")
+    // revalidatePath("/cell-reports")
 
     return {
       cellReport,
