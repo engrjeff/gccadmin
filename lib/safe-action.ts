@@ -1,3 +1,4 @@
+import { PrismaClientKnownRequestError } from "@prisma/client/runtime/library"
 import {
   createSafeActionClient,
   DEFAULT_SERVER_ERROR_MESSAGE,
@@ -12,7 +13,23 @@ export const actionClient = createSafeActionClient({
   handleServerError(e) {
     console.error("Action error:", e.message)
 
+    if (e instanceof PrismaClientKnownRequestError) {
+      if (e.code === "P2002") {
+        if (
+          e.message.includes(
+            "Unique constraint failed on the fields: (`batchName`)"
+          )
+        ) {
+          return "Encounter batch name must be unique."
+        }
+      }
+    }
+
     if (e instanceof ActionError) {
+      return e.message
+    }
+
+    if (e instanceof Error) {
       return e.message
     }
 
