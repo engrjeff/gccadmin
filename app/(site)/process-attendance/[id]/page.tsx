@@ -47,10 +47,8 @@ async function ProcessAttendanceDetailPage({
       <Breadcrumb>
         <BreadcrumbList>
           <BreadcrumbItem>
-            <BreadcrumbLink>
-              <BreadcrumbLink>
-                <Link href="/process-attendance">Process Attendance</Link>
-              </BreadcrumbLink>
+            <BreadcrumbLink asChild>
+              <Link href="/process-attendance">Process Attendance</Link>
             </BreadcrumbLink>
           </BreadcrumbItem>
           <BreadcrumbSeparator />
@@ -129,50 +127,108 @@ async function ProcessAttendanceDetailPage({
           </TableRow>
         </TableHeader>
         <TableBody className="[&_tr:last-child]:border-b">
-          {record.students.map((student, index) => (
-            <TableRow
-              key={`student-${student.disciple_id}`}
-              className="py-0  hover:bg-background [&_td]:last:border-r-0"
-            >
-              <TableCell className="whitespace-nowrap border-r px-3 py-1.5 text-center text-muted-foreground lg:py-2">
-                {index + 1}
-              </TableCell>
-              <TableCell className="whitespace-nowrap border-r px-3 py-1.5 lg:py-2">
-                {student.disciple.name}
-              </TableCell>
-              <TableCell className="whitespace-nowrap border-r px-3 py-1.5 lg:py-2">
-                {student.disciple.encounter_batch?.batchName}
-              </TableCell>
-              <TableCell className="whitespace-nowrap border-r px-3 py-1.5 lg:py-2">
-                {student.disciple.leader?.name.includes("De Guzman")
-                  ? "Ptr. " + student.disciple.leader.name
-                  : student.disciple.leader?.name}
-              </TableCell>
-              {record.processLessonSeries.lessons.map((lesson) => (
-                <TableCell
-                  key={`process-lesson-cell-${lesson.id}`}
-                  className={cn(
-                    "whitespace-nowrap border-r px-3 py-1.5 text-center last:border-r-0 lg:py-2",
-                    presentByLesson.has(lesson.id)
+          <TableRow className="py-0 hover:bg-background">
+            <TableCell colSpan={4} className="bg-muted/30 py-1">
+              Male
+            </TableCell>
+          </TableRow>
+          {record.students
+            .filter((d) => d.disciple.gender === "MALE")
+            .map((student, index) => (
+              <TableRow
+                key={`student-${student.disciple_id}`}
+                className="py-0  hover:bg-background"
+              >
+                <TableCell className="whitespace-nowrap border-r px-3 py-1.5 text-center text-muted-foreground lg:py-2">
+                  {index + 1}
+                </TableCell>
+                <TableCell className="whitespace-nowrap border-r px-3 py-1.5 lg:py-2">
+                  {student.disciple.name}
+                </TableCell>
+                <TableCell className="whitespace-nowrap border-r px-3 py-1.5 lg:py-2">
+                  {student.disciple.encounter_batch?.batchName}
+                </TableCell>
+                <TableCell className="whitespace-nowrap border-r px-3 py-1.5 lg:py-2">
+                  {student.disciple.leader?.name.includes("De Guzman")
+                    ? "Ptr. " + student.disciple.leader.name
+                    : student.disciple.leader?.name}
+                </TableCell>
+                {record.processLessonSeries.lessons.map((lesson) => (
+                  <TableCell
+                    key={`process-lesson-cell-${lesson.id}`}
+                    className={cn(
+                      "whitespace-nowrap border-r px-3 py-1.5 text-center last:border-r-0 lg:py-2",
+                      presentByLesson.has(lesson.id)
+                        ? presentByLesson
+                            .get(lesson.id)
+                            ?.includes(student.disciple_id)
+                          ? "border border-emerald-400/20 bg-emerald-400/10 text-emerald-400"
+                          : "border border-red-400/20 bg-red-400/10 text-red-400"
+                        : ""
+                    )}
+                  >
+                    {presentByLesson.has(lesson.id)
                       ? presentByLesson
                           .get(lesson.id)
                           ?.includes(student.disciple_id)
-                        ? "border border-emerald-400/20 bg-emerald-400/10 text-emerald-400"
-                        : "border border-red-400/20 bg-red-400/10 text-red-400"
-                      : ""
-                  )}
-                >
-                  {presentByLesson.has(lesson.id)
-                    ? presentByLesson
-                        .get(lesson.id)
-                        ?.includes(student.disciple_id)
-                      ? "Present"
-                      : "Absent"
-                    : "--"}
+                        ? "Present"
+                        : "Absent"
+                      : "--"}
+                  </TableCell>
+                ))}
+              </TableRow>
+            ))}
+          <TableRow className="py-0 hover:bg-background">
+            <TableCell colSpan={4} className="bg-muted/30 py-1">
+              Female
+            </TableCell>
+          </TableRow>
+          {record.students
+            .filter((d) => d.disciple.gender === "FEMALE")
+            .map((student, index) => (
+              <TableRow
+                key={`student-${student.disciple_id}`}
+                className="py-0  hover:bg-background"
+              >
+                <TableCell className="whitespace-nowrap border-r px-3 py-1.5 text-center text-muted-foreground lg:py-2">
+                  {index + 1}
                 </TableCell>
-              ))}
-            </TableRow>
-          ))}
+                <TableCell className="whitespace-nowrap border-r px-3 py-1.5 lg:py-2">
+                  {student.disciple.name}
+                </TableCell>
+                <TableCell className="whitespace-nowrap border-r px-3 py-1.5 lg:py-2">
+                  {student.disciple.encounter_batch?.batchName}
+                </TableCell>
+                <TableCell className="whitespace-nowrap border-r px-3 py-1.5 lg:py-2">
+                  {student.disciple.leader?.name.includes("De Guzman")
+                    ? "Ptr. " + student.disciple.leader.name
+                    : student.disciple.leader?.name}
+                </TableCell>
+                {record.processLessonSeries.lessons.map((lesson) => (
+                  <TableCell
+                    key={`process-lesson-cell-${lesson.id}`}
+                    className={cn(
+                      "whitespace-nowrap border-r px-3 py-1.5 text-center last:border-r-0 lg:py-2",
+                      presentByLesson.has(lesson.id)
+                        ? presentByLesson
+                            .get(lesson.id)
+                            ?.includes(student.disciple_id)
+                          ? "border border-emerald-400/20 bg-emerald-400/10 text-emerald-400"
+                          : "border border-red-400/20 bg-red-400/10 text-red-400"
+                        : ""
+                    )}
+                  >
+                    {presentByLesson.has(lesson.id)
+                      ? presentByLesson
+                          .get(lesson.id)
+                          ?.includes(student.disciple_id)
+                        ? "Present"
+                        : "Absent"
+                      : "--"}
+                  </TableCell>
+                ))}
+              </TableRow>
+            ))}
         </TableBody>
       </Table>
     </div>

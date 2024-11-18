@@ -10,10 +10,10 @@ import {
   useForm,
 } from "react-hook-form"
 
-import { Button } from "@/components/ui/button"
 import FormErrorMessage from "@/components/ui/form-error-message"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
+import { SubmitButton } from "@/components/ui/submit-button"
 import { Textarea } from "@/components/ui/textarea"
 import { toast } from "@/components/ui/use-toast"
 import TagsInput from "@/components/tags-input"
@@ -145,9 +145,9 @@ function LessonForm({
           </div>
         </div>
         <div className="text-right">
-          <Button type="submit">
-            {isSubmitting ? "Saving..." : "Save Lesson"}
-          </Button>
+          <SubmitButton type="submit" loading={isSubmitting}>
+            Save Lesson
+          </SubmitButton>
         </div>
       </fieldset>
     </form>

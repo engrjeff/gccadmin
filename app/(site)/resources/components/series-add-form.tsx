@@ -3,7 +3,7 @@
 import { useState } from "react"
 import { useRouter } from "next/navigation"
 import { zodResolver } from "@hookform/resolvers/zod"
-import { Plus } from "lucide-react"
+import { PlusCircleIcon } from "lucide-react"
 import {
   Controller,
   SubmitErrorHandler,
@@ -11,6 +11,7 @@ import {
   useForm,
 } from "react-hook-form"
 
+import { useIsAdmin } from "@/hooks/use-isadmin"
 import { Button } from "@/components/ui/button"
 import {
   Dialog,
@@ -23,6 +24,7 @@ import {
 import FormErrorMessage from "@/components/ui/form-error-message"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
+import { SubmitButton } from "@/components/ui/submit-button"
 import { Textarea } from "@/components/ui/textarea"
 import { toast } from "@/components/ui/use-toast"
 import TagsInput from "@/components/tags-input"
@@ -36,6 +38,8 @@ function SeriesAddForm() {
   const [dialogOpen, setDialogOpen] = useState(false)
   const router = useRouter()
 
+  const { isAdmin } = useIsAdmin()
+
   const form = useForm<LessonSeriesCreateInputs>({
     resolver: zodResolver(seriesCreateSchema),
     defaultValues: {
@@ -44,6 +48,8 @@ function SeriesAddForm() {
   })
 
   const { errors } = form.formState
+
+  if (!isAdmin) return null
 
   const onError: SubmitErrorHandler<LessonSeriesCreateInputs> = (
     formErrors
@@ -99,12 +105,9 @@ function SeriesAddForm() {
   return (
     <Dialog open={dialogOpen} onOpenChange={setDialogOpen}>
       <DialogTrigger asChild>
-        <Button
-          size="sm"
-          className="fixed bottom-4 right-4 z-30 flex h-14 w-14 rounded-full p-0 shadow-lg lg:static lg:h-10 lg:w-auto lg:rounded-md lg:px-4 lg:py-2"
-        >
-          <Plus className="h-6 w-6 lg:mr-3 lg:h-4 lg:w-4" />
-          <span className="sr-only lg:not-sr-only">Add Series</span>
+        <Button size="sm">
+          <PlusCircleIcon className="size-4" />
+          Add Series
         </Button>
       </DialogTrigger>
       <DialogContent className="mx-4 sm:max-w-md">
@@ -165,9 +168,7 @@ function SeriesAddForm() {
               </div>
             </div>
             <div className="text-right">
-              <Button type="submit">
-                {isLoading ? "Saving..." : "Save Series"}
-              </Button>
+              <SubmitButton loading={isLoading}>Save Series</SubmitButton>
             </div>
           </fieldset>
         </form>

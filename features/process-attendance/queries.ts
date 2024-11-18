@@ -31,6 +31,11 @@ export async function getProcessAttendanceDetail(id: string) {
               },
             },
           },
+          orderBy: {
+            disciple: {
+              name: "asc",
+            },
+          },
         },
         attendanceRecords: {
           include: {
