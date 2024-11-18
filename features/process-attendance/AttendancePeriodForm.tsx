@@ -283,6 +283,7 @@ export function AttendancePeriodForm({
               <div className="flex items-center space-x-2 pt-4">
                 <Checkbox
                   checked={addMoreStudents}
+                  disabled={!processLevel}
                   onCheckedChange={(checked) => {
                     setAddMoreStudents(checked === true ? true : false)
                   }}
