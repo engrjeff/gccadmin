@@ -36,7 +36,7 @@ async function ResourcesPage() {
           />
           <SeriesAddForm />
         </div>
-        <div className="w-full flex-1 overflow-y-auto p-4 pb-0">
+        <div className="w-full flex-1 overflow-y-auto p-4 pt-0">
           <ul className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
             {resources.map((series) => (
               <li key={series.id} className="relative">

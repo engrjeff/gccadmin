@@ -92,7 +92,7 @@ export function DiscipleEditForm({
   const { errors: formErrors } = form.formState
 
   const disciplesOfLeader = useDisciplesOfLeader(
-    isAdmin ? leaderId : session.data?.user.discipleId
+    isAdmin ? form.watch("leaderId") : session.data?.user.discipleId
   )
 
   const onSubmit = async (values: DiscipleUpdateInputs) => {
@@ -290,38 +290,42 @@ export function DiscipleEditForm({
               />
             )}
 
-            <FormField
-              control={form.control}
-              name="handled_by_id"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>
-                    Handled By{" "}
-                    <span className="text-xs italic text-muted-foreground">
-                      Optional
-                    </span>
-                  </FormLabel>
-                  <FormControl>
-                    <NativeSelect
-                      className="normal-case"
-                      id="handled_by_id"
-                      {...field}
-                    >
-                      <option value="">Select cell leader</option>
-                      {disciplesOfLeader.data
-                        ?.filter((dc) => dc.isMyPrimary)
-                        ?.map((item) => (
-                          <option key={item.id} value={item.id}>
-                            {item.name}
-                          </option>
-                        ))}
-                    </NativeSelect>
-                  </FormControl>
-                  <FormDescription>Who handles this disciple?</FormDescription>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
+            {!disciple.isMyPrimary && !disciple.isPrimary ? (
+              <FormField
+                control={form.control}
+                name="handled_by_id"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>
+                      Handled By{" "}
+                      <span className="text-xs italic text-muted-foreground">
+                        Optional
+                      </span>
+                    </FormLabel>
+                    <FormControl>
+                      <NativeSelect
+                        className="normal-case"
+                        id="handled_by_id"
+                        {...field}
+                      >
+                        <option value="">Select cell leader</option>
+                        {disciplesOfLeader.data
+                          ?.filter((dc) => dc.isMyPrimary)
+                          ?.map((item) => (
+                            <option key={item.id} value={item.id}>
+                              {item.name}
+                            </option>
+                          ))}
+                      </NativeSelect>
+                    </FormControl>
+                    <FormDescription>
+                      Who handles this disciple?
+                    </FormDescription>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+            ) : null}
 
             <div className="grid grid-cols-2 gap-3">
               <FormField
