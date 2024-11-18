@@ -39,7 +39,7 @@ export const columns: ColumnDef<DiscipleWithLeader>[] = [
     accessorKey: "name",
     id: "name",
     header: () => <SortLink title="Name" sortValue="name" />,
-    cell: ({ row }) => (
+    cell: ({ row, table }) => (
       <div className="relative">
         <p className="text-sm font-medium">{row.original.name}</p>
         <p className="flex items-center gap-x-1.5 text-xs capitalize text-muted-foreground">
@@ -57,7 +57,10 @@ export const columns: ColumnDef<DiscipleWithLeader>[] = [
         </p>
 
         <div className="absolute -right-2 -top-1 lg:hidden">
-          <DiscipleRowActions disciple={row.original} />
+          <DiscipleRowActions
+            onOpen={() => table.toggleAllPageRowsSelected(false)}
+            disciple={row.original}
+          />
         </div>
       </div>
     ),
@@ -138,8 +141,13 @@ export const columns: ColumnDef<DiscipleWithLeader>[] = [
   {
     id: "actions",
     header: "Actions",
-    cell: ({ row }) => {
-      return <DiscipleRowActions disciple={row.original} />
+    cell: ({ row, table }) => {
+      return (
+        <DiscipleRowActions
+          onOpen={() => table.toggleAllPageRowsSelected(false)}
+          disciple={row.original}
+        />
+      )
     },
   },
 ]

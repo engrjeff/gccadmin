@@ -51,12 +51,15 @@ type RowAction = "edit" | "view" | "make-inactive" | "make-active" | "delete"
 
 export function DiscipleRowActions({
   disciple,
+  onOpen,
 }: {
   disciple: DiscipleWithLeader
+  onOpen: () => void
 }) {
   const [action, setAction] = useState<RowAction>()
 
   const [drawerOpen, setDrawerOpen] = useState(false)
+  const [open, setOpen] = useState(false)
 
   const isMobile = useIsMobile()
 
@@ -65,12 +68,20 @@ export function DiscipleRowActions({
     setDrawerOpen(false)
   }
 
+  function handleDropdownItemClick(actionName: RowAction) {
+    setAction(actionName)
+    setOpen(false)
+  }
+
   return (
     <>
       {isMobile ? (
         <Drawer
           open={drawerOpen}
-          onOpenChange={setDrawerOpen}
+          onOpenChange={(isOpen) => {
+            if (isOpen) onOpen()
+            setDrawerOpen(isOpen)
+          }}
           shouldScaleBackground={false}
         >
           <DrawerTrigger asChild>
@@ -134,7 +145,14 @@ export function DiscipleRowActions({
           </DrawerContent>
         </Drawer>
       ) : (
-        <DropdownMenu modal={false}>
+        <DropdownMenu
+          modal={false}
+          open={open}
+          onOpenChange={(isOpen) => {
+            if (isOpen) onOpen()
+            setOpen(isOpen)
+          }}
+        >
           <DropdownMenuTrigger asChild>
             <Button
               variant="ghost"
