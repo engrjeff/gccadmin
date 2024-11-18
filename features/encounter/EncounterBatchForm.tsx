@@ -1,6 +1,7 @@
 "use client"
 
 import { zodResolver } from "@hookform/resolvers/zod"
+import { addDays, format, isValid } from "date-fns"
 import { useAction } from "next-safe-action/hooks"
 import { useForm } from "react-hook-form"
 
@@ -59,8 +60,8 @@ export function EncounterBatchForm({
   const form = useForm<CreateEncounterBatchInputs>({
     defaultValues: {
       batchName: "",
-      startDate: "",
-      endDate: "",
+      startDate: format(new Date(), "yyyy-MM-dd"),
+      endDate: format(new Date(), "yyyy-MM-dd"),
       members: [],
     },
     resolver: zodResolver(createEncounterBatchSchema),
@@ -123,6 +124,21 @@ export function EncounterBatchForm({
                         max={new Date().toLocaleDateString("en-ca")}
                         className="w-min"
                         {...field}
+                        onChange={(e) => {
+                          field.onChange(e)
+
+                          if (e.currentTarget.value) {
+                            if (isValid(e.currentTarget.valueAsDate)) {
+                              form.setValue(
+                                "endDate",
+                                format(
+                                  addDays(new Date(e.currentTarget.value), 1),
+                                  "yyyy-MM-dd"
+                                )
+                              )
+                            }
+                          }
+                        }}
                       />
                     </FormControl>
                     <FormMessage />
