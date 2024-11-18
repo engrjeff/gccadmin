@@ -1,7 +1,10 @@
+"use client"
+
 import { useState } from "react"
 import { Lesson, LessonSeries } from "@prisma/client"
 import { MoreVertical } from "lucide-react"
 
+import { useIsAdmin } from "@/hooks/use-isadmin"
 import { Button } from "@/components/ui/button"
 import {
   Dialog,
@@ -27,9 +30,13 @@ type SeriesWithLessons = LessonSeries & { lessons: Lesson[] }
 function LessonSeriesActions({ series }: { series: SeriesWithLessons }) {
   const [activeAction, setActiveAction] = useState<"edit" | "add-lesson">()
 
+  const { isAdmin } = useIsAdmin()
+
+  if (!isAdmin) return null
+
   return (
     <>
-      <DropdownMenu>
+      <DropdownMenu modal={false}>
         <DropdownMenuTrigger asChild>
           <Button variant="ghost" size="icon">
             <span className="sr-only">Lesson series actions menu</span>
