@@ -21,6 +21,7 @@ export const discipleCreateSchema = z.object({
   process_level: z.nativeEnum(ProcessLevel),
   process_level_status: z.nativeEnum(ProcessLevelStatus),
   leaderId: z.string().min(1, { message: "Leader is required" }),
+  handled_by_id: z.string().optional(),
 })
 
 export const discipleUpdateSchema = discipleCreateSchema.partial().extend({
