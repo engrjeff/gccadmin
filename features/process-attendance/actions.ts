@@ -76,6 +76,7 @@ export const createAttendance = authActionClient
           disciple_id: p,
           process_attendance_attendee_id: `${attendance.id}-${p}`,
           process_attendance_id: attendance.id,
+          is_present: true,
         })),
       })
 
