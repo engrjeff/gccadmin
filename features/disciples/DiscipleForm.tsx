@@ -6,6 +6,7 @@ import { useSession } from "next-auth/react"
 import { useAction } from "next-safe-action/hooks"
 import { useForm } from "react-hook-form"
 
+import { useDisciplesOfLeader } from "@/hooks/use-disciples-by-leader"
 import { usePrimaryLeaders } from "@/hooks/use-primary-leaders"
 import { Button } from "@/components/ui/button"
 import { Checkbox } from "@/components/ui/checkbox"
@@ -25,10 +26,6 @@ import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group"
 import { Separator } from "@/components/ui/separator"
 import { SubmitButton } from "@/components/ui/submit-button"
 import { useToast } from "@/components/ui/use-toast"
-import {
-  DiscipleCreateInputs,
-  discipleCreateSchema,
-} from "@/app/api/disciples/schema"
 
 import { addDisciple } from "./actions"
 import {
@@ -37,6 +34,7 @@ import {
   processLevels,
   processLevelStatuses,
 } from "./constants"
+import { DiscipleCreateInputs, discipleCreateSchema } from "./schema"
 
 const initialValues: Partial<DiscipleCreateInputs> = {
   name: "",
@@ -48,6 +46,7 @@ const initialValues: Partial<DiscipleCreateInputs> = {
   member_type: "KIDS",
   process_level: "NONE",
   process_level_status: "NOT_STARTED",
+  handled_by_id: undefined,
 }
 
 interface DiscipleFormProps {
@@ -96,6 +95,10 @@ export function DiscipleForm({ initialName, onAfterSave }: DiscipleFormProps) {
   const leaderId = user?.discipleId
 
   const { errors: formErrors } = form.formState
+
+  const disciplesOfLeader = useDisciplesOfLeader(
+    isAdmin ? leaderId : session.data?.user.discipleId
+  )
 
   const onSubmit = async (values: DiscipleCreateInputs) => {
     const result = await action.executeAsync(values)
@@ -301,6 +304,39 @@ export function DiscipleForm({ initialName, onAfterSave }: DiscipleFormProps) {
                 {...form.register("leaderId")}
               />
             )}
+
+            <FormField
+              control={form.control}
+              name="handled_by_id"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>
+                    Handled By{" "}
+                    <span className="text-xs italic text-muted-foreground">
+                      Optional
+                    </span>
+                  </FormLabel>
+                  <FormControl>
+                    <NativeSelect
+                      className="normal-case"
+                      id="handled_by_id"
+                      {...field}
+                    >
+                      <option value="">Select cell leader</option>
+                      {disciplesOfLeader.data
+                        ?.filter((dc) => dc.isMyPrimary)
+                        ?.map((item) => (
+                          <option key={item.id} value={item.id}>
+                            {item.name}
+                          </option>
+                        ))}
+                    </NativeSelect>
+                  </FormControl>
+                  <FormDescription>Who handles this disciple?</FormDescription>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
 
             <div className="grid grid-cols-2 gap-3">
               <FormField

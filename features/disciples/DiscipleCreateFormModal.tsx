@@ -22,8 +22,8 @@ export function DiscipleCreateFormModal() {
     <Sheet open={open} onOpenChange={setOpen}>
       <SheetTrigger asChild>
         <Button size="sm" className="h-9">
-          <PlusCircleIcon className="h-4 w-4" /> Add{" "}
-          <span className="hidden md:inline">Disciple</span>
+          <PlusCircleIcon className="h-4 w-4" />
+          <span>Add Disciple</span>
         </Button>
       </SheetTrigger>
       <SheetContent
