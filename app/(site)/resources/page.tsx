@@ -28,15 +28,15 @@ async function ResourcesPage() {
 
   return (
     <>
-      <div className="relative flex flex-col gap-4 overflow-hidden p-4">
-        <div className="flex items-start justify-between gap-4">
+      <div className="relative flex flex-col gap-4 overflow-hidden">
+        <div className="flex items-start justify-between gap-4 p-4 pb-0">
           <PageTitle
             title="Resources"
             subtitle="View and manage GCC Lessons."
           />
           <SeriesAddForm />
         </div>
-        <div className="flex-1">
+        <div className="w-full flex-1 overflow-y-auto p-4 pb-0">
           <ul className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
             {resources.map((series) => (
               <li key={series.id} className="relative">
