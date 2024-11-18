@@ -6,6 +6,7 @@ import { useSession } from "next-auth/react"
 import { useAction } from "next-safe-action/hooks"
 import { useForm } from "react-hook-form"
 
+import { useDisciplesOfLeader } from "@/hooks/use-disciples-by-leader"
 import { usePrimaryLeaders } from "@/hooks/use-primary-leaders"
 import { Button } from "@/components/ui/button"
 import {
@@ -24,7 +25,6 @@ import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group"
 import { Separator } from "@/components/ui/separator"
 import { SubmitButton } from "@/components/ui/submit-button"
 import { useToast } from "@/components/ui/use-toast"
-import { DiscipleCreateInputs } from "@/app/api/disciples/schema"
 
 import { updateDisciple } from "./actions"
 import { DiscipleWithLeader } from "./columns"
@@ -35,18 +35,6 @@ import {
   processLevelStatuses,
 } from "./constants"
 import { DiscipleUpdateInputs, discipleUpdateSchema } from "./schema"
-
-const initialValues: Partial<DiscipleCreateInputs> = {
-  name: "",
-  address: "",
-  birthdate: "1990-01-01",
-  gender: "MALE",
-  cell_status: "FIRST_TIMER",
-  church_status: "NACS",
-  member_type: "KIDS",
-  process_level: "NONE",
-  process_level_status: "NOT_STARTED",
-}
 
 interface DiscipleEditFormProps {
   disciple: DiscipleWithLeader
@@ -74,6 +62,7 @@ export function DiscipleEditForm({
       member_type: disciple.member_type,
       process_level: disciple.process_level,
       process_level_status: disciple.process_level_status,
+      handled_by_id: disciple.handled_by_id ?? undefined,
     },
     mode: "onChange",
     resolver: zodResolver(discipleUpdateSchema),
@@ -101,6 +90,10 @@ export function DiscipleEditForm({
   const leaderId = user?.discipleId
 
   const { errors: formErrors } = form.formState
+
+  const disciplesOfLeader = useDisciplesOfLeader(
+    isAdmin ? leaderId : session.data?.user.discipleId
+  )
 
   const onSubmit = async (values: DiscipleUpdateInputs) => {
     const result = await action.executeAsync({ id: disciple.id, ...values })
@@ -296,6 +289,39 @@ export function DiscipleEditForm({
                 {...form.register("leaderId")}
               />
             )}
+
+            <FormField
+              control={form.control}
+              name="handled_by_id"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>
+                    Handled By{" "}
+                    <span className="text-xs italic text-muted-foreground">
+                      Optional
+                    </span>
+                  </FormLabel>
+                  <FormControl>
+                    <NativeSelect
+                      className="normal-case"
+                      id="handled_by_id"
+                      {...field}
+                    >
+                      <option value="">Select cell leader</option>
+                      {disciplesOfLeader.data
+                        ?.filter((dc) => dc.isMyPrimary)
+                        ?.map((item) => (
+                          <option key={item.id} value={item.id}>
+                            {item.name}
+                          </option>
+                        ))}
+                    </NativeSelect>
+                  </FormControl>
+                  <FormDescription>Who handles this disciple?</FormDescription>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
 
             <div className="grid grid-cols-2 gap-3">
               <FormField
