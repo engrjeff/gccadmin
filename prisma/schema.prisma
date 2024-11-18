@@ -238,6 +238,9 @@ model ProcessAttendee {
   process_attendance             ProcessAttendance @relation(fields: [process_attendance_id], references: [id], onDelete: Cascade)
   disciple                       Disciple          @relation(fields: [disciple_id], references: [id])
   remarks                        String?
+  is_present                     Boolean           @default(false)
+  devo                           Int               @default(0)
+  with_assignment                Boolean?
 
   @@index([process_attendance_id])
   @@index([disciple_id])

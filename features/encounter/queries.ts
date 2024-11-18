@@ -44,6 +44,9 @@ export async function getEncounterBatch({
                 },
               },
             },
+            orderBy: {
+              name: "asc",
+            },
           },
         },
         orderBy: {
@@ -74,6 +77,9 @@ export async function getEncounterBatch({
                 name: true,
               },
             },
+          },
+          orderBy: {
+            name: "asc",
           },
         },
       },

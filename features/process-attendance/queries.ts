@@ -12,10 +12,16 @@ export async function getProcessAttendancePeriods() {
   }
 }
 
-export async function getProcessAttendanceDetail(id: string) {
+export interface GetProcessAttendanceDetailArgs {
+  id: string
+}
+
+export async function getProcessAttendanceDetail(
+  args: GetProcessAttendanceDetailArgs
+) {
   try {
     const result = await prisma.processAttendancePeriod.findUnique({
-      where: { id },
+      where: { id: args.id },
       include: {
         processLessonSeries: {
           select: {
@@ -40,7 +46,7 @@ export async function getProcessAttendanceDetail(id: string) {
         attendanceRecords: {
           include: {
             teacher: { select: { name: true } },
-            process_attendees: { select: { disciple_id: true, remarks: true } },
+            process_attendees: true,
           },
         },
       },
