@@ -65,14 +65,6 @@ export const getDisciples = async (args: DisciplesQueryArgs | undefined) => {
 
   const isMyPrimary = args?.status === "primary" ? true : undefined
 
-  // page information
-  // const total = await db.disciple.count({
-  //   where: {
-  //     leaderId: user.role === "ADMIN" ? undefined : user.discipleId,
-  //     isDeleted: false,
-  //   },
-  // })
-
   const totalFiltered = await db.disciple.count({
     where: {
       leaderId:
