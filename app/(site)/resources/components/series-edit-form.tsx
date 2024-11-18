@@ -10,10 +10,10 @@ import {
   useForm,
 } from "react-hook-form"
 
-import { Button } from "@/components/ui/button"
 import FormErrorMessage from "@/components/ui/form-error-message"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
+import { SubmitButton } from "@/components/ui/submit-button"
 import { Textarea } from "@/components/ui/textarea"
 import { toast } from "@/components/ui/use-toast"
 import TagsInput from "@/components/tags-input"
@@ -150,9 +150,7 @@ function SeriesEditForm({
           </div>
         </div>
         <div className="text-right">
-          <Button type="submit">
-            {isLoading ? "Saving..." : "Save Changes"}
-          </Button>
+          <SubmitButton loading={isLoading}>Save Changes</SubmitButton>
         </div>
       </fieldset>
     </form>
