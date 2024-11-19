@@ -47,12 +47,12 @@ export function CellReportDetails({
         <div className="flex flex-wrap gap-2">
           {cellReport.scripture_references.length
             ? cellReport.scripture_references.map((sc, i) => (
-                <Badge key={`scripture-ref-${sc}-${i}`} variant="PREENC">
+                <Badge key={`scripture-ref-${sc}-${i}`} variant="NONE">
                   {sc}
                 </Badge>
               ))
             : cellReport.lesson?.scripture_references?.map((sc, i) => (
-                <Badge key={`lesson-scripture-ref-${sc}-${i}`} variant="PREENC">
+                <Badge key={`lesson-scripture-ref-${sc}-${i}`} variant="NONE">
                   {sc}
                 </Badge>
               ))}
