@@ -1,4 +1,5 @@
 import {
+  AlbumIcon,
   FlameIcon,
   LayoutDashboard,
   Library,
@@ -41,6 +42,11 @@ export const processMenuItems = [
     title: "Tracking",
     href: "/tracking",
     icon: <Table2Icon className="h-4 w-4" />,
+  },
+  {
+    title: "Process Lessons",
+    href: "/process-lessons",
+    icon: <AlbumIcon className="h-4 w-4" />,
   },
   {
     title: "Process Attendance",
