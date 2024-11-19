@@ -1,9 +1,7 @@
 import Link from "next/link"
 import { notFound } from "next/navigation"
-import { AssignmentToggler } from "@/features/process-attendance/AssignmentToggler"
-import { AttendanceToggler } from "@/features/process-attendance/AttendanceToggler"
-import { ColumnFilter } from "@/features/process-attendance/ColumnFilter"
-import { DevotionInput } from "@/features/process-attendance/DevotionInput"
+import { BatchFilter } from "@/features/process-attendance/BatchFilter"
+import { LeaderFilter } from "@/features/process-attendance/LeaderFilter"
 import { ProcessAttendanceAddButton } from "@/features/process-attendance/ProcessAttendanceAddButton"
 import {
   getProcessAttendanceDetail,
@@ -13,6 +11,7 @@ import { ProcessAttendee } from "@prisma/client"
 import { format } from "date-fns"
 import { LockIcon } from "lucide-react"
 
+import { cn } from "@/lib/utils"
 import { Badge } from "@/components/ui/badge"
 import {
   Breadcrumb,
@@ -22,9 +21,7 @@ import {
   BreadcrumbPage,
   BreadcrumbSeparator,
 } from "@/components/ui/breadcrumb"
-import { Button } from "@/components/ui/button"
 import {
-  Table,
   TableBody,
   TableCell,
   TableHead,
@@ -41,6 +38,8 @@ async function ProcessAttendanceDetailPage({
 }) {
   const record = await getProcessAttendanceDetail({
     id: params.id,
+    leaderId: searchParams?.leaderId,
+    batchId: searchParams?.batchId,
   })
 
   if (!record) notFound()
@@ -51,27 +50,6 @@ async function ProcessAttendanceDetailPage({
     presentByLesson.set(record.process_lesson_id, record.process_attendees)
   })
 
-  const batchFilterOptions = new Map<string, { label: string; value: string }>()
-
-  record.students
-    .filter((s) => s.disciple.encounter_batch_id)
-    .forEach((d) => {
-      if (
-        d.disciple.encounter_batch_id &&
-        !batchFilterOptions.has(d.disciple.encounter_batch_id)
-      ) {
-        batchFilterOptions.set(d.disciple.encounter_batch_id, {
-          label: d.disciple.encounter_batch?.batchName!,
-          value: d.disciple.encounter_batch_id,
-        })
-      }
-    })
-
-  const leaderFilterOptions = new Map<
-    string,
-    { label: string; value: string }
-  >()
-
   const isPresent = (lessonId: string, studentId: string) =>
     presentByLesson
       .get(lessonId)
@@ -81,16 +59,15 @@ async function ProcessAttendanceDetailPage({
     presentByLesson.get(lessonId)?.find((d) => d.disciple_id === studentId)
       ?.with_assignment
 
-  record.students.forEach((d) => {
-    if (d.disciple.leaderId && !leaderFilterOptions.has(d.disciple.leaderId)) {
-      leaderFilterOptions.set(d.disciple.leaderId, {
-        label: d.disciple?.leader?.name.includes("De Guzman")
-          ? "Ptr. " + d.disciple?.leader?.name!
-          : d.disciple?.leader?.name!,
-        value: d.disciple.leaderId,
-      })
-    }
-  })
+  const male = record.students.filter((d) => d.disciple.gender === "MALE")
+
+  const female = record.students.filter((d) => d.disciple.gender === "FEMALE")
+
+  function getAttendee(lessonId: string, studentId: string) {
+    return presentByLesson.has(lessonId)
+      ? presentByLesson.get(lessonId)?.find((d) => d.disciple_id === studentId)
+      : "NA"
+  }
 
   return (
     <div className="relative flex flex-col gap-4 overflow-hidden p-4">
@@ -108,127 +85,139 @@ async function ProcessAttendanceDetailPage({
         </BreadcrumbList>
       </Breadcrumb>
 
-      <Table className="relative w-full overflow-auto rounded-lg border">
-        <TableHeader>
-          <TableRow className="hover:bg-transparent">
-            <TableHead colSpan={3} className="h-auto border-r py-2">
-              <div className="space-y-1">
-                <div className="flex items-center justify-between">
-                  <p className="text-xs">{record.description} </p>
-                  <Badge variant="ACTIVE">
-                    {record.students.length} students
-                  </Badge>
-                </div>
-
-                <p className="text-xs text-muted-foreground">
-                  {`Attendance sheet for ${record.description}`}
-                </p>
-              </div>
-            </TableHead>
-            <TableHead className="h-9 border-r text-right">
-              <div className="space-y-0.5">
-                <p className="text-xs">Teacher</p>
-                <p className="text-xs text-muted-foreground">Date</p>
-              </div>
-            </TableHead>
-            {record.attendanceRecords.map((attendance) => (
+      <div className="relative w-full flex-1 overflow-auto rounded-lg border">
+        <table className="mb-4 w-full caption-bottom border-separate border-spacing-0 text-sm">
+          <TableHeader>
+            <TableRow className="hover:bg-transparent">
               <TableHead
-                key={`attendance-record-${attendance.id}`}
-                className="min-w-[140px] border-r p-2 last:border-r-0"
+                colSpan={2}
+                className="sticky left-0 h-auto border-r bg-gray-900 py-2"
               >
-                <div className="space-y-0.5">
-                  <p className="text-xs">
-                    {attendance.teacher?.name.includes("De Guzman")
-                      ? "Ptr. " + attendance.teacher.name
-                      : attendance.teacher?.name}
-                  </p>
-                  <p className="text-xs text-muted-foreground">
-                    {format(attendance.date, "MM/dd/yyyy")}
-                  </p>
-                </div>
-              </TableHead>
-            ))}
-          </TableRow>
-          <TableRow className="text-xs hover:bg-transparent">
-            <TableHead className="h-9 border-r text-center">#</TableHead>
-            <TableHead className="h-9 border-r">Name</TableHead>
-            <TableHead className="h-[34px] border-r p-0.5">
-              <ColumnFilter
-                title="Batch"
-                filterKey="batchId"
-                options={Array.from(batchFilterOptions.values())}
-              />
-            </TableHead>
-            <TableHead className="h-[34px] border-r p-0.5">
-              <ColumnFilter
-                title="Leader"
-                filterKey="leaderId"
-                options={Array.from(leaderFilterOptions.values())}
-              />
-            </TableHead>
-            {record.processLessonSeries.lessons.map((lesson) => (
-              <TableHead
-                key={`process-lesson-${lesson.id}`}
-                className="h-[34px] min-w-[140px] border-r p-0.5 last:border-r-0"
-              >
-                {presentByLesson.has(lesson.id) ? (
-                  <div className="flex items-center justify-between gap-1 pr-1">
-                    <Button
-                      size="icon"
-                      variant="outline"
-                      className="size-7 bg-muted/20"
-                    >
-                      <LockIcon className="size-2 text-amber-500" />
-                    </Button>
-                    <span>{lesson.title.split(": ")[1]}</span>
+                <div className="space-y-1">
+                  <div className="flex items-center justify-between">
+                    <p className="text-xs">{record.description} </p>
+                    <Badge variant="ACTIVE">
+                      {record.students.length} students
+                    </Badge>
                   </div>
-                ) : (
-                  <ProcessAttendanceAddButton
-                    label={lesson.title.split(": ")[1]}
-                    processLessonId={lesson.id}
-                    processAttendancePeriodId={record.id}
-                    students={record.students.map((s) => s.disciple)}
-                  />
-                )}
-              </TableHead>
-            ))}
-          </TableRow>
-        </TableHeader>
-        <TableBody className="[&_tr:last-child]:border-b">
-          <TableRow className="py-0 hover:bg-background">
-            <TableCell colSpan={4} className="border-r bg-muted/30 py-1">
-              Male
-            </TableCell>
-            {record.processLessonSeries.lessons.map((lesson) => (
-              <TableCell
-                key={`subrow-male-lesson-${lesson.id}`}
-                className="border-r bg-muted/30 p-0 last:border-r-0"
-              >
-                <div className="grid h-[29px] grid-cols-3 divide-x text-center text-xs font-semibold">
-                  <div className="flex items-center justify-center">P/A</div>
-                  <div className="flex items-center justify-center">Devo</div>
-                  <div className="flex items-center justify-center">Assig</div>
+
+                  <p className="text-xs text-muted-foreground">
+                    {`Attendance sheet for ${record.description}`}
+                  </p>
                 </div>
-              </TableCell>
-            ))}
-          </TableRow>
-          {record.students
-            .filter((d) => d.disciple.gender === "MALE")
-            .map((student, index) => (
+              </TableHead>
+              <TableHead colSpan={2} className="h-9 border-r text-right">
+                <div className="space-y-0.5">
+                  <p className="text-xs">Teacher</p>
+                  <p className="text-xs text-muted-foreground">Date</p>
+                </div>
+              </TableHead>
+              {record.attendanceRecords.map((attendance) => (
+                <TableHead
+                  key={`attendance-record-${attendance.id}`}
+                  className="min-w-[140px] border-r p-2"
+                >
+                  <div className="space-y-0.5">
+                    <p className="text-xs">
+                      {attendance.teacher?.name.includes("De Guzman")
+                        ? "Ptr. " + attendance.teacher.name
+                        : attendance.teacher?.name}
+                    </p>
+                    <div className="flex items-center justify-between">
+                      <p className="text-xs text-muted-foreground">
+                        {format(attendance.date, "MM/dd/yyyy")}
+                      </p>
+
+                      <p className="text-xs">
+                        {attendance.process_attendees.length} /{" "}
+                        {record.students.length}
+                      </p>
+                    </div>
+                  </div>
+                </TableHead>
+              ))}
+            </TableRow>
+            <TableRow className="text-xs hover:bg-transparent">
+              <TableHead className="sticky left-0 top-0 z-40 h-9 w-[39.53px] border-y border-r bg-gray-900 text-center">
+                #
+              </TableHead>
+              <TableHead className="sticky left-[39.53px] top-0 z-40 h-9 border-y border-r bg-gray-900">
+                Name
+              </TableHead>
+              <TableHead className="sticky top-0 z-30 h-[34px] border-y border-r bg-gray-900 p-0.5">
+                <BatchFilter />
+              </TableHead>
+              <TableHead className="sticky top-0 z-30 h-[34px] border-y border-r bg-gray-900 p-0.5">
+                <LeaderFilter />
+              </TableHead>
+              {record.processLessonSeries.lessons.map((lesson) => (
+                <TableHead
+                  key={`process-lesson-${lesson.id}`}
+                  className="sticky top-0 z-30 h-[34px] min-w-[140px] border-y border-r bg-gray-900 p-0.5 last:border-r-0"
+                >
+                  {presentByLesson.has(lesson.id) ? (
+                    <div className="flex items-center justify-between gap-1 px-1">
+                      <span>{lesson.title.split(": ")[1]}</span>
+                      <LockIcon className="size-4 text-amber-500" />
+                    </div>
+                  ) : (
+                    <ProcessAttendanceAddButton
+                      label={lesson.title.split(": ")[1]}
+                      processLessonId={lesson.id}
+                      processAttendancePeriodId={record.id}
+                      students={record.students.map((s) => s.disciple)}
+                    />
+                  )}
+                </TableHead>
+              ))}
+            </TableRow>
+          </TableHeader>
+          <TableBody className="[&_tr:last-child]:border-b">
+            {male.length ? (
+              <TableRow className="py-0 hover:bg-background">
+                <TableCell
+                  colSpan={2}
+                  className="sticky left-0 border-b border-r bg-gray-900 py-1"
+                >
+                  Male
+                </TableCell>
+                <TableCell className="border-b border-r bg-gray-900 py-1"></TableCell>
+                <TableCell className="border-b border-r bg-gray-900 py-1"></TableCell>
+                {record.processLessonSeries.lessons.map((lesson) => (
+                  <TableCell
+                    key={`subrow-male-lesson-${lesson.id}`}
+                    className="border-b border-r bg-gray-900 p-0 last:border-r-0"
+                  >
+                    <div className="grid h-[29px] grid-cols-3 divide-x text-center text-xs font-semibold">
+                      <div className="flex items-center justify-center">
+                        P/A
+                      </div>
+                      <div className="flex items-center justify-center">
+                        Devo
+                      </div>
+                      <div className="flex items-center justify-center">
+                        Assig
+                      </div>
+                    </div>
+                  </TableCell>
+                ))}
+              </TableRow>
+            ) : null}
+            {male.map((student, index) => (
               <TableRow
                 key={`student-${student.disciple_id}`}
                 className="py-0 hover:bg-background"
               >
-                <TableCell className="whitespace-nowrap border-r bg-muted/30 px-3 py-1.5 text-center text-muted-foreground lg:py-2">
+                <TableCell className="sticky left-0 z-20 size-9 whitespace-nowrap border-b border-r bg-gray-900 px-3 py-1.5 text-center text-muted-foreground lg:py-2">
                   {index + 1}
                 </TableCell>
-                <TableCell className="whitespace-nowrap border-r px-3 py-1.5 lg:py-2">
+                <TableCell className="sticky left-[39.53px] z-20 whitespace-nowrap border-b border-r bg-background px-3 py-1.5 lg:py-2">
                   {student.disciple.name}
                 </TableCell>
-                <TableCell className="whitespace-nowrap border-r px-3 py-1.5 lg:py-2">
+                <TableCell className="whitespace-nowrap border-b border-r px-3 py-1.5 lg:py-2">
                   {student.disciple.encounter_batch?.batchName}
                 </TableCell>
-                <TableCell className="whitespace-nowrap border-r px-3 py-1.5 lg:py-2">
+                <TableCell className="whitespace-nowrap border-b border-r px-3 py-1.5 lg:py-2">
                   {student.disciple.leader?.name.includes("De Guzman")
                     ? "Ptr. " + student.disciple.leader.name
                     : student.disciple.leader?.name}
@@ -236,111 +225,129 @@ async function ProcessAttendanceDetailPage({
                 {record.processLessonSeries.lessons.map((lesson, i) => (
                   <TableCell
                     key={`process-male-lesson-cell-${lesson.id}`}
-                    className="whitespace-nowrap border-r p-0 text-center last:border-r-0 data-[disabled=true]:pointer-events-none"
+                    className="whitespace-nowrap border-b border-r p-px text-center align-baseline last:border-r-0 data-[disabled=true]:pointer-events-none"
                   >
-                    <div
-                      data-present={isPresent(lesson.id, student.disciple.id)}
-                      className="grid grid-cols-3 divide-x text-center text-xs font-semibold"
-                    >
-                      {presentByLesson.has(lesson.id) ? (
-                        <>
-                          <AttendanceToggler
-                            isPresent={isPresent(
-                              lesson.id,
-                              student.disciple.id
-                            )}
-                            studentId={student.disciple.id}
-                          />
-                          <DevotionInput disabled={i !== 0} />
-                          <AssignmentToggler
-                            hasAssignment={
-                              hasAssignment(lesson.id, student.disciple.id) ??
-                              null
-                            }
-                            studentId={student.disciple.id}
-                          />
-                        </>
-                      ) : null}
-                    </div>
+                    <AttendeeDataCell
+                      attendee={getAttendee(lesson.id, student.disciple_id)}
+                    />
                   </TableCell>
                 ))}
               </TableRow>
             ))}
-          <TableRow className="py-0 hover:bg-background">
-            <TableCell colSpan={4} className="border-r bg-muted/30 py-1">
-              Female
-            </TableCell>
-            {record.processLessonSeries.lessons.map((lesson) => (
-              <TableCell
-                key={`subrow-female-lesson-${lesson.id}`}
-                className="border-r bg-muted/30 p-0 last:border-r-0"
-              >
-                <div className="grid h-[29px] grid-cols-3 divide-x text-center text-xs font-semibold">
-                  <div className="flex items-center justify-center">P/A</div>
-                  <div className="flex items-center justify-center">Devo</div>
-                  <div className="flex items-center justify-center">Assig</div>
-                </div>
-              </TableCell>
-            ))}
-          </TableRow>
-          {record.students
-            .filter((d) => d.disciple.gender === "FEMALE")
-            .map((student, index) => (
+            {female.length ? (
+              <TableRow className="py-0 hover:bg-background">
+                <TableCell
+                  colSpan={2}
+                  className="sticky left-0 border-b border-r bg-gray-900 py-1"
+                >
+                  Female
+                </TableCell>
+                <TableCell className="border-b border-r bg-gray-900 py-1"></TableCell>
+                <TableCell className="border-b border-r bg-gray-900 py-1"></TableCell>
+                {record.processLessonSeries.lessons.map((lesson) => (
+                  <TableCell
+                    key={`subrow-female-lesson-${lesson.id}`}
+                    className="border-b border-r bg-gray-900 p-0 last:border-r-0"
+                  >
+                    <div className="grid h-[29px] grid-cols-3 divide-x text-center text-xs font-semibold">
+                      <div className="flex items-center justify-center">
+                        P/A
+                      </div>
+                      <div className="flex items-center justify-center">
+                        Devo
+                      </div>
+                      <div className="flex items-center justify-center">
+                        Assig
+                      </div>
+                    </div>
+                  </TableCell>
+                ))}
+              </TableRow>
+            ) : null}
+            {female.map((student, index) => (
               <TableRow
                 key={`student-${student.disciple_id}`}
                 className="py-0 hover:bg-background"
               >
-                <TableCell className="whitespace-nowrap border-r bg-muted/30 px-3 py-1.5 text-center text-muted-foreground lg:py-2">
+                <TableCell className="sticky left-0 z-20 size-9 whitespace-nowrap border-b border-r bg-gray-900 px-3 py-1.5 text-center text-muted-foreground lg:py-2">
                   {index + 1}
                 </TableCell>
-                <TableCell className="whitespace-nowrap border-r px-3 py-1.5 lg:py-2">
+                <TableCell className="sticky left-[39.53px] z-20 whitespace-nowrap border-b border-r bg-background px-3 py-1.5 lg:py-2">
                   {student.disciple.name}
                 </TableCell>
-                <TableCell className="whitespace-nowrap border-r px-3 py-1.5 lg:py-2">
+                <TableCell className="whitespace-nowrap border-b border-r px-3 py-1.5 lg:py-2">
                   {student.disciple.encounter_batch?.batchName}
                 </TableCell>
-                <TableCell className="whitespace-nowrap border-r px-3 py-1.5 lg:py-2">
+                <TableCell className="whitespace-nowrap border-b border-r px-3 py-1.5 lg:py-2">
                   {student.disciple.leader?.name.includes("De Guzman")
                     ? "Ptr. " + student.disciple.leader.name
                     : student.disciple.leader?.name}
                 </TableCell>
                 {record.processLessonSeries.lessons.map((lesson, i) => (
                   <TableCell
-                    key={`process-female-lesson-cell-${lesson.id}`}
-                    className="whitespace-nowrap border-r p-0 text-center last:border-r-0 data-[disabled=true]:pointer-events-none"
+                    key={`process-male-lesson-cell-${lesson.id}`}
+                    className="whitespace-nowrap border-b border-r p-px text-center align-baseline last:border-r-0 data-[disabled=true]:pointer-events-none"
                   >
-                    <div
-                      data-present={isPresent(lesson.id, student.disciple.id)}
-                      className="grid grid-cols-3 divide-x text-center text-xs font-semibold"
-                    >
-                      {presentByLesson.has(lesson.id) ? (
-                        <>
-                          <AttendanceToggler
-                            isPresent={isPresent(
-                              lesson.id,
-                              student.disciple.id
-                            )}
-                            studentId={student.disciple.id}
-                          />
-                          <DevotionInput disabled={i !== 0} />
-                          <AssignmentToggler
-                            hasAssignment={
-                              hasAssignment(lesson.id, student.disciple.id) ??
-                              null
-                            }
-                            studentId={student.disciple.id}
-                          />
-                        </>
-                      ) : null}
-                    </div>
+                    <AttendeeDataCell
+                      attendee={getAttendee(lesson.id, student.disciple_id)}
+                    />
                   </TableCell>
                 ))}
               </TableRow>
             ))}
-        </TableBody>
-      </Table>
+          </TableBody>
+        </table>
+      </div>
     </div>
   )
 }
 
 export default ProcessAttendanceDetailPage
+
+function AttendeeDataCell({ attendee }: { attendee?: ProcessAttendee | "NA" }) {
+  if (attendee === "NA") return null
+
+  if (!attendee)
+    return (
+      <div className="grid h-9 gap-px grid-cols-3 grid-rows-1 divide-x text-center text-xs font-semibold">
+        <div className="flex items-center justify-center bg-red-400/20 text-red-500">
+          A
+        </div>
+        <div className="flex items-center justify-center bg-red-400/20 text-red-500">
+          0
+        </div>
+        <div className="flex items-center justify-center bg-red-400/20 text-red-500">
+          No
+        </div>
+      </div>
+    )
+
+  return (
+    <div className="grid h-9 gap-px grid-cols-3 grid-rows-1 divide-x text-center text-xs font-semibold">
+      <div className="flex items-center justify-center border-green-500 bg-green-400/20 text-green-500">
+        P
+      </div>
+      <div
+        className={cn("flex items-center justify-center", {
+          "bg-orange-400/20 text-orange-500":
+            attendee.devo <= 2 && attendee.devo > 0,
+          "bg-amber-400/20 text-amber-500":
+            attendee.devo <= 5 && attendee.devo > 2,
+          "bg-green-400/20 text-green-500": attendee.devo >= 6,
+        })}
+      >
+        {attendee.devo}
+      </div>
+      <div
+        className={cn(
+          "flex items-center justify-center",
+          attendee.with_assignment === true
+            ? "bg-green-400/20 text-green-500"
+            : "bg-red-400/20 text-red-500"
+        )}
+      >
+        {attendee.with_assignment ? "Yes" : "No"}
+      </div>
+    </div>
+  )
+}

@@ -73,10 +73,13 @@ export const createAttendance = authActionClient
       // create ProcessAttendee records
       await prisma.processAttendee.createMany({
         data: process_attendees.map((p) => ({
-          disciple_id: p,
-          process_attendance_attendee_id: `${attendance.id}-${p}`,
+          disciple_id: p.disciple_id,
+          process_attendance_attendee_id: `${attendance.id}-${p.disciple_id}`,
           process_attendance_id: attendance.id,
           is_present: true,
+          devo: p.devo,
+          with_assignment: p.with_assignment,
+          remarks: p.remarks,
         })),
       })
 

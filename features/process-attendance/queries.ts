@@ -14,6 +14,8 @@ export async function getProcessAttendancePeriods() {
 
 export interface GetProcessAttendanceDetailArgs {
   id: string
+  batchId?: string
+  leaderId?: string
 }
 
 export async function getProcessAttendanceDetail(
@@ -29,6 +31,12 @@ export async function getProcessAttendanceDetail(
           },
         },
         students: {
+          where: {
+            disciple: {
+              encounter_batch_id: args.batchId ?? undefined,
+              leaderId: args.leaderId ?? undefined,
+            },
+          },
           include: {
             disciple: {
               include: {

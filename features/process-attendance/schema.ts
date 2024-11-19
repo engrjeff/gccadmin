@@ -66,7 +66,12 @@ export const createAttendanceRecordSchema = z.object({
     required_error: "Attendance period is required.",
   }),
   process_attendees: z
-    .string({ required_error: "Must have at least 1 student." })
+    .object({
+      disciple_id: z.string(),
+      remarks: z.string().optional(),
+      devo: z.number().int().positive().min(0),
+      with_assignment: z.boolean().optional(),
+    })
     .array()
     .min(1, { message: "Must have at least 1 student." }),
 })
