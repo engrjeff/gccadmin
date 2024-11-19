@@ -49,15 +49,14 @@ export function ColumnFilter({
           >
             <Checkbox
               id={option.value}
-              disabled
-              // checked={option.value === filter}
-              // onCheckedChange={(isChecked) => {
-              //   if (isChecked === true) {
-              //     setFilter(option.value)
-              //   } else {
-              //     setFilter(null)
-              //   }
-              // }}
+              checked={option.value === filter}
+              onCheckedChange={(isChecked) => {
+                if (isChecked === true) {
+                  setFilter(option.value)
+                } else {
+                  setFilter(null)
+                }
+              }}
             />
             <label
               htmlFor={option.value}
@@ -81,7 +80,10 @@ export function ColumnFilter({
             size="sm"
             variant="outline"
             className="h-8 w-full bg-muted/30"
-            onClick={() => setFilter(null)}
+            onClick={() => {
+              setFilter(null)
+              setOpen(false)
+            }}
           >
             Reset
           </Button>

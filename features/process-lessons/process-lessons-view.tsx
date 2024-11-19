@@ -4,7 +4,6 @@ import { useState } from "react"
 import { DownloadIcon } from "lucide-react"
 
 import { cn } from "@/lib/utils"
-import { SeriesWithLessons } from "@/hooks/use-lessons-series"
 import { Badge } from "@/components/ui/badge"
 import { Button, buttonVariants } from "@/components/ui/button"
 import {
@@ -16,7 +15,13 @@ import {
   SheetTrigger,
 } from "@/components/ui/sheet"
 
-export function LessonsViewModal({ series }: { series: SeriesWithLessons }) {
+import { ProcessSeriesWithLessons } from "./types"
+
+export function ProcessLessonsView({
+  series,
+}: {
+  series: ProcessSeriesWithLessons
+}) {
   const [open, setOpen] = useState(false)
 
   return (
@@ -36,7 +41,7 @@ export function LessonsViewModal({ series }: { series: SeriesWithLessons }) {
         <ul className="max-h-[calc(100dvh-100px)] space-y-4 overflow-y-auto p-4">
           {series.lessons.map((lesson) => (
             <li key={lesson.id}>
-              <div className="flex items-start justify-between rounded-md border p-4">
+              <div className="flex items-center justify-between rounded-md border p-4">
                 <div className="max-w-[80%] space-y-2">
                   <p className="text-sm">{lesson.title}</p>
                   {lesson.description ? (
@@ -65,10 +70,7 @@ export function LessonsViewModal({ series }: { series: SeriesWithLessons }) {
                   className={cn(
                     buttonVariants({ size: "icon", variant: "outline" }),
                     "bg-muted/30",
-                    {
-                      "pointer-events-none opacity-60 text-muted-foreground":
-                        !lesson.file_url,
-                    }
+                    { "pointer-events-none opacity-80": !lesson.file_url }
                   )}
                 >
                   <DownloadIcon className="size-4" />
