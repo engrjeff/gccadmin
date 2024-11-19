@@ -3,9 +3,10 @@
 import { useState } from "react"
 import { DownloadIcon } from "lucide-react"
 
+import { cn } from "@/lib/utils"
 import { SeriesWithLessons } from "@/hooks/use-lessons-series"
 import { Badge } from "@/components/ui/badge"
-import { Button } from "@/components/ui/button"
+import { Button, buttonVariants } from "@/components/ui/button"
 import {
   Sheet,
   SheetContent,
@@ -26,7 +27,6 @@ export function LessonsViewModal({ series }: { series: SeriesWithLessons }) {
       <SheetContent
         side="right"
         className="inset-y-2 right-2 flex h-auto w-[95%] flex-col gap-0 overflow-y-hidden rounded-lg border bg-background p-0 focus-visible:outline-none sm:max-w-lg"
-        onInteractOutside={(e) => e.preventDefault()}
       >
         <SheetHeader className="space-y-1 border-b p-4 text-left">
           <SheetTitle>{series.title}</SheetTitle>
@@ -57,15 +57,22 @@ export function LessonsViewModal({ series }: { series: SeriesWithLessons }) {
                     ) : null}
                   </div>
                 </div>
-                <Button
-                  size="icon"
-                  variant="outline"
-                  className="bg-muted/30"
-                  aria-label="download"
-                  disabled={!lesson.file_url}
+                <a
+                  title={`Download file for ${lesson.title}`}
+                  href={lesson.file_url!}
+                  download={lesson.file_url}
+                  target="_blank"
+                  className={cn(
+                    buttonVariants({ size: "icon", variant: "outline" }),
+                    "bg-muted/30",
+                    {
+                      "pointer-events-none opacity-60 text-muted-foreground":
+                        !lesson.file_url,
+                    }
+                  )}
                 >
                   <DownloadIcon className="size-4" />
-                </Button>
+                </a>
               </div>
             </li>
           ))}
