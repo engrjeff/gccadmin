@@ -1,8 +1,12 @@
 import { Metadata } from "next"
+import { CellgroupsWithAssistants } from "@/features/dashboard/CellgroupsWithAssistants"
+import { DisciplesWithCellgroups } from "@/features/dashboard/DisciplesWithCellgroups"
 import { MemberStatisticsByCellStatus } from "@/features/dashboard/MemberStatisticsByCellStatus"
 import { MemberStatisticsByChurchStatus } from "@/features/dashboard/MemberStatisticsByChurchStatus"
 import { MemberStatisticsByType } from "@/features/dashboard/MemberStatisticsByType"
+import { ThisWeekDisplay } from "@/features/dashboard/ThisWeekDisplay"
 import { WeeklyCellReports } from "@/features/dashboard/WeeklyCellReports"
+import { WeeklyCellReportsByLeader } from "@/features/dashboard/WeeklyCellReportsByLeader"
 
 import PageTitle from "@/components/page-title"
 
@@ -23,17 +27,22 @@ async function DashboardPage() {
 
         <div className="flex-1 space-y-4 overflow-y-auto px-4">
           <div>
-            <h2 className="mb-2 font-semibold text-indigo-500">
-              Weekly Cell Groups
-            </h2>
-            <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:gap-12 xl:grid-cols-3">
-              <WeeklyCellReports />
-            </div>
+            <h2 className="font-semibold">Weekly Cell Groups</h2>
+            <ThisWeekDisplay />
           </div>
-          <div>
-            <h2 className="mb-2 font-semibold text-indigo-500">
-              Member Statistics
-            </h2>
+          <div className="grid grid-cols-1 gap-6 lg:gap-6 xl:grid-cols-3">
+            <WeeklyCellReports />
+            <CellgroupsWithAssistants />
+            <DisciplesWithCellgroups />
+          </div>
+          <div className="py-4">
+            <WeeklyCellReportsByLeader />
+          </div>
+          <div className="space-y-4">
+            <div>
+              <h2 className="font-semibold">Member Statistics</h2>
+              <p className="text-xs text-muted-foreground">As of today</p>
+            </div>
             <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:gap-12 xl:grid-cols-3">
               <MemberStatisticsByType />
               <MemberStatisticsByCellStatus />
@@ -42,14 +51,6 @@ async function DashboardPage() {
           </div>
         </div>
       </div>
-
-      {/* <div className="flex-1 space-y-6 overflow-auto px-4 lg:px-6">
-        <KPIStats />
-        <WeeklyCellReports searchParams={searchParams} />
-        <GroupStatusData />
-        <AnnualCellReports />
-        <LeadersData />
-      </div> */}
     </>
   )
 }
