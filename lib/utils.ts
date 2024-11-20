@@ -47,3 +47,11 @@ export function getSkip({ limit, page }: { limit?: number; page?: number }) {
 
   return _limit * (_page - 1)
 }
+
+export function getInitials(inputStr: string) {
+  return inputStr
+    .split(" ")
+    .slice(0, 2)
+    .map((c) => c.substring(0, 1))
+    .join("")
+}
