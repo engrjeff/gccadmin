@@ -32,7 +32,7 @@ export async function AttendancePeriodListing() {
       {attendancePeriods.map((item) => (
         <li key={`process-attendance-period-${item.id}`}>
           <Link href={`/process-attendance/${item.id}`}>
-            <Card className="bg-muted/30 hover:border-primary">
+            <Card className="hover:border-primary">
               <CardHeader className="lg:p-4">
                 <CardTitle className="text-base font-semibold">
                   {item.description}
