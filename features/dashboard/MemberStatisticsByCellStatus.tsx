@@ -11,20 +11,20 @@ export function MemberStatisticsByCellStatus() {
 
   if (members.isLoading)
     return (
-      <Skeleton className="border rounded-lg p-4 h-[314px] animate-pulse bg-muted/30" />
+      <Skeleton className="h-[314px] animate-pulse rounded-lg bg-muted/30 p-4" />
     )
 
   const total =
     members.data?.reduce((total, a) => total + a._count.cell_status, 0) ?? 100
 
   return (
-    <div className="flex flex-col pb-6 border-b sm:border-b-0">
+    <div className="flex flex-col gap-4 border-b pb-6 sm:border-b-0">
       <p className="text-sm font-semibold">Members by Cell Status</p>
-      <ul className="mt-4 space-y-4">
+      <ul className="space-y-4">
         {members.data?.map((member) => (
           <li key={"stat-" + member.cell_status}>
             <p className="flex justify-between text-sm">
-              <span className="font-medium text-gray-900 dark:text-gray-50 capitalize">
+              <span className="font-medium capitalize text-gray-900 dark:text-gray-50">
                 {removeUnderscores(member.cell_status)}
               </span>
               <span className="font-medium text-gray-900 dark:text-gray-50">
@@ -35,7 +35,7 @@ export function MemberStatisticsByCellStatus() {
                 </span>
               </span>
             </p>
-            <div className="flex w-full items-center mt-2 [&amp;>*]:h-1.5">
+            <div className="mt-2 flex w-full items-center [&>*]:h-1.5">
               <div
                 className="relative flex h-2 w-full items-center rounded-full bg-indigo-100 dark:bg-indigo-500/30"
                 aria-label="progress bar"

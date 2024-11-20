@@ -73,7 +73,7 @@ export function CellReportDetails({
                     {idx + 1}
                   </span>
                   <p className="text-sm">{attendee.disciple.name}</p>
-                  <div className="space-x-2 w-full md:w-auto ml-3 md:ml-auto">
+                  <div className="ml-3 w-full space-x-2 md:ml-auto md:w-auto">
                     <Badge variant={attendee.disciple.cell_status}>
                       Cell: {removeUnderscores(attendee.disciple.cell_status)}
                     </Badge>

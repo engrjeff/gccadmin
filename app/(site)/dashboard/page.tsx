@@ -9,27 +9,28 @@ export const metadata: Metadata = {
   title: "Dashboard",
 }
 
-interface PageProps {
-  searchParams: { from?: string; to?: string }
-}
-
-async function DashboardPage({ searchParams }: PageProps) {
+async function DashboardPage() {
   return (
     <>
-      <div className="relative flex flex-col gap-4 overflow-hidden p-6 py-4">
-        <div className="flex items-start justify-between gap-4">
+      <div className="relative flex flex-col gap-4 overflow-hidden py-4">
+        <div className="flex items-start justify-between gap-4 px-4">
           <PageTitle
             title="Dashboard"
             subtitle="Quick insights for GCC statistics."
           />
         </div>
 
-        <div className="flex-1 overflow-y-auto">
-          <h2 className="font-semibold mb-2">Member Statistics</h2>
-          <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-6 lg:gap-12">
-            <MemberStatisticsByType />
-            <MemberStatisticsByCellStatus />
-            <MemberStatisticsByChurchStatus />
+        <div className="flex-1 space-y-4 overflow-y-auto px-4">
+          {/* <div className="grid grid-cols-1 gap-6 sm:grid-cols-3">
+            <WeeklyCellReports />
+          </div> */}
+          <div>
+            <h2 className="mb-2 font-semibold">Member Statistics</h2>
+            <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:gap-12 xl:grid-cols-3">
+              <MemberStatisticsByType />
+              <MemberStatisticsByCellStatus />
+              <MemberStatisticsByChurchStatus />
+            </div>
           </div>
         </div>
       </div>
