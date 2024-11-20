@@ -14,6 +14,10 @@ export async function GET(request: NextRequest) {
     if (requestType === "memberType") {
       const result = await prisma.disciple.groupBy({
         by: "member_type",
+        where: {
+          isActive: true,
+          isDeleted: false,
+        },
         _count: {
           member_type: true,
         },
@@ -46,6 +50,10 @@ export async function GET(request: NextRequest) {
     if (requestType === "cellStatus") {
       const result = await prisma.disciple.groupBy({
         by: "cell_status",
+        where: {
+          isActive: true,
+          isDeleted: false,
+        },
         _count: {
           cell_status: true,
         },
@@ -62,6 +70,10 @@ export async function GET(request: NextRequest) {
     if (requestType === "churchStatus") {
       const result = await prisma.disciple.groupBy({
         by: "church_status",
+        where: {
+          isActive: true,
+          isDeleted: false,
+        },
         _count: {
           church_status: true,
         },
