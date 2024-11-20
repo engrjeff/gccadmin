@@ -18,7 +18,7 @@ export function MemberStatisticsByType() {
     members.data?.reduce((total, a) => total + a._count.member_type, 0) ?? 100
 
   return (
-    <div className="flex flex-col border-b pb-6 sm:border-b-0">
+    <div className="flex flex-col gap-4 border-b pb-6 sm:border-b-0">
       <p className="text-sm font-semibold">Members by Type</p>
       <ul className="space-y-4">
         {members.data?.map((member) => (
