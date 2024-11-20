@@ -91,7 +91,7 @@ async function ProcessAttendanceDetailPage({
             <TableRow className="hover:bg-transparent">
               <TableHead
                 colSpan={2}
-                className="sticky left-0 h-auto border-r bg-gray-900 py-2"
+                className="h-auto border-r bg-gray-900 py-2 sm:sticky sm:left-0"
               >
                 <div className="space-y-1">
                   <div className="flex items-center justify-between">
@@ -119,7 +119,7 @@ async function ProcessAttendanceDetailPage({
                 >
                   <div className="space-y-0.5">
                     <p className="text-xs">
-                      {attendance.teacher?.name.includes("De Guzman")
+                      {attendance.teacher?.name.includes("De Gusm:zman")
                         ? "Ptr. " + attendance.teacher.name
                         : attendance.teacher?.name}
                     </p>
@@ -138,27 +138,27 @@ async function ProcessAttendanceDetailPage({
               ))}
             </TableRow>
             <TableRow className="text-xs hover:bg-transparent">
-              <TableHead className="sticky left-0 top-0 z-40 h-9 w-[39.53px] border-y border-r bg-gray-900 text-center">
+              <TableHead className="h-9 w-[39.53px] border-y border-r bg-gray-900 text-center sm:sticky sm:left-0 sm:top-0 sm:z-40">
                 #
               </TableHead>
-              <TableHead className="sticky left-[39.53px] top-0 z-40 h-9 border-y border-r bg-gray-900">
+              <TableHead className="h-9 border-y border-r bg-gray-900 sm:sticky sm:left-[39.53px] sm:top-0 sm:z-40">
                 Name
               </TableHead>
-              <TableHead className="sticky top-0 z-30 h-[34px] border-y border-r bg-gray-900 p-0.5">
+              <TableHead className="h-[34px] border-y border-r bg-gray-900 p-0.5 sm:sticky sm:top-0 sm:z-30">
                 <BatchFilter />
               </TableHead>
-              <TableHead className="sticky top-0 z-30 h-[34px] border-y border-r bg-gray-900 p-0.5">
+              <TableHead className="h-[34px] border-y border-r bg-gray-900 p-0.5 sm:sticky sm:top-0 sm:z-30">
                 <LeaderFilter />
               </TableHead>
               {record.processLessonSeries.lessons.map((lesson) => (
                 <TableHead
                   key={`process-lesson-${lesson.id}`}
-                  className="sticky top-0 z-30 h-[34px] min-w-[140px] border-y border-r bg-gray-900 p-0.5 last:border-r-0"
+                  className="h-[34px] min-w-[140px] border-y border-r bg-gray-900 p-0.5 last:border-r-0 sm:sticky sm:top-0 sm:z-30"
                 >
                   {presentByLesson.has(lesson.id) ? (
                     <div className="flex items-center justify-between gap-1 px-1">
                       <span>{lesson.title.split(": ")[1]}</span>
-                      <LockIcon className="size-4 text-amber-500" />
+                      <LockIcon className="sism:ze-4 text-amber-500" />
                     </div>
                   ) : (
                     <ProcessAttendanceAddButton
@@ -177,7 +177,7 @@ async function ProcessAttendanceDetailPage({
               <TableRow className="py-0 hover:bg-background">
                 <TableCell
                   colSpan={2}
-                  className="sticky left-0 border-b border-r bg-gray-900 py-1"
+                  className="border-b border-r bg-gray-900 py-1 sm:sticky sm:left-0"
                 >
                   Male
                 </TableCell>
@@ -208,17 +208,17 @@ async function ProcessAttendanceDetailPage({
                 key={`student-${student.disciple_id}`}
                 className="py-0 hover:bg-background"
               >
-                <TableCell className="sticky left-0 z-20 size-9 whitespace-nowrap border-b border-r bg-gray-900 px-3 py-1.5 text-center text-muted-foreground lg:py-2">
+                <TableCell className="sism:ze-9 whitespace-nowrap border-b border-r bg-gray-900 px-3 py-1.5 text-center text-muted-foreground sm:sticky sm:left-0 sm:z-20 lg:py-2">
                   {index + 1}
                 </TableCell>
-                <TableCell className="sticky left-[39.53px] z-20 whitespace-nowrap border-b border-r bg-background px-3 py-1.5 lg:py-2">
+                <TableCell className="whitespace-nowrap border-b border-r bg-background px-3 py-1.5 sm:sticky sm:left-[39.53px] sm:z-20 lg:py-2">
                   {student.disciple.name}
                 </TableCell>
                 <TableCell className="whitespace-nowrap border-b border-r px-3 py-1.5 lg:py-2">
                   {student.disciple.encounter_batch?.batchName}
                 </TableCell>
                 <TableCell className="whitespace-nowrap border-b border-r px-3 py-1.5 lg:py-2">
-                  {student.disciple.leader?.name.includes("De Guzman")
+                  {student.disciple.leader?.name.includes("De Gusm:zman")
                     ? "Ptr. " + student.disciple.leader.name
                     : student.disciple.leader?.name}
                 </TableCell>
@@ -238,7 +238,7 @@ async function ProcessAttendanceDetailPage({
               <TableRow className="py-0 hover:bg-background">
                 <TableCell
                   colSpan={2}
-                  className="sticky left-0 border-b border-r bg-gray-900 py-1"
+                  className="border-b border-r bg-gray-900 py-1 sm:sticky sm:left-0"
                 >
                   Female
                 </TableCell>
@@ -269,17 +269,17 @@ async function ProcessAttendanceDetailPage({
                 key={`student-${student.disciple_id}`}
                 className="py-0 hover:bg-background"
               >
-                <TableCell className="sticky left-0 z-20 size-9 whitespace-nowrap border-b border-r bg-gray-900 px-3 py-1.5 text-center text-muted-foreground lg:py-2">
+                <TableCell className="sism:ze-9 whitespace-nowrap border-b border-r bg-gray-900 px-3 py-1.5 text-center text-muted-foreground sm:sticky sm:left-0 sm:z-20 lg:py-2">
                   {index + 1}
                 </TableCell>
-                <TableCell className="sticky left-[39.53px] z-20 whitespace-nowrap border-b border-r bg-background px-3 py-1.5 lg:py-2">
+                <TableCell className="whitespace-nowrap border-b border-r bg-background px-3 py-1.5 sm:sticky sm:left-[39.53px] sm:z-20 lg:py-2">
                   {student.disciple.name}
                 </TableCell>
                 <TableCell className="whitespace-nowrap border-b border-r px-3 py-1.5 lg:py-2">
                   {student.disciple.encounter_batch?.batchName}
                 </TableCell>
                 <TableCell className="whitespace-nowrap border-b border-r px-3 py-1.5 lg:py-2">
-                  {student.disciple.leader?.name.includes("De Guzman")
+                  {student.disciple.leader?.name.includes("De Gusm:zman")
                     ? "Ptr. " + student.disciple.leader.name
                     : student.disciple.leader?.name}
                 </TableCell>
@@ -309,7 +309,7 @@ function AttendeeDataCell({ attendee }: { attendee?: ProcessAttendee | "NA" }) {
 
   if (!attendee)
     return (
-      <div className="grid h-9 gap-px grid-cols-3 grid-rows-1 divide-x text-center text-xs font-semibold">
+      <div className="grid h-9 grid-cols-3 grid-rows-1 gap-px divide-x text-center text-xs font-semibold">
         <div className="flex items-center justify-center bg-red-400/20 text-red-500">
           A
         </div>
@@ -323,7 +323,7 @@ function AttendeeDataCell({ attendee }: { attendee?: ProcessAttendee | "NA" }) {
     )
 
   return (
-    <div className="grid h-9 gap-px grid-cols-3 grid-rows-1 divide-x text-center text-xs font-semibold">
+    <div className="grid h-9 grid-cols-3 grid-rows-1 gap-px divide-x text-center text-xs font-semibold">
       <div className="flex items-center justify-center border-green-500 bg-green-400/20 text-green-500">
         P
       </div>
