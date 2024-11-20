@@ -123,15 +123,15 @@ function getDateRange(
 
   if (preset === "this_week") {
     return {
-      start: startOfWeek(now),
-      end: endOfWeek(now),
+      start: startOfWeek(now, { weekStartsOn: 1 }),
+      end: endOfWeek(now, { weekStartsOn: 1 }),
     }
   }
 
   if (preset === "last_week") {
     return {
-      start: subDays(startOfWeek(now), 7),
-      end: subDays(endOfWeek(now), 7),
+      start: subDays(startOfWeek(now, { weekStartsOn: 1 }), 7),
+      end: subDays(endOfWeek(now, { weekStartsOn: 1 }), 7),
     }
   }
 
