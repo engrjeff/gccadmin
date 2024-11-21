@@ -1,6 +1,6 @@
 import { format } from "date-fns"
 
-import { removeUnderscores } from "@/lib/utils"
+import { formatTime, removeUnderscores } from "@/lib/utils"
 import { Badge } from "@/components/ui/badge"
 
 import { CellReportRecord } from "./types"
@@ -31,7 +31,8 @@ export function CellReportDetails({
       <div className="px-4 py-2 text-sm">
         <p>Date</p>
         <p className="text-muted-foreground">
-          {format(cellReport.date, "MMMM dd, yyyy")} at {cellReport.time}
+          {format(new Date(cellReport.date), "MMMM dd, yyyy")} at{" "}
+          {formatTime(cellReport.time)}
         </p>
       </div>
       <div className="px-4 py-2 text-sm">

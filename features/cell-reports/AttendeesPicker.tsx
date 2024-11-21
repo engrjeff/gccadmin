@@ -18,6 +18,7 @@ export function AttendeesPicker() {
 
   const leaderId = cellReportForm.watch("leaderId")
   const attendees = cellReportForm.watch("attendees")
+  const assistantId = cellReportForm.watch("assistant_id")
 
   const [attendeesSearchQuery, setAttendeesSearchQuery] = useState("")
 
@@ -32,7 +33,8 @@ export function AttendeesPicker() {
   const unSelectedAttendees = disciplesOfLeader.data?.filter(
     (d) =>
       !attendees.includes(d.id) &&
-      d.name.toLowerCase().includes(attendeesSearchQuery.toLowerCase())
+      d.name.toLowerCase().includes(attendeesSearchQuery.toLowerCase()) &&
+      d.id !== assistantId
   )
 
   const handleAttendeesSelection = (attendeeId: string) => {

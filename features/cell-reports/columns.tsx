@@ -74,7 +74,7 @@ export const columns: ColumnDef<CellReportRecord>[] = [
     cell: (props) => (
       <div className="whitespace-nowrap">
         <p className="text-sm">
-          {format(props.row.original.date, "MMM dd, yyyy")}
+          {format(new Date(props.row.original.date), "MMM dd, yyyy")}
         </p>
         <p className="text-xs text-muted-foreground">
           {formatTime(props.row.original.time)}

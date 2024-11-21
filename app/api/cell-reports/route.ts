@@ -1,4 +1,5 @@
-import { NextResponse } from "next/server"
+import { NextRequest, NextResponse } from "next/server"
+import { getCellReports } from "@/features/cell-reports/queries"
 import { isToday } from "date-fns"
 import { getServerSession } from "next-auth"
 
@@ -105,5 +106,16 @@ export async function POST(req: Request) {
     return NextResponse.json(cellReport)
   } catch (error: any) {
     return new NextResponse(error.message || "Error", { status: 500 })
+  }
+}
+
+export async function GET(req: NextRequest) {
+  try {
+    const params = Object.fromEntries(req.nextUrl.searchParams.entries())
+    const reports = await getCellReports(params)
+
+    return NextResponse.json(reports)
+  } catch (error) {
+    return NextResponse.json([])
   }
 }

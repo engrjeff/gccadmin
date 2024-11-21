@@ -32,9 +32,10 @@ import { useToast } from "@/components/ui/use-toast"
 import { AppCombobox } from "@/components/app-combobox"
 import TagsInput from "@/components/tags-input"
 
-import { createCellReport } from "./actions"
+import { updateCellReport } from "./actions"
 import { AttendeesPicker } from "./AttendeesPicker"
 import { cellReportCreateSchema, CreateCellReportInputs } from "./schema"
+import { CellReportRecord } from "./types"
 
 function maptoOptions<T>(dataArr: T[], valueKey: keyof T, labelKey: keyof T) {
   return dataArr
@@ -45,19 +46,13 @@ function maptoOptions<T>(dataArr: T[], valueKey: keyof T, labelKey: keyof T) {
     : []
 }
 
-const initialValues: CreateCellReportInputs = {
-  leaderId: "",
-  venue: "",
-  attendees: [],
-  type: "OPEN",
-  scripture_references: [],
-  assistant_id: "",
-  date: format(new Date(), "yyyy-MM-dd"),
-  time: format(new Date(), "hh:mm"),
-  lessonId: "",
-}
-
-export function CellReportForm({ onAfterSave }: { onAfterSave: () => void }) {
+export function CellReportEditForm({
+  cellReport,
+  onAfterSave,
+}: {
+  cellReport: CellReportRecord
+  onAfterSave: () => void
+}) {
   const session = useSession()
 
   const { refetch: refetchCellGroups } = useCellReports()
@@ -69,37 +64,54 @@ export function CellReportForm({ onAfterSave }: { onAfterSave: () => void }) {
 
   const { toast } = useToast()
 
-  const action = useAction(createCellReport, {
+  const action = useAction(updateCellReport, {
     onError({ error }) {
       toast({
         title: "Something went wrong.",
         description:
-          "The cell report record was not created. Please try again.",
+          "The cell report record was not updated. Please try again.",
         variant: "destructive",
       })
     },
     onSuccess() {
       toast({
         title: "Success!",
-        description: "The cell report was created successfully!",
+        description: "The cell report was updated successfully!",
         variant: "success",
       })
     },
   })
 
-  const [createMore, setCreateMore] = useState(false)
-  const [withAssistant, setWithAssistant] = useState(false)
-  const [selectedSeries, setSelectedSeries] = useState<string>()
+  const [withAssistant, setWithAssistant] = useState(() =>
+    cellReport.assistant_id ? true : false
+  )
+  const [selectedSeries, setSelectedSeries] = useState<string | undefined>(
+    () => cellReport.lesson?.lesson_series_id ?? undefined
+  )
 
   const form = useForm<CreateCellReportInputs>({
     resolver: zodResolver(cellReportCreateSchema),
-    defaultValues: initialValues,
+    defaultValues: {
+      leaderId: cellReport.leaderId,
+      venue: cellReport.venue,
+      attendees: cellReport.attendees
+        .map((d) => d.disciple_id)
+        .filter((a) => a !== cellReport.assistant?.disciple_id),
+      type: cellReport.type,
+      scripture_references: cellReport.scripture_references,
+      lesson_name: cellReport.lessonId ? "" : cellReport.lesson_name!,
+      assistant_id: cellReport.assistant?.disciple_id ?? "",
+      date: format(new Date(cellReport.date), "yyyy-MM-dd"),
+      time: cellReport.time,
+      lessonId: cellReport.lesson_name ? "" : cellReport.lessonId!,
+    },
   })
 
   const { formState } = form
 
   const leaderId = form.watch("leaderId")
   const selectedLesson = form.watch("lessonId")
+  const attendees = form.watch("attendees")
 
   useEffect(() => {
     if (!session.data?.user || isAdmin) return
@@ -156,27 +168,24 @@ export function CellReportForm({ onAfterSave }: { onAfterSave: () => void }) {
 
     if (!hasNoError) return
 
-    const attendeesData = values.assistant_id
-      ? [...values.attendees, values.assistant_id]
-      : values.attendees
+    const attendeesData = Array.from(
+      new Set(
+        values.assistant_id
+          ? values.attendees?.concat([values.assistant_id])
+          : values.attendees
+      )
+    )
 
     const result = await action.executeAsync({
+      id: cellReport.id,
       ...values,
+      lessonId: values.lesson_name ? "" : values.lessonId,
+      lesson_name: values.lessonId ? "" : values.lesson_name,
+      scripture_references: values.lessonId ? [] : values.scripture_references,
       attendees: attendeesData,
     })
 
     if (result?.data?.cellReport?.id) {
-      if (createMore) {
-        form.reset(initialValues)
-
-        setSelectedSeries(undefined)
-        setWithAssistant(false)
-
-        action.reset()
-
-        return
-      }
-
       onAfterSave()
 
       await refetchCellGroups()
@@ -206,6 +215,7 @@ export function CellReportForm({ onAfterSave }: { onAfterSave: () => void }) {
                       <NativeSelect
                         className="normal-case"
                         id="leaderId"
+                        disabled
                         value={field.value}
                         onChange={(e) => {
                           field.onChange(e.currentTarget.value)
@@ -327,13 +337,32 @@ export function CellReportForm({ onAfterSave }: { onAfterSave: () => void }) {
                     <FormLabel>Assistant Leader</FormLabel>
                     <FormControl>
                       <NativeSelect
+                        key={disciplesOfLeader.data?.length}
                         className="normal-case"
                         id="assistant_id"
                         {...field}
+                        onChange={(e) => {
+                          if (e.currentTarget.value) {
+                            // remove the assistant from attendees if
+                            // the selected assistant is not equal to
+                            // the cell report initial assistant
+                            if (
+                              cellReport.assistant?.disciple_id !==
+                              e.currentTarget.value
+                            ) {
+                              form.setValue(
+                                "attendees",
+                                attendees.filter(
+                                  (a) => a !== e.currentTarget.value
+                                )
+                              )
+                            }
+
+                            field.onChange(e)
+                          }
+                        }}
                       >
-                        <option disabled value="">
-                          Select assistant leader
-                        </option>
+                        <option value="">Select assistant leader</option>
                         {disciplesOfLeader.data
                           ?.filter((dc) => dc.isMyPrimary)
                           ?.map((item) => (
@@ -357,7 +386,9 @@ export function CellReportForm({ onAfterSave }: { onAfterSave: () => void }) {
             <legend className="text-sm font-medium">Lesson Details</legend>
 
             <Tabs
-              defaultValue="pick-lesson"
+              defaultValue={
+                cellReport.lesson_name ? "custom-lesson" : "pick-lesson"
+              }
               className="w-full"
               onValueChange={() => {
                 setSelectedSeries(undefined)
@@ -377,6 +408,7 @@ export function CellReportForm({ onAfterSave }: { onAfterSave: () => void }) {
                 <div className="flex flex-col space-y-2">
                   <Label>Series</Label>
                   <AppCombobox
+                    key={lessonsSeries.data?.length}
                     fullwidth
                     label="Select Series"
                     value={selectedSeries}
@@ -393,6 +425,7 @@ export function CellReportForm({ onAfterSave }: { onAfterSave: () => void }) {
                         <FormLabel>Lesson</FormLabel>
                         <FormControl>
                           <AppCombobox
+                            key={lessons.length}
                             fullwidth
                             disabled={!selectedSeries}
                             label="Select Lesson"
@@ -477,37 +510,38 @@ export function CellReportForm({ onAfterSave }: { onAfterSave: () => void }) {
         </div>
 
         <div className="mt-auto flex flex-col gap-3 border-t p-4 text-right md:flex-row md:items-center">
-          <div className="mb-2 hidden select-none items-center space-x-2 md:mb-0">
-            <Checkbox
-              id="create-more-flag"
-              className="rounded"
-              checked={createMore}
-              onCheckedChange={(checked) =>
-                setCreateMore(checked === true ? true : false)
-              }
-            />
-            <label
-              htmlFor="create-more-flag"
-              className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
-            >
-              Create another report
-            </label>
-          </div>
           <Button
             variant="outline"
-            type="reset"
+            type="button"
             disabled={false}
             className="bg-muted/30 md:ml-auto"
-            onClick={() => {
-              form.reset(initialValues)
-              setSelectedSeries(undefined)
-              setWithAssistant(false)
-            }}
+            onClick={onAfterSave}
+            // onClick={() => {
+            //   form.reset({
+            //     leaderId: cellReport.leaderId,
+            //     venue: cellReport.venue,
+            //     attendees: cellReport.attendees
+            //       .map((d) => d.disciple_id)
+            //       .filter((a) => a !== cellReport.assistant?.disciple_id),
+            //     type: cellReport.type,
+            //     scripture_references: cellReport.scripture_references,
+            //     lesson_name: cellReport.lessonId ? "" : cellReport.lesson_name!,
+            //     assistant_id: cellReport.assistant?.disciple_id ?? "",
+            //     date: format(new Date(cellReport.date), "yyyy-MM-dd"),
+            //     time: cellReport.time,
+            //     lessonId: cellReport.lesson_name ? "" : cellReport.lessonId!,
+            //   })
+
+            //   setSelectedSeries(
+            //     cellReport.lesson?.lesson_series_id ?? undefined
+            //   )
+            //   setWithAssistant(cellReport.assistant_id ? true : false)
+            // }}
           >
-            Reset
+            Cancel
           </Button>
           <SubmitButton type="submit" loading={action.isPending}>
-            Save Report
+            Save Changes
           </SubmitButton>
         </div>
       </form>
