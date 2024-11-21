@@ -1,15 +1,14 @@
 import { menuItems, processMenuItems } from "@/config/menuItems"
 
-import Logo from "./logo"
+import { AppQuickActions } from "./app-quick-actions"
 import NavLink from "./nav-link"
 import { UserMenuDropdown } from "./user-menu-dropdown"
 
 function SideNav() {
   return (
     <nav className="fixed hidden h-full w-[220px] flex-col bg-background text-muted-foreground lg:flex">
-      <div className="flex h-16 items-center gap-3 px-4 pt-4">
-        <Logo size={36} />
-        <span className="text-xl font-semibold text-white">GCC Admin</span>
+      <div className="p-4">
+        <AppQuickActions />
       </div>
       <div className="space-y-2 p-4">
         <p className="py-3 text-xs font-semibold uppercase tracking-wider text-muted-foreground">

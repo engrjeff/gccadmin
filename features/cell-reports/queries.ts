@@ -47,8 +47,6 @@ export async function getCellReports(args: CellReportQueryArgs | undefined) {
 
   const dateFilter = args?.dateRange ? getDateRange(args.dateRange) : undefined
 
-  if (dateFilter) console.log(dateFilter)
-
   const totalFiltered = await prisma.cellReport.count({
     where: {
       leaderId: user.role === "ADMIN" ? undefined : user.discipleId,

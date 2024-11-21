@@ -15,6 +15,7 @@ import {
 } from "@/components/ui/sheet"
 
 import { CellReportDetails } from "./CellReportDetails"
+import { CellReportEditForm } from "./CellReportEditForm"
 import { CellReportRecord } from "./types"
 
 type RowAction = "edit" | "view"
@@ -101,7 +102,10 @@ export function CellReportRowActions({
             <SheetTitle>Edit Cell Report</SheetTitle>
             <SheetDescription>Fill in the details below.</SheetDescription>
           </SheetHeader>
-          <div className="px-4">TO DO - jeff</div>
+          <CellReportEditForm
+            cellReport={cellReport}
+            onAfterSave={() => setAction(undefined)}
+          />
         </SheetContent>
       </Sheet>
     </>
