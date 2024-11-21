@@ -38,7 +38,7 @@ export function UserMenuDropdown() {
       <DropdownMenuTrigger asChild>
         <Button
           variant="outline"
-          className="relative h-auto w-full justify-start border-gray-900 py-3 text-left"
+          className="relative h-auto w-full justify-start py-3 text-left"
         >
           <Avatar key={user.image} className="h-7 w-7">
             <AvatarImage
@@ -55,7 +55,7 @@ export function UserMenuDropdown() {
           <MoreVerticalIcon className="ml-auto size-4" />
         </Button>
       </DropdownMenuTrigger>
-      <DropdownMenuContent align="end" forceMount>
+      <DropdownMenuContent align="end" className="w-trigger-width">
         <DropdownMenuLabel>{user.email}</DropdownMenuLabel>
         <DropdownMenuSeparator />
         <DropdownMenuItem asChild>
