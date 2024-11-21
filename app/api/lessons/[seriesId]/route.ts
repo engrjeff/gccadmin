@@ -15,6 +15,9 @@ export async function GET(req: Request, { params }: Params) {
       include: {
         lessons: true,
       },
+      orderBy: {
+        createdAt: "desc",
+      },
     })
 
     return NextResponse.json(lessonSeries)

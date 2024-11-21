@@ -1,21 +1,29 @@
+"use client"
+
+import { useCellReports } from "@/hooks/use-cell-reports"
+import PageLoadingSpinner from "@/components/page-loading-spinner"
+
 import { CellReportPagination } from "./CellReportPagination"
 import { CellReportTable } from "./CellReportTable"
-import { getCellReports } from "./queries"
 
-export async function CellReportListing({
-  searchParams,
-}: {
-  searchParams: any
-}) {
-  const { cellReports, pageInfo } = await getCellReports(searchParams)
+export function CellReportListing() {
+  const reports = useCellReports()
+
+  if (reports.isLoading)
+    return (
+      <div className="relative min-h-[300px] flex-1">
+        <PageLoadingSpinner />
+      </div>
+    )
+
+  const cellReports = reports.data?.cellReports
+
+  const pageInfo = reports.data?.pageInfo
 
   return (
     <>
-      <CellReportTable
-        key={JSON.stringify(searchParams)}
-        cellReports={cellReports}
-      />
-      <CellReportPagination pageInfo={pageInfo} />
+      <CellReportTable cellReports={cellReports ?? []} />
+      <CellReportPagination pageInfo={pageInfo!} />
     </>
   )
 }
