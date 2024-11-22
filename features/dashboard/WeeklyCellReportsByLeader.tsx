@@ -56,11 +56,11 @@ export function WeeklyCellReportsByLeader() {
   )
 
   return (
-    <Table className="border rounded-lg">
+    <Table className="rounded-lg border">
       <TableHeader>
         <TableRow className="hover:bg-muted/30">
-          <TableHead>Name</TableHead>
-          <TableHead>Cell Groups Handled</TableHead>
+          <TableHead>Network Leader</TableHead>
+          <TableHead>Cell Groups Conducted</TableHead>
           <TableHead>Disciples Handled</TableHead>
         </TableRow>
       </TableHeader>
@@ -69,7 +69,7 @@ export function WeeklyCellReportsByLeader() {
           <TableRow className="hover:bg-background">
             <TableCell colSpan={3}>
               <div className="p-8">
-                <p className="text-center text-muted-foreground text-sm">
+                <p className="text-center text-sm text-muted-foreground">
                   No cell reports for this week yet.
                 </p>
               </div>
