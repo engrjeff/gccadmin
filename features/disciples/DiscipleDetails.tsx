@@ -4,10 +4,10 @@ import { format } from "date-fns"
 import { removeUnderscores } from "@/lib/utils"
 import { Badge } from "@/components/ui/badge"
 
-import { DiscipleWithLeader } from "./columns"
+import { DiscipleRecord } from "./schema"
 
 interface DiscipleDetailsProps {
-  disciple: DiscipleWithLeader
+  disciple: DiscipleRecord
 }
 
 export function DiscipleDetails({
@@ -22,9 +22,15 @@ export function DiscipleDetails({
           <p className="text-muted-foreground">{disciple.name}</p>
         </div>
         <div className="px-4 py-2 text-sm">
-          <p>Leader</p>
+          <p>Network Leader</p>
           <p className="text-muted-foreground">{disciple.leader?.name}</p>
         </div>
+        {disciple.handled_by ? (
+          <div className="px-4 py-2 text-sm">
+            <p>Handled By</p>
+            <p className="text-muted-foreground">{disciple.handled_by?.name}</p>
+          </div>
+        ) : null}
         <div className="px-4 py-2 text-sm">
           <p>Address</p>
           <p className="text-muted-foreground">{disciple.address}</p>
@@ -32,7 +38,7 @@ export function DiscipleDetails({
         <div className="px-4 py-2 text-sm">
           <p>Birthdate</p>
           <p className="text-muted-foreground">
-            {format(disciple.birthdate, "MMMM dd, yyyy")}
+            {format(new Date(disciple.birthdate), "MMMM dd, yyyy")}
           </p>
         </div>
         <div className="space-y-2 px-4 py-2 text-sm capitalize">

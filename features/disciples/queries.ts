@@ -139,6 +139,9 @@ export const getDisciples = async (args: DisciplesQueryArgs | undefined) => {
             name: true,
           },
         },
+        handled_by: {
+          select: { name: true },
+        },
       },
 
       take: args?.pageSize ?? DEFAULT_PAGE_SIZE,
@@ -196,6 +199,9 @@ export const getDisciples = async (args: DisciplesQueryArgs | undefined) => {
         select: {
           name: true,
         },
+      },
+      handled_by: {
+        select: { name: true },
       },
     },
 
