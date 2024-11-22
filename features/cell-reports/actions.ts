@@ -95,8 +95,6 @@ export const createCellReport = authActionClient
       })
     ).then((values) => values)
 
-    // revalidatePath("/cell-reports")
-
     return {
       cellReport,
     }
@@ -131,6 +129,7 @@ export const updateCellReport = authActionClient
         leaderId,
         has_custom_lesson: body.lesson_name ? true : false,
         lessonId: body.lesson_name ? null : undefined,
+        assistant_id: !assistant_id ? null : undefined,
       },
     })
 
@@ -157,6 +156,16 @@ export const updateCellReport = authActionClient
           },
         },
       })
+    }
+
+    if (!assistant_id && foundReport.assistant_id) {
+      if (foundReport.assistant_id) {
+        await prisma.cellReportAssistant.delete({
+          where: {
+            disciple_report_id: foundReport.assistant_id,
+          },
+        })
+      }
     }
 
     await prisma.lessonsTakenByDisciple.deleteMany({
@@ -249,8 +258,6 @@ export const updateCellReport = authActionClient
         return updated
       })
     ).then((values) => values)
-
-    // revalidatePath("/cell-reports")
 
     return {
       cellReport,

@@ -11,6 +11,7 @@ import { useCellReports } from "@/hooks/use-cell-reports"
 import { useDisciplesOfLeader } from "@/hooks/use-disciples-by-leader"
 import { useLessonsSeries } from "@/hooks/use-lessons-series"
 import { usePrimaryLeaders } from "@/hooks/use-primary-leaders"
+import { useWeeklyCellGroups } from "@/hooks/use-weekly-cellgroups"
 import { Button } from "@/components/ui/button"
 import { Checkbox } from "@/components/ui/checkbox"
 import {
@@ -56,6 +57,7 @@ export function CellReportEditForm({
   const session = useSession()
 
   const { refetch: refetchCellGroups } = useCellReports()
+  const { refetch: refectchWeeklyReports } = useWeeklyCellGroups()
 
   const isAdmin = session.data?.user?.role === "ADMIN"
 
@@ -189,6 +191,7 @@ export function CellReportEditForm({
       onAfterSave()
 
       await refetchCellGroups()
+      await refectchWeeklyReports()
     }
   }
 

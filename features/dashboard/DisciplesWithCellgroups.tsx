@@ -34,14 +34,23 @@ export function DisciplesWithCellgroups() {
     .filter((d) => d.assistant_id)
     .map((a) => a.assistant.disciple)
 
-  const assistantCGCountMap = new Map<string, number>()
+  const assistantCGCountMap = new Map<
+    string,
+    { assistant: DiscipleRecord; cgCount: number }
+  >()
 
   assistants?.forEach((a) => {
     if (assistantCGCountMap.has(a.id)) {
-      const currentCount = assistantCGCountMap.get(a.id) ?? 0
-      assistantCGCountMap.set(a.id, currentCount + 1)
+      const currentCount = assistantCGCountMap.get(a.id)?.cgCount ?? 0
+      assistantCGCountMap.set(a.id, {
+        assistant: a,
+        cgCount: currentCount + 1,
+      })
     } else {
-      assistantCGCountMap.set(a.id, 1)
+      assistantCGCountMap.set(a.id, {
+        assistant: a,
+        cgCount: 1,
+      })
     }
   })
 
@@ -55,24 +64,24 @@ export function DisciplesWithCellgroups() {
       </div>
 
       <ul className="space-y-2">
-        {assistants?.map((assistant) => (
-          <li key={assistant.id}>
+        {Array.from(assistantCGCountMap)?.map(([key, assistant]) => (
+          <li key={assistant.assistant.id}>
             <div className="flex items-center gap-2">
               <Avatar className="size-8">
                 <AvatarFallback className="bg-indigo-500/20 text-xs font-semibold text-indigo-500">
-                  {getInitials(assistant.name)}
+                  {getInitials(assistant.assistant.name)}
                 </AvatarFallback>
               </Avatar>
               <div>
-                <p className="text-sm">{assistant.name}</p>
+                <p className="text-sm">{assistant.assistant.name}</p>
                 <p className="ml-auto text-xs text-muted-foreground">
-                  {assistantCGCountMap.get(assistant.id)} cell{" "}
-                  {assistantCGCountMap.get(assistant.id)! > 1
+                  {assistantCGCountMap.get(key)?.cgCount} cell{" "}
+                  {assistantCGCountMap.get(key)?.cgCount! > 1
                     ? "groups"
                     : "group"}
                 </p>
               </div>
-              <AssistantDetails assistant={assistant} />
+              <AssistantDetails assistant={assistant.assistant} />
             </div>
           </li>
         ))}
