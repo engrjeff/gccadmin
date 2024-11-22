@@ -54,7 +54,14 @@ export async function GET() {
               },
             },
             assistant: {
-              select: { disciple: { select: { id: true, name: true } } },
+              select: {
+                disciple: {
+                  include: {
+                    leader: { select: { name: true } },
+                    handled_by: { select: { name: true } },
+                  },
+                },
+              },
             },
           },
         },

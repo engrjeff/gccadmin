@@ -1,6 +1,5 @@
 "use client"
 
-import { Disciple } from "@prisma/client"
 import { ColumnDef } from "@tanstack/react-table"
 
 import { removeUnderscores } from "@/lib/utils"
@@ -10,10 +9,9 @@ import { SortLink } from "@/components/ui/data-table/sort-link"
 import { Separator } from "@/components/ui/separator"
 
 import { DiscipleRowActions } from "./DiscipleRowActions"
+import { DiscipleRecord } from "./schema"
 
-export type DiscipleWithLeader = Disciple & { leader: { name: string } | null }
-
-export const columns: ColumnDef<DiscipleWithLeader>[] = [
+export const columns: ColumnDef<DiscipleRecord>[] = [
   {
     id: "select",
     header: ({ table }) => (

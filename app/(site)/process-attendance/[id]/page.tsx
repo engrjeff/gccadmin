@@ -158,7 +158,7 @@ async function ProcessAttendanceDetailPage({
                   {presentByLesson.has(lesson.id) ? (
                     <div className="flex items-center justify-between gap-1 px-1">
                       <span>{lesson.title.split(": ")[1]}</span>
-                      <LockIcon className="sism:ze-4 text-amber-500" />
+                      <LockIcon className="size-4 text-blue-500" />
                     </div>
                   ) : (
                     <ProcessAttendanceAddButton
