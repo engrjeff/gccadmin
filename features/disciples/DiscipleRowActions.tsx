@@ -246,7 +246,7 @@ export function DiscipleRowActions({
           </SheetHeader>
           <div className="flex-1">
             <Tabs defaultValue="details" className="h-full w-full">
-              <TabsList className="h-auto w-full justify-start rounded-none border-b bg-transparent px-4 py-0">
+              <TabsList className="h-auto w-full max-w-full justify-start overflow-x-auto overflow-y-hidden rounded-none border-b bg-transparent px-4 py-0">
                 <TabsTrigger
                   value="details"
                   className="-mb-px rounded-none border-b-2 border-transparent p-3 hover:border-gray-500 data-[state=active]:border-foreground"

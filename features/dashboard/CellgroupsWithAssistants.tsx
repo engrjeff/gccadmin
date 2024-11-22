@@ -93,22 +93,22 @@ export function CellgroupsWithAssistants() {
               r={RADIUS}
               cx="45"
               cy="45"
-              stroke-width="7"
+              strokeWidth="7"
               fill="transparent"
               stroke=""
-              stroke-linecap="round"
+              strokeLinecap="round"
               className="stroke-gray-100 transition-colors ease-linear dark:stroke-gray-500/30"
             ></circle>
             <circle
               r={RADIUS}
               cx="45"
               cy="45"
-              stroke-width="7"
-              stroke-dasharray={strokeDashArray}
-              stroke-dashoffset={0}
+              strokeWidth="7"
+              strokeDasharray={strokeDashArray}
+              strokeDashoffset={0}
               fill="transparent"
               stroke=""
-              stroke-linecap="round"
+              strokeLinecap="round"
               className="transform-gpu stroke-blue-500 transition-all duration-300 ease-in-out dark:stroke-blue-500"
             ></circle>
           </svg>

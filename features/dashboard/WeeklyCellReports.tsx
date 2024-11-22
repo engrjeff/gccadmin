@@ -44,19 +44,17 @@ export function WeeklyCellReports() {
 
   return (
     <div className="flex flex-col gap-3 rounded-lg border bg-muted/10 p-5">
-      <div>
-        <p className="text-sm font-semibold">
-          Cell Groups This Week{" "}
-          {trend ? (
-            <Badge
-              variant={trend.status === "increased" ? "ACTIVE" : "INACTIVE"}
-              className="ml-2 px-1"
-            >
-              {trend?.status === "increased" ? "+" : "-"}
-              {trend?.value.toFixed(1)}%
-            </Badge>
-          ) : null}
-        </p>
+      <div className="flex items-center">
+        <p className="text-sm font-semibold">Cell Groups This Week </p>
+        {trend ? (
+          <Badge
+            variant={trend.status === "increased" ? "ACTIVE" : "INACTIVE"}
+            className="ml-2 px-1"
+          >
+            {trend?.status === "increased" ? "+" : "-"}
+            {trend?.value.toFixed(1)}%
+          </Badge>
+        ) : null}
       </div>
       <div className="flex items-baseline gap-2">
         <span className="text-xl font-bold text-gray-900 dark:text-gray-50">
