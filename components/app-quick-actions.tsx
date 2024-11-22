@@ -35,24 +35,30 @@ export function AppQuickActions() {
         <DropdownMenuTrigger asChild>
           <Button
             variant="outline"
-            className="h-12 lg:h-14 w-full justify-start p-2 text-left text-foreground bg-transparent"
+            className="h-12 w-full justify-start border-transparent bg-transparent p-2 text-left text-foreground lg:h-14 lg:border-input"
           >
             <Logo size={32} />
             <span className="mt-0.5 inline-block font-semibold">GCC Admin</span>
             <ChevronsUpDownIcon className="ml-auto size-4" />
           </Button>
         </DropdownMenuTrigger>
-        <DropdownMenuContent align="end" className="w-trigger-width">
+        <DropdownMenuContent align="start" className="w-[200px]">
           <DropdownMenuLabel className="text-xs font-normal text-muted-foreground">
             Quick Actions
           </DropdownMenuLabel>
-          <DropdownMenuItem onClick={() => setAction("create-report")}>
+          <DropdownMenuItem
+            className="py-2"
+            onClick={() => setAction("create-report")}
+          >
             Create Cell Report
           </DropdownMenuItem>
-          <DropdownMenuItem onClick={() => setAction("add-disciple")}>
+          <DropdownMenuItem
+            className="py-2"
+            onClick={() => setAction("add-disciple")}
+          >
             Add Disciple
           </DropdownMenuItem>
-          <DropdownMenuItem asChild>
+          <DropdownMenuItem className="py-2" asChild>
             <Link href="/process-attendance">Go To Process</Link>
           </DropdownMenuItem>
         </DropdownMenuContent>

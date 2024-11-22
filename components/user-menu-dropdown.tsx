@@ -106,10 +106,12 @@ export function UserMobileMenuDropdown() {
         </Button>
       </DropdownMenuTrigger>
       <DropdownMenuContent align="end" forceMount>
-        <DropdownMenuLabel>{user.email}</DropdownMenuLabel>
+        <DropdownMenuLabel className="text-sm font-normal text-muted-foreground">
+          {user.email}
+        </DropdownMenuLabel>
         <DropdownMenuSeparator />
         <DropdownMenuItem asChild>
-          <button className="flex w-full">
+          <button className="flex w-full py-2">
             <UserIcon className="mr-2 size-4" />
             <span>Profile</span>
           </button>
@@ -117,7 +119,7 @@ export function UserMobileMenuDropdown() {
         <DropdownMenuItem asChild>
           <button
             type="button"
-            className="flex w-full"
+            className="flex w-full py-2"
             onClick={() => signOut()}
           >
             <LogOutIcon className="mr-2 size-4" />
