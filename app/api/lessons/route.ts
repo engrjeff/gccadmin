@@ -12,7 +12,11 @@ export async function GET() {
   try {
     const lessonSeriesList = await db.lessonSeries.findMany({
       include: {
-        lessons: true,
+        lessons: {
+          orderBy: {
+            createdAt: "desc",
+          },
+        },
       },
       orderBy: {
         createdAt: "desc",

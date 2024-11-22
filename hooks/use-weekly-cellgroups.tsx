@@ -1,5 +1,6 @@
 "use client"
 
+import { DiscipleRecord } from "@/features/disciples/schema"
 import { CellReport, Disciple } from "@prisma/client"
 import { useQuery } from "@tanstack/react-query"
 
@@ -12,10 +13,7 @@ interface DiscipleWithCellReports extends Disciple {
         attendees: number
       }
       assistant: {
-        disciple: {
-          id: string
-          name: string
-        }
+        disciple: DiscipleRecord
       }
     }
   >

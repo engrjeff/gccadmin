@@ -1,6 +1,7 @@
 import {
   CellStatus,
   ChurchStatus,
+  Disciple,
   Gender,
   MemberType,
   ProcessLevel,
@@ -72,4 +73,9 @@ export type PageInfo = {
   pageSize: number
   totalPages: number
   itemCount: number
+}
+
+export interface DiscipleRecord extends Disciple {
+  leader: { name: string } | null
+  handled_by: { name: string } | null
 }

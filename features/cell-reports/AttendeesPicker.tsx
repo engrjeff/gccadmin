@@ -21,6 +21,7 @@ export function AttendeesPicker() {
   const assistantId = cellReportForm.watch("assistant_id")
 
   const [attendeesSearchQuery, setAttendeesSearchQuery] = useState("")
+  const [selectedShown, setSelectedShown] = useState(false)
 
   const disciplesOfLeader = useDisciplesOfLeader(
     isAdmin ? leaderId : session.data?.user.discipleId
@@ -94,11 +95,17 @@ export function AttendeesPicker() {
       </div>
 
       {attendees.length ? (
-        <section className="mb-6 border-y">
+        <section className="mb-6 border-t">
           <div className="flex items-center justify-between border-b bg-muted/20 px-2.5 py-1">
-            <h3 className="text-xs font-medium text-blue-500">
-              Selected ({attendees.length})
-            </h3>
+            <Button
+              type="button"
+              size="sm"
+              variant="link"
+              className="px-0 text-blue-500 no-underline"
+              onClick={() => setSelectedShown((state) => !state)}
+            >
+              {selectedShown ? "Hide" : "View"} Selected ({attendees.length})
+            </Button>
             <Button
               type="button"
               size="sm"
@@ -109,24 +116,26 @@ export function AttendeesPicker() {
               Deselect All
             </Button>
           </div>
-          <ul className="max-h-[300px] w-full divide-y overflow-y-auto">
-            {selectedAttendees?.map((d) => (
-              <li key={`attendee-${d.id}`}>
-                <button
-                  title="click to deselect"
-                  type="button"
-                  onClick={() => handleAttendeesSelection(d.id)}
-                  className={cn(
-                    "inline-flex w-full items-center justify-between p-2.5 transition-colors hover:bg-muted",
-                    attendees.includes(d.id) ? "bg-muted/30" : ""
-                  )}
-                >
-                  <span className="text-sm text-foreground">{d.name}</span>
-                  <CheckIcon size={16} className="text-green-500" />
-                </button>
-              </li>
-            ))}
-          </ul>
+          {selectedShown ? (
+            <ul className="max-h-[300px] w-full overflow-y-auto">
+              {selectedAttendees?.map((d) => (
+                <li key={`attendee-${d.id}`} className="border-b">
+                  <button
+                    title="click to deselect"
+                    type="button"
+                    onClick={() => handleAttendeesSelection(d.id)}
+                    className={cn(
+                      "inline-flex w-full items-center justify-between p-2.5 transition-colors hover:bg-muted",
+                      attendees.includes(d.id) ? "bg-muted/30" : ""
+                    )}
+                  >
+                    <span className="text-sm text-foreground">{d.name}</span>
+                    <CheckIcon size={16} className="text-green-500" />
+                  </button>
+                </li>
+              ))}
+            </ul>
+          ) : null}
         </section>
       ) : null}
 

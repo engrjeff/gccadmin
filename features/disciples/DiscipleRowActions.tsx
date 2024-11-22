@@ -39,13 +39,14 @@ import {
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 
 import { AttendedCellGroups } from "./AttendedCellGroups"
-import { DiscipleWithLeader } from "./columns"
 import { DiscipleAccountActions } from "./DiscipleAccountActions"
 import { DiscipleChangeActiveStatusDialog } from "./DiscipleChangeActiveStatusDialog"
 import { DiscipleDeleteDialog } from "./DiscipleDeleteDialog"
 import { DiscipleDetails } from "./DiscipleDetails"
 import { DiscipleEditForm } from "./DiscipleEditForm"
+import { HandledDisciples } from "./HandledDisciples"
 import { LessonsTakenByDisciple } from "./LessonsTakenByDisciple"
+import { DiscipleRecord } from "./schema"
 
 type RowAction = "edit" | "view" | "make-inactive" | "make-active" | "delete"
 
@@ -53,7 +54,7 @@ export function DiscipleRowActions({
   disciple,
   onOpen,
 }: {
-  disciple: DiscipleWithLeader
+  disciple: DiscipleRecord
   onOpen: () => void
 }) {
   const [action, setAction] = useState<RowAction>()
@@ -264,6 +265,12 @@ export function DiscipleRowActions({
                 >
                   Cell Groups
                 </TabsTrigger>
+                <TabsTrigger
+                  value="handled-disciples"
+                  className="-mb-px rounded-none border-b-2 border-transparent p-3 hover:border-gray-500 data-[state=active]:border-foreground"
+                >
+                  Disciples
+                </TabsTrigger>
               </TabsList>
               <TabsContent
                 value="details"
@@ -287,6 +294,12 @@ export function DiscipleRowActions({
                 className="mt-0 max-h-[calc(100dvh-140px)] flex-1 overflow-y-auto pb-2"
               >
                 <AttendedCellGroups discipleId={disciple.id} />
+              </TabsContent>
+              <TabsContent
+                value="handled-disciples"
+                className="mt-0 max-h-[calc(100dvh-140px)] flex-1 overflow-y-auto pb-2"
+              >
+                <HandledDisciples discipleId={disciple.id} />
               </TabsContent>
             </Tabs>
           </div>

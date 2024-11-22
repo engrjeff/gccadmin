@@ -19,13 +19,13 @@ import {
   TableRow,
 } from "@/components/ui/table"
 
-import { columns, DiscipleWithLeader } from "./columns"
+import { columns } from "./columns"
 import { DiscipleBulkActions } from "./DiscipleBulkActions"
 import { DisciplePagination } from "./DisciplePagination"
-import { PageInfo } from "./schema"
+import { DiscipleRecord, PageInfo } from "./schema"
 
 interface Props {
-  disciples: DiscipleWithLeader[]
+  disciples: DiscipleRecord[]
   pageInfo: PageInfo
 }
 
