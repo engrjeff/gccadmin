@@ -27,17 +27,20 @@ import { SubmitButton } from "@/components/ui/submit-button"
 import { useToast } from "@/components/ui/use-toast"
 
 import { updateDisciple } from "./actions"
-import { DiscipleWithLeader } from "./columns"
 import {
   cellStatuses,
   churchStatuses,
   processLevels,
   processLevelStatuses,
 } from "./constants"
-import { DiscipleUpdateInputs, discipleUpdateSchema } from "./schema"
+import {
+  DiscipleRecord,
+  DiscipleUpdateInputs,
+  discipleUpdateSchema,
+} from "./schema"
 
 interface DiscipleEditFormProps {
-  disciple: DiscipleWithLeader
+  disciple: DiscipleRecord
   onAfterSave: () => void
 }
 

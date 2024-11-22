@@ -76,6 +76,6 @@ export type PageInfo = {
 }
 
 export interface DiscipleRecord extends Disciple {
-  leader: { name: string }
+  leader: { name: string } | null
   handled_by: { name: string } | null
 }
