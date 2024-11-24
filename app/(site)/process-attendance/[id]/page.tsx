@@ -329,6 +329,7 @@ function AttendeeDataCell({ attendee }: { attendee?: ProcessAttendee | "NA" }) {
       </div>
       <div
         className={cn("flex items-center justify-center", {
+          "bg-red-400/20 text-red-500": attendee.devo === 0,
           "bg-orange-400/20 text-orange-500":
             attendee.devo <= 2 && attendee.devo > 0,
           "bg-amber-400/20 text-amber-500":
