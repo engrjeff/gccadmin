@@ -69,7 +69,7 @@ export const createAttendanceRecordSchema = z.object({
     .object({
       disciple_id: z.string(),
       remarks: z.string().optional(),
-      devo: z.number().int().positive().min(0),
+      devo: z.number().nonnegative().optional(),
       with_assignment: z.boolean().optional(),
     })
     .array()
