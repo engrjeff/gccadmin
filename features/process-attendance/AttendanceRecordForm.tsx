@@ -291,7 +291,7 @@ export function AttendanceRecordForm({
                                 onWheel={(e) => e.currentTarget.blur()}
                                 min={0}
                                 className="rounded-none bg-transparent text-center"
-                                value={field.value.toString()}
+                                value={field.value?.toString() ?? "0"}
                                 onChange={(e) => {
                                   field.onChange(e.currentTarget.valueAsNumber)
                                 }}
