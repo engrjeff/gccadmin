@@ -1,5 +1,6 @@
 "use client"
 
+import { usePathname } from "next/navigation"
 import { DiscipleRecord } from "@/features/disciples/schema"
 import { CellReport, Disciple } from "@prisma/client"
 import { useQuery } from "@tanstack/react-query"
@@ -27,10 +28,13 @@ interface ReportResponse {
   }
 }
 
-async function getWeeklyReports(): Promise<ReportResponse> {
+async function getWeeklyReports(
+  view: "weekly" | "monthly" = "weekly"
+): Promise<ReportResponse> {
   try {
     const response = await apiClient.get<ReportResponse>(
-      "/reports/weekly-cellgroups"
+      "/reports/weekly-cellgroups",
+      { params: { view } }
     )
     return response.data
   } catch (error) {
@@ -45,8 +49,12 @@ async function getWeeklyReports(): Promise<ReportResponse> {
 }
 
 export function useWeeklyCellGroups() {
+  const pathname = usePathname()
+
+  const view = pathname === "/dashboard/monthly" ? "monthly" : "weekly"
+
   return useQuery({
     queryKey: ["weekly-cellgroups"],
-    queryFn: getWeeklyReports,
+    queryFn: () => getWeeklyReports(view),
   })
 }

@@ -4,13 +4,14 @@ import { DisciplesWithCellgroups } from "@/features/dashboard/DisciplesWithCellg
 import { MemberStatisticsByCellStatus } from "@/features/dashboard/MemberStatisticsByCellStatus"
 import { MemberStatisticsByChurchStatus } from "@/features/dashboard/MemberStatisticsByChurchStatus"
 import { MemberStatisticsByType } from "@/features/dashboard/MemberStatisticsByType"
-import { ThisWeekDisplay } from "@/features/dashboard/ThisWeekDisplay"
+import { ThisMonthDisplay } from "@/features/dashboard/ThisWeekDisplay"
 import { WeeklyCellReports } from "@/features/dashboard/WeeklyCellReports"
 import { WeeklyCellReportsByLeader } from "@/features/dashboard/WeeklyCellReportsByLeader"
+import { format } from "date-fns"
 
 import PageTitle from "@/components/page-title"
 
-import { ViewTabs } from "./components/view-tabs"
+import { ViewTabs } from "../components/view-tabs"
 
 export const metadata: Metadata = {
   title: "Dashboard",
@@ -30,11 +31,13 @@ async function DashboardPage() {
 
         <div className="flex-1 space-y-4 overflow-y-auto px-4">
           <div>
-            <h2 className="font-semibold">Weekly Cell Groups</h2>
-            <ThisWeekDisplay />
+            <h2 className="font-semibold">
+              {format(new Date(), "MMMM yyyy")} Cell Groups
+            </h2>
+            <ThisMonthDisplay />
           </div>
           <div className="grid grid-cols-1 gap-6 lg:gap-6 xl:grid-cols-3">
-            <WeeklyCellReports />
+            <WeeklyCellReports view="monthly" />
             <CellgroupsWithAssistants />
             <DisciplesWithCellgroups />
           </div>

@@ -1,5 +1,14 @@
+import { CellReportQueryArgs } from "@/features/cell-reports/schema"
 import { CellStatus } from "@prisma/client"
 import { clsx, type ClassValue } from "clsx"
+import {
+  endOfMonth,
+  endOfWeek,
+  startOfMonth,
+  startOfWeek,
+  subDays,
+  subMonths,
+} from "date-fns"
 import { twMerge } from "tailwind-merge"
 
 export function cn(...inputs: ClassValue[]) {
@@ -54,4 +63,40 @@ export function getInitials(inputStr: string) {
     .slice(0, 2)
     .map((c) => c.substring(0, 1))
     .join("")
+}
+
+export function getDateRange(
+  preset: CellReportQueryArgs["dateRange"]
+): { start: Date; end: Date } | undefined {
+  if (!preset) return undefined
+
+  const now = new Date()
+
+  if (preset === "this_week") {
+    return {
+      start: startOfWeek(now, { weekStartsOn: 1 }),
+      end: endOfWeek(now, { weekStartsOn: 1 }),
+    }
+  }
+
+  if (preset === "last_week") {
+    return {
+      start: subDays(startOfWeek(now, { weekStartsOn: 1 }), 7),
+      end: subDays(endOfWeek(now, { weekStartsOn: 1 }), 7),
+    }
+  }
+
+  if (preset === "this_month") {
+    return {
+      start: startOfMonth(now),
+      end: endOfMonth(now),
+    }
+  }
+
+  if (preset === "last_month") {
+    return {
+      start: startOfMonth(subMonths(now, 1)),
+      end: endOfMonth(subMonths(now, 1)),
+    }
+  }
 }
