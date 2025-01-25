@@ -59,7 +59,7 @@ export function DisciplesWithCellgroups() {
       <div>
         <p className="text-sm font-semibold">Disciples With Cell Groups</p>
         <p className="text-xs text-muted-foreground">
-          Showing Disciples who handled Cell Groups this week.
+          Showing Disciples who handled Cell Groups.
         </p>
       </div>
 

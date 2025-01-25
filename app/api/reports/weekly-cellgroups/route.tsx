@@ -1,4 +1,4 @@
-import { NextResponse } from "next/server"
+import { NextRequest, NextResponse } from "next/server"
 import {
   endOfWeek,
   previousMonday,
@@ -7,28 +7,37 @@ import {
 } from "date-fns"
 
 import { prisma } from "@/lib/db"
+import { getDateRange } from "@/lib/utils"
 
 export const dynamic = "force-dynamic"
 
-export async function GET() {
+export async function GET(request: NextRequest) {
   try {
+    const searchParams = request.nextUrl.searchParams
+    const view = searchParams.get("view")
+
     const now = new Date()
 
-    const dateFilter = {
+    let dateFilter = {
       start: startOfWeek(now, { weekStartsOn: 1 }),
       end: endOfWeek(now, { weekStartsOn: 1 }),
     }
 
-    const lastWeekDateFilter = {
+    let lastDateFilter = {
       start: previousMonday(dateFilter?.start),
       end: previousSunday(dateFilter?.end),
+    }
+
+    if (view === "monthly") {
+      dateFilter = getDateRange("this_month")!
+      lastDateFilter = getDateRange("last_month")!
     }
 
     const lastWeek = await prisma.cellReport.count({
       where: {
         date: {
-          gte: lastWeekDateFilter.start,
-          lte: lastWeekDateFilter.end,
+          gte: lastDateFilter.start,
+          lte: lastDateFilter.end,
         },
       },
     })

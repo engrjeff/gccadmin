@@ -6,7 +6,11 @@ import { useWeeklyCellGroups } from "@/hooks/use-weekly-cellgroups"
 import { Badge } from "@/components/ui/badge"
 import { Skeleton } from "@/components/ui/skeleton"
 
-export function WeeklyCellReports() {
+export function WeeklyCellReports({
+  view = "weekly",
+}: {
+  view?: "weekly" | "monthly"
+}) {
   const reports = useWeeklyCellGroups()
 
   if (reports.isLoading)
@@ -42,10 +46,12 @@ export function WeeklyCellReports() {
     return (input / cellReports?.length) * 100
   }
 
+  const rangeText = view === "monthly" ? "month" : "week"
+
   return (
     <div className="flex flex-col gap-3 rounded-lg border bg-muted/10 p-5">
       <div className="flex items-center">
-        <p className="text-sm font-semibold">Cell Groups This Week </p>
+        <p className="text-sm font-semibold">Cell Groups this {rangeText}</p>
         {trend ? (
           <Badge
             variant={trend.status === "increased" ? "ACTIVE" : "INACTIVE"}
@@ -60,7 +66,9 @@ export function WeeklyCellReports() {
         <span className="text-xl font-bold text-gray-900 dark:text-gray-50">
           {cellReports?.length}
         </span>
-        <span className="text-sm text-gray-500">cell groups this week</span>
+        <span className="text-sm text-gray-500">
+          cell groups this {rangeText}
+        </span>
       </div>
       <div className="flex w-full items-center rounded-full bg-muted/30 [&>*]:h-1.5">
         <div
