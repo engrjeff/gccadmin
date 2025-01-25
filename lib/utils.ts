@@ -100,3 +100,8 @@ export function getDateRange(
     }
   }
 }
+
+export function calcPercentDiff(v1: number, v2: number) {
+  const ave = (v1 + v2) * 0.5
+  return (Math.abs(v1 - v2) / ave) * 100
+}

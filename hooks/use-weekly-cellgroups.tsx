@@ -7,7 +7,7 @@ import { useQuery } from "@tanstack/react-query"
 
 import { apiClient } from "@/lib/apiClient"
 
-interface DiscipleWithCellReports extends Disciple {
+export interface DiscipleWithCellReports extends Disciple {
   cell_reports: Array<
     CellReport & {
       _count: {
@@ -16,6 +16,9 @@ interface DiscipleWithCellReports extends Disciple {
       assistant: {
         disciple: DiscipleRecord
       }
+      attendees: Array<{
+        disciple: Disciple
+      }>
     }
   >
 }

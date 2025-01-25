@@ -7,7 +7,7 @@ import {
 } from "date-fns"
 
 import { prisma } from "@/lib/db"
-import { getDateRange } from "@/lib/utils"
+import { calcPercentDiff, getDateRange } from "@/lib/utils"
 
 export const dynamic = "force-dynamic"
 
@@ -33,7 +33,7 @@ export async function GET(request: NextRequest) {
       lastDateFilter = getDateRange("last_month")!
     }
 
-    const lastWeek = await prisma.cellReport.count({
+    const lastRecords = await prisma.cellReport.count({
       where: {
         date: {
           gte: lastDateFilter.start,
@@ -62,6 +62,19 @@ export async function GET(request: NextRequest) {
                 attendees: true,
               },
             },
+            attendees: {
+              select: {
+                disciple: {
+                  select: {
+                    id: true,
+                    name: true,
+                    cell_status: true,
+                    church_status: true,
+                    process_level: true,
+                  },
+                },
+              },
+            },
             assistant: {
               select: {
                 disciple: {
@@ -77,14 +90,16 @@ export async function GET(request: NextRequest) {
       },
     })
 
+    const totalCGs = cellReports.reduce((t, c) => t + c.cell_reports.length, 0)
+
     return NextResponse.json({
       cellReports,
       trend: {
-        value:
-          lastWeek === 0
-            ? 100
-            : (Math.abs(cellReports.length - lastWeek) / lastWeek) * 100,
-        status: cellReports.length >= lastWeek ? "increased" : "decreased",
+        value: calcPercentDiff(totalCGs, lastRecords),
+        // lastRecords === 0
+        //   ? 100
+        //   : (Math.abs(cellReports.length - lastRecords) / lastRecords) * 100,
+        status: cellReports.length >= lastRecords ? "increased" : "decreased",
       },
     })
   } catch (error) {
